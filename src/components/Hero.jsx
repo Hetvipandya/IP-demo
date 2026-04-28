@@ -3,14 +3,14 @@ import Header from "./Header";
 import Footer from "./Footer";
 import TestimonialsSection from "./TestimonialsSection";
 
+ 
 
-
-const basePath = "public/assets/";
+const basePath = "/assets/";
 
 const insuranceTypes = [
     { title: "Life", image: basePath + "li-1.png" }, 
     { title: "Car", image: basePath + "car.png" },
-    { title: "Bike", image: basePath + "red-scooter-1.png" },
+    { title: "Bike", image: basePath + "red-scooter-1.png" }, 
     { title: "Health", image: basePath + "health.png" },
   ];
 
