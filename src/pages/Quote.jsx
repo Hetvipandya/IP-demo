@@ -12,8 +12,8 @@ const Quote = () => {
 
           {/* LEFT SIDE */}
           <div className="space-y-6">
-            <h1 className="text-3xl md:text-5xl font-bold text-[#00335B]">
-              Our <span className="text-[#8CC63F]">Insurance</span> Services
+            <h1 className="text-3xl md:text-5xl font-bold text-[#213591]">
+              Our <span className="text-[#E8021E]">Insurance</span> Services
             </h1>
 
             <p className="text-[#00335B] text-lg leading-relaxed max-w-sm">
@@ -23,7 +23,7 @@ const Quote = () => {
 
             <a
               href="tel:+918238311555"
-              className="inline-flex items-center gap-3 bg-[#00335B] text-white px-8 py-3 font-bold hover:bg-[#002848] transition"
+              className="inline-flex items-center gap-3 bg-[#213591] text-white px-8 py-3 font-bold hover:bg-[#002848] transition"
             >
               <Phone className="w-5 h-5" />
               Call Minaxi Navlakha
@@ -31,9 +31,9 @@ const Quote = () => {
           </div>
 
           {/* RIGHT FORM */}
-          <div className="bg-[#F1F5E1] border-2 border-dashed border-[#8CC63F]/40 p-8 md:p-12 rounded-none shadow-sm">
+          <div className="bg-[#F1F5E1] border-2 border-dashed border-[#E8021E]/40 p-8 md:p-12 rounded-none shadow-sm">
 
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#00335B] text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#213591] text-center mb-10">
               Get a Free Insurance Quote
             </h2>
 
@@ -72,7 +72,7 @@ const Quote = () => {
 
               <button
                 type="submit"
-                className="bg-[#00335B] text-white px-10 py-3 font-bold hover:bg-[#002848] transition"
+                className="bg-[#213591] text-white px-10 py-3 font-bold hover:bg-[#002848] transition"
               >
                 Submit
               </button>

@@ -136,15 +136,15 @@ const partners = [
 
 const blogCards = [
   {
-    image: basePath + "125089.jpg",
+    image: "https://navlakhainsurance.in/wp-content/uploads/2025/07/127981.jpg",
     title: "Property Insurance Protecting Your Valuable Assets",
   },
   {
-    image: basePath + "127981.jpg",
+    image: "https://navlakhainsurance.in/wp-content/uploads/2025/07/125089.jpg",
     title: "Travel Insurance Your Trusted Companion",
   },
   {
-    image: basePath + "134016.jpg",
+    image: "https://navlakhainsurance.in/wp-content/uploads/2025/07/134016.jpg",
     title: "Liability Insurance Protecting You",
   },
 ];
@@ -152,19 +152,22 @@ const blogCards = [
 const Index = () => {
   return (
    
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-cyan-50 text-gray-900">
+   <main className="bg-gradient-to-br from-slate-50 to-cyan-50 text-gray-900">
+  {/* min-h-screen કાઢી નાખવાથી કન્ટેન્ટ મુજબ જ હાઈટ લેશે */}
       {/* HERO */}
      
-  <section id="home" className="mx-auto max-w-7xl px-5 pb-20 pt-20 lg:px-8 lg:pb-28 lg:pt-28">
-  <div className="max-w-4xl">
-    {/* Heading with split colors as per image */}
+  {/* pt-20 ને બદલે pt-5 અથવા pt-0 કરી જુઓ */}
+<section 
+  id="home" 
+  className="mx-auto max-w-7xl px-5 pb-20 pt-40 lg:px-8 lg:pb-28 lg:pt-48 -mt-16 relative z-10"
+>
+<div className="max-w-4xl">
     <h1 className="text-balance text-4xl font-bold leading-tight tracking-tight md:text-6xl">
-      <span className="text-[#003d63]">Protecting What </span>
-      <span className="text-[#72b056]">Matters Most All Type General </span>
-      <span className="text-[#003d63]">Insurance</span>
+      <span className="text-[#213591]">Protecting What </span>
+      <span className="text-[#E8021E]">Matters Most All Type General </span>
+      <span className="text-[#213591]">Insurance</span>
     </h1>
     
-    {/* Subtext */}
     <p className="mt-6 text-xl font-medium text-gray-800">
       Get a quote or compare
     </p>
@@ -180,7 +183,7 @@ const Index = () => {
         style={{ animationDelay: `${index * 90}ms` }}
       >
         {/* Icon Container with Green Border */}
-        <span className="flex size-24 items-center justify-center rounded-xl border-2 border-[#72b056] bg-white p-4 transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-lg">
+        <span className="flex size-24 items-center justify-center rounded-xl border-2 border-[#213591] bg-white p-4 transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-lg">
           <img 
             src={item.image} 
             alt={`${item.title} insurance`} 
@@ -202,8 +205,8 @@ const Index = () => {
     <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
   {/* Heading */}
   <h2 className="text-center text-3xl font-bold md:text-4xl">
-    <span className="text-[#003d63]">Why </span>
-    <span className="text-[#72b056]">Navlakha Insurance?</span>
+    <span className="text-[#213591]">Why </span>
+    <span className="text-[#E8021E]">Griva Insurance?</span>
   </h2>
 
   {/* Stats Grid */}
@@ -214,9 +217,9 @@ const Index = () => {
         {/* Double Circle Border Container */}
         <div className="relative flex size-48 items-center justify-center">
           {/* Outer Thin Circle */}
-          <div className="absolute inset-0 rounded-full border border-[#72b056] opacity-40"></div>
+          <div className="absolute inset-0 rounded-full border border-[#213591] opacity-40"></div>
           {/* Inner Circle with Image */}
-          <div className="flex size-[90%] items-center justify-center rounded-full border border-[#72b056] bg-transparent p-2">
+          <div className="flex size-[90%] items-center justify-center rounded-full border border-[#213591] bg-transparent p-2">
             <img 
               src={stat.image} 
               alt={stat.label} 
@@ -227,12 +230,12 @@ const Index = () => {
         </div>
 
         {/* Stats Number */}
-        <h3 className="mt-8 text-3xl font-bold text-[#003d63]">
+        <h3 className="mt-8 text-3xl font-bold text-[#213591]">
           {stat.number}
         </h3>
         
         {/* Stats Label (Uppercase as per image) */}
-        <p className="mt-2 text-sm font-bold tracking-wide text-[#003d63] uppercase">
+        <p className="mt-2 text-sm font-bold tracking-wide text-[#213591] uppercase">
           {stat.label}
         </p>
       </div>
@@ -244,8 +247,8 @@ const Index = () => {
      <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
   {/* Section Heading */}
   <h2 className="mb-16 text-center text-3xl font-bold md:text-4xl">
-    <span className="text-[#72b056]">Navlakha Insurance </span>
-    <span className="text-[#003d63]">With You On Every Step</span>
+    <span className="text-[#E8021E]">Griva Insurance </span>
+    <span className="text-[#213591]">With You On Every Step</span>
   </h2>
 
   {/* Stepper Line - visible on desktop */}
@@ -265,11 +268,11 @@ const Index = () => {
     {steps.map((step, i) => (
       <div key={i} className="flex flex-col items-center text-center">
         {/* Title */}
-        <h3 className="text-xl font-bold text-[#003d63]">{step.title}</h3>
+        <h3 className="text-xl font-bold text-[#213591]">{step.title}</h3>
 
         {/* Image with Blue Circle Background */}
         <div className="relative mt-8 flex h-64 w-64 items-end justify-center">
-          <div className="absolute bottom-4 size-48 rounded-full bg-[#1a5d9a]"></div>
+          <div className="absolute bottom-4 size-48 rounded-full bg-[#213591]"></div>
           <img 
             src={step.image} 
             alt={step.title} 
@@ -278,13 +281,13 @@ const Index = () => {
         </div>
 
         {/* Description */}
-        <p className="mt-6 min-h-[3rem] text-base font-bold text-[#003d63]">
+        <p className="mt-6 min-h-[3rem] text-base font-bold text-[#213591]">
           {step.description}
         </p>
 
         {/* Button with Green Accent */}
-        <button className="relative mt-6 overflow-hidden rounded-sm bg-[#003d63] px-8 py-3 text-sm font-bold text-white transition-all hover:opacity-90">
-          <div className="absolute left-0 top-0 h-full w-1.5 bg-[#72b056]"></div>
+        <button className="relative mt-6 overflow-hidden rounded-sm bg-[#213591] px-8 py-3 text-sm font-bold text-white transition-all hover:opacity-90">
+          <div className="absolute left-0 top-0 h-full w-1.5 bg-[#E8021E]"></div>
           {step.cta}
         </button>
       </div>
@@ -295,8 +298,8 @@ const Index = () => {
       {/* products */}
   <section className="mx-auto max-w-7xl px-5 py-20">
         <h2 className="text-center text-3xl font-bold mb-12">
-          <span className="text-[#003d63]">Types Of </span>
-          <span className="text-[#72b056]">Insurance Products</span>
+          <span className="text-[#213591]">Types Of </span>
+          <span className="text-[#E8021E]">Insurance Products</span>
         </h2>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 border-l border-t border-gray-300">
@@ -306,7 +309,7 @@ const Index = () => {
               <img src={product.image} className="h-48 w-full object-cover" />
 
               <div className="p-5 text-center">
-                <h3 className="text-lg font-bold text-[#2e7d32]">
+                <h3 className="text-lg font-bold text-[#E8021E]">
                   {product.title}
                 </h3>
 
@@ -314,8 +317,8 @@ const Index = () => {
                   {product.description}
                 </p>
 
-                <button className="mt-5 bg-[#003d63] text-white px-6 py-2 rounded relative overflow-hidden">
-                  <span className="absolute left-0 top-0 w-1.5 h-full bg-[#72b056]"></span>
+                <button className="mt-5 bg-[#213591] text-white px-6 py-2 rounded relative overflow-hidden">
+                  <span className="absolute left-0 top-0 w-1.5 h-full bg-[#E8021E]"></span>
                   Quick Enquiry
                 </button>
               </div>
@@ -331,9 +334,10 @@ const Index = () => {
 <section className="mx-auto max-w-7xl px-5 py-20 lg:px-8">
   {/* Section Heading */}
   <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
-    <span className="text-[#003d63]">Our </span>
-    <span className="text-[#72b056]">Trusted Insurance Partners</span>
+    <span className="text-[#213591]">Our </span>
+    <span className="text-[#E8021E]">Trusted Insurance Partners</span>
   </h2>
+
 
   {/* Grid */}
   <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7">
@@ -369,9 +373,9 @@ const Index = () => {
         {/* Left Side: Heading */}
         <div className="text-left">
           <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
-            <span className="text-[#10375c]">Get Free Advice</span> <span className="text-[#10375c]">From Our</span>
+            <span className="text-[#213591]">Get Free Advice</span> <span className="text-[#213591]">From Our</span>
             <br />
-            <span className="text-[#68a357]">Certified Insurance Advisors</span>
+            <span className="text-[#E8021E]">Certified Insurance Advisors</span>
           </h2>
         </div>
 
@@ -406,7 +410,7 @@ const Index = () => {
           <div className="flex justify-center">
             <a 
               href="tel:8320291588" 
-              className="inline-flex w-full items-center justify-center gap-3 rounded-md bg-[#0a3d62] px-6 py-3 text-lg font-bold text-white transition hover:bg-[#082d49] active:scale-95 shadow-lg"
+              className="inline-flex w-full items-center justify-center gap-3 rounded-md bg-[#213591] px-6 py-3 text-lg font-bold text-white transition hover:bg-[#082d49] active:scale-95 shadow-lg"
             >
               Talk to an Advisor
             </a>
@@ -424,9 +428,9 @@ const Index = () => {
   <div className="mx-auto max-w-7xl">
 
     {/* TITLE */}
-    <h2 className="text-center text-3xl font-extrabold">
-      <span className="text-[#003d63]">Insurance </span>
-      <span className="text-[#72b056]">Blogs</span>
+    <h2 className="text-center text-3xl font-bold md:text-4xl">
+      <span className="text-[#213591]">Insurance </span>
+      <span className="text-[#E8021E]">Blogs</span>
     </h2>
 
     {/* GRID */}
@@ -446,19 +450,19 @@ const Index = () => {
           <div className="p-6">
 
             {/* DATE (GREEN) */}
-            <p className="font-extrabold text-[#72b056]">
+            <p className="font-extrabold text-[#E8021E]">
               26 Jul, 2025
             </p>
 
             {/* TITLE (BLUE) */}
-            <h3 className="mt-3 text-2xl font-extrabold text-[#003d63]">
+            <h3 className="mt-3 text-2xl font-extrabold text-[#213591]">
               {blog.title}
             </h3>
 
             {/* READ MORE (GREEN + BLUE MIX) */}
             <a
               href="#contact"
-              className="mt-5 inline-flex items-center gap-2 font-extrabold text-[#72b056] hover:text-[#003d63] transition"
+              className="mt-5 inline-flex items-center gap-2 font-extrabold text-[#E8021E] hover:text-[#213591] transition"
             >
               Read More
               <ArrowRight className="size-4" />

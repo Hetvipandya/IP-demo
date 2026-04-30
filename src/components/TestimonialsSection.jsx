@@ -32,8 +32,8 @@ const TestimonialsSection = ({ testimonials }) => {
   return (
     <section className="bg-gray-50 py-20 px-5">
       <div className="max-w-7xl mx-auto text-center mb-12">
-        <h2 className="text-4xl font-bold text-[#1a365d]">
-          Our Customers <span className="text-[#76b543]">Love Us</span>
+        <h2 className="text-4xl font-bold text-[#213591]">
+          Our Customers <span className="text-[#E8021E]">Love Us</span>
         </h2>
       </div>
 

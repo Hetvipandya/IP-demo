@@ -14,7 +14,7 @@ const Layout = () => {
       <Header />
 
       {/* Important spacing for fixed navbar */}
-      <main className="pt-16">
+      <main className="">
         <Outlet />
       </main>
 

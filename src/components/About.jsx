@@ -14,7 +14,7 @@ const testimonials = [
   },
   {
     name: "Arjun Verma",
-    role: "Entrepreneur",
+    role: "Entrepreneur", 
     image: "/assets/24.jpg",
     quote:
       "Transit insurance ke liye quick aur hassle-free service mili. Truly reliable team!",
@@ -32,106 +32,136 @@ const About = () => {
   return (
     <div className="flex flex-col w-full">
 
-      {/* ===================== SECTION 1 ===================== */}
-      <section className="py-16 md:py-24 bg-[#fdfaf2]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+ <section className="py-16 md:py-24 bg-[#fdfaf2]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-            {/* IMAGE */}
-            <div className="relative group">
-              <div className="overflow-hidden rounded-lg shadow-2xl">
-                <img
-                  src="https://navlakhainsurance.in/wp-content/uploads/2025/07/Untitled-design-7.png"
-                  alt="Minaxi Navlakha"
-                  className="w-full h-auto object-cover transition duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="absolute -bottom-4 -left-4 w-24 h-24 bg-[#76b543]/20 rounded-full blur-2xl -z-10"></div>
+          {/* LEFT SIDE: IMAGE WITH TECH VIBE */}
+         <div className="relative group">
+  <div className="overflow-hidden rounded-lg shadow-2xl border-4 border-white">
+    <img
+      src="https://media.licdn.com/dms/image/v2/D4D22AQEMyEAvt-vSuQ/feedshare-shrink_800/feedshare-shrink_800/0/1689514965135?e=2147483647&v=beta&t=9b9rSryE0zHjPctw_4CHJr-VHWu_OuRZEbGH1ROYN3I"
+      alt="Griva Insurance Tech Presentation"
+      /* Height h-[350px] rakhi chhe jene tame tamari rite adjust kari shako cho */
+      className="w-full h-[350px] md:h-[400px] object-cover transition duration-500 group-hover:scale-105"
+    />
+  </div>
+  {/* Decorative background element */}
+  <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-[#213591]/10 rounded-full blur-3xl -z-10"></div>
+</div>
+
+          {/* RIGHT SIDE: CONTENT */}
+          <div className="space-y-6">
+            <h2 className="text-3xl md:text-5xl font-bold text-[#213591] leading-tight">
+              Griva <span className="text-[#E8021E]">Insurance Services</span>
+            </h2>
+
+            <div className="space-y-4 text-gray-700 text-[16px] md:text-[18px] leading-relaxed">
+              <p className="font-medium text-lg text-[#003366]">
+                Modern Problems Require Smart Insurance Solutions.
+              </p>
+              
+              <p>
+                At <b className="text-[#213591]">Griva Insurance Services</b>, we blend traditional trust with modern technology. Founded by <b>Miss Minaxi Navlakha</b>, we bring over a decade of expertise to help you navigate the complex world of risk management.
+              </p>
+
+              <p>
+                As seen in our focus on <b>Generative AI and Innovation</b>, we stay ahead of the curve to provide the most efficient coverage for:
+              </p>
+
+              <ul className="grid grid-cols-2 gap-2 text-[#003366] font-semibold">
+                <li>• Health & Motor</li>
+                <li>• Liability & Travel</li>
+                <li>• Property & Fire</li>
+                <li>• Transit & Warehouse</li>
+              </ul>
+
+              <p>
+                Our mission is to safeguard your digital and physical assets with <b>hassle-free claims</b> and <b>personalized guidance</b>. We don't just sell policies; we build lasting security for your future.
+              </p>
             </div>
 
-            {/* CONTENT */}
-            <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold text-[#003366]">
-                Navlakha <span className="text-[#76b543]">Insurance Services</span>
-              </h2>
-
-              <div className="space-y-4 text-gray-700 text-[15px] md:text-[16px] leading-relaxed">
-                <p>
-                  <b className="text-[#003366]">Navlakha Insurance Services</b> trusted insurance solutions provide kare chhe.
-                </p>
-                <p>
-                  <b>Founded by Miss Minaxi Navlakha</b>, with 10+ years experience.
-                </p>
-                <p>
-                  Health, Motor, Travel, Property, Fire, Transit badha insurance cover.
-                </p>
-                <p>
-                  Mission: customers ne financial protection aapvu.
-                </p>
-              </div>
-
+            <div className="pt-4">
               <a
                 href="tel:+918320291588"
-                className="inline-flex items-center gap-3 bg-[#003366] text-white px-8 py-4 rounded-md font-bold hover:bg-[#002244] transition shadow-lg border-l-4 border-[#76b543]"
+                className="inline-flex items-center gap-3 bg-[#213591] text-white px-10 py-4 rounded-lg font-bold hover:bg-[#1a2a75] transition-all duration-300 shadow-xl border-l-8 border-[#E8021E] active:scale-95"
               >
-                <Phone size={20} />
-                Call Minaxi Navlakha
+                <Phone size={22} className="animate-pulse" />
+                Connect with Griva Insurance
               </a>
             </div>
           </div>
+
         </div>
-      </section>
+      </div>
+    </section>
 
       {/* ===================== SECTION 2 ===================== */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#213591]">
+            Our Valued Partners
+          </h2>
+        </div>
 
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#6a9ab0]">
-              Our Valued Partners
-            </h2>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-            {/* IMAGE */}
-            <div className="flex justify-center">
-              <div className="relative w-full max-w-md">
-                <div className="aspect-[4/5] overflow-hidden rounded-full shadow-xl border-4 border-gray-50">
-                  <img
-                    src="https://navlakhainsurance.in/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-30-at-4.05.16-PM.jpeg"
-                    alt="Paresh Navlakha"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+          {/* IMAGE */}
+          <div className="flex justify-center">
+            <div className="relative w-full max-w-md">
+              <div className="aspect-[4/5] overflow-hidden rounded-full shadow-xl border-4 border-gray-50">
+                <img
+                  src="https://navlakhainsurance.in/wp-content/uploads/2026/03/WhatsApp-Image-2026-03-30-at-4.05.16-PM.jpeg"
+                  alt="Paresh Navlakha"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
+          </div>
 
-            {/* CONTENT */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-4xl font-extrabold">Paresh Navlakha</h3>
-                <p className="text-[#76b543] font-bold uppercase text-sm">
-                  Director
-                </p>
-              </div>
+          {/* CONTENT */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-4xl font-extrabold text-gray-900">Paresh Navlakha</h3>
+              <p className="text-[#E8021E] font-bold uppercase tracking-wider text-sm mt-1">
+                Director
+              </p>
+            </div>
 
-              <p className="text-gray-800 leading-relaxed text-[15px]">
-                Paresh Navlakha manages insurance operations, claims, and partnerships with top companies like HDFC, ICICI, SBI, Bajaj Allianz.
+            <div className="text-gray-600 leading-relaxed text-[15px] space-y-4">
+              <p>
+                Paresh Navlakha is a key figure at Navlakha Insurance Services. As a Director, he is a primary contact for the firm, which was founded by Miss Minaxi Navlakha.
+              </p>
+              
+              <p>
+                Through the agency, he oversees a broad range of general insurance products, including <span className="font-semibold">Health & Life Insurance, Motor Insurance (Car and Bike)</span>, and Commercial Coverage like Liability, Warehouse, Transit, and Property Insurance.
               </p>
 
-              <div className="border-t pt-6 space-y-3 text-gray-700">
-                <p><b>Email:</b> paresh@navlakhainsurance.in</p>
-                <p><b>Phone:</b> +91-9316309866</p>
-              </div>
-
-              <button className="p-3 bg-gray-100 rounded-full text-[#76b543] hover:bg-[#76b543] hover:text-white transition">
-                <Share2 />
-              </button>
+              <p>
+                The firm emphasizes a "trusted and transparent" approach, leveraging over 10 years of industry experience. Paresh manages strategic partnerships with major providers such as <span className="font-semibold text-gray-800">HDFC ERGO, ICICI Lombard, SBI General Insurance, and Bajaj Allianz</span> to offer competitive premiums and streamlined claim settlements.
+              </p>
             </div>
+
+            <div className="border-t pt-6 space-y-2 text-gray-700">
+              <p className="flex gap-2">
+                <span className="font-bold">Email:</span> 
+                <a href="mailto:paresh@navlakhainsurance.in" className="hover:text-[#76b543]">paresh@navlakhainsurance.in</a>
+              </p>
+              <p className="flex gap-2">
+                <span className="font-bold">Phone:</span> 
+                <a href="tel:+919316309866" className="hover:text-[#76b543]">+91-9316309866</a>
+              </p>
+            </div>
+
+            <button className="p-3 bg-gray-100 rounded-full text-[#E8021E] hover:bg-[#E8021E] hover:text-white transition-all shadow-sm">
+              <Share2 size={20} />
+            </button>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       <section className="py-16 bg-gray-50">
         <TestimonialsSection testimonials={testimonials} />

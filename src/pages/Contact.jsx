@@ -54,12 +54,12 @@ const ContactPage = () => {
               >
 
                 {/* ICON BOX (GREEN ON HOVER) */}
-                <div className="w-12 h-12 flex items-center justify-center border border-[#11243D] text-[#11243D] group-hover:bg-[#8CC63F] group-hover:text-white group-hover:border-[#8CC63F] transition">
+                <div className="w-12 h-12 flex items-center justify-center border border-[#11243D] text-[#11243D] group-hover:bg-[#E8021E] group-hover:text-white group-hover:border-[#E8021E] transition">
                   <item.icon size={20} />
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-[#11243D] mb-1 group-hover:text-[#8CC63F] transition">
+                  <h3 className="font-bold text-[#11243D] mb-1 group-hover:text-[#E8021E] transition">
                     {item.title}
                   </h3>
 
@@ -86,7 +86,7 @@ const ContactPage = () => {
           </div>
 
           {/* RIGHT FORM (SQUARE BORDER FIX) */}
-          <div className="lg:col-span-3 bg-[#0B192A] p-10 border border-gray-700 rounded-none text-white">
+          <div className="lg:col-span-3 bg-[#213591] p-10 border border-gray-700 rounded-none text-white">
 
             <h2 className="text-3xl font-bold mb-4">
               Send a Message
