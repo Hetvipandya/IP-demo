@@ -26,7 +26,7 @@ const Quote = () => {
               className="inline-flex items-center gap-3 bg-[#213591] text-white px-8 py-3 font-bold hover:bg-[#002848] transition"
             >
               <Phone className="w-5 h-5" />
-              Call Minaxi Navlakha
+              Call Griva Insurance
             </a>
           </div>
 

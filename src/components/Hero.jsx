@@ -2,6 +2,7 @@ import { ArrowRight, CheckCircle2, Phone } from "lucide-react";
 import Header from "./Header";
 import Footer from "./Footer";
 import TestimonialsSection from "./TestimonialsSection";
+import { Link } from "react-router-dom";
 
  
 
@@ -15,13 +16,41 @@ const insuranceTypes = [
   ];
 
 const quoteItems = [
-  { title: "Bike", image: basePath + "red-scooter-1.png" },
-  { title: "Car", image: basePath + "car.png" },
-  { title: "Health", image: basePath + "health.png" },
-  { title: "Term", image: basePath + "term.png" },
-  { title: "Investment Tax Planning", image: basePath + "investment.png" },
-  { title: "Saving For Child", image: basePath + "saving-child.png" },
-  { title: "Pension & Retirement", image: basePath + "pension.png" },
+  { 
+    title: "Bike", 
+    image: basePath + "red-scooter-1.png",
+    path: "/motor-insurance"
+  },
+  { 
+    title: "Car", 
+    image: basePath + "car.png",
+    path: "/motor-insurance" // or create separate route if needed
+  },
+  { 
+    title: "Health", 
+    image: basePath + "health.png",
+    path: "/health-insurance"
+  },
+  { 
+    title: "Term", 
+    image: basePath + "term.png",
+    path: "/health-insurance" // (you can create this later)
+  },
+  { 
+    title: "Investment Tax Planning", 
+    image: basePath + "investment.png",
+    path: "/property-insurance"
+  },
+  { 
+    title: "Saving For Child", 
+    image: basePath + "saving-child.png",
+    path: "/liability-insurance"
+  },
+  { 
+    title: "Pension & Retirement", 
+    image: basePath + "pension.png",
+    path: "/property-insurance"
+  },
 ];
 
 /* helper to reuse quoteItems images */
@@ -78,9 +107,9 @@ const testimonials = [
 ];
 
 const steps = [
-  { title: "Choosing Right Policy", cta: "Compare Quotes", image: basePath + "POLICIES-SOLD-2.png" },
-  { title: "Compare Quotes From 45+ Insurers", cta: "Connect With Our Experts", image: basePath + "POLICIES-SOLD-3.png" },
-  { title: "Hassle-free Claim Assistance", cta: "Enquire Now", image: basePath + "2150797566-Photoroom-1-1.png" },
+  { title: "Choosing Right Policy", cta: "Compare Quotes", image: basePath + "POLICIES-SOLD-2.png", path: "/contact" },
+  { title: "Compare Quotes From 45+ Insurers", cta: "Connect With Our Experts", image: basePath + "POLICIES-SOLD-3.png", path: "/contact" },
+  { title: "Hassle-free Claim Assistance", cta: "Enquire Now", image: basePath + "2150797566-Photoroom-1-1.png", path: "/contact" },
 ];
 const productImages = [
   "Untitled-design-29.png",
@@ -94,28 +123,28 @@ const productImages = [
   "Untitled-design-32.png",
   "Untitled-design-33.png",
   "Untitled-design-34.png",
-];
+]; 
 
 const productsRaw = [
-  { title: "Health Insurance", description: "Covers medical expenses, hospitalization, and emergencies, ensuring quality healthcare access for you and your family with complete financial protection." },
-  { title: "Motor Insurance", description: "Protects vehicles against accidents, theft, and damages, including third-party liabilities, ensuring worry-free driving and fast, reliable claims support." },
-  { title: "Liability Insurance", description: "Provides coverage against legal claims for property damage or injuries, protecting individuals and businesses from unexpected financial liabilities and lawsuits." },
-  { title: "Travel Insurance", description: "Covers medical emergencies, trip cancellations, lost luggage, and travel delays for worry-free journeys." },
-  { title: "Property Insurance", description: "Secures homes, offices, and commercial properties against fire, theft, and natural disasters." },
-  { title: "Fire Insurance", description: "Protects property from fire, lightning, and explosion damage with financial support after incidents." },
-  { title: "Warehouse Insurance", description: "Covers stored goods against fire, theft, and disasters, safeguarding inventory value." },
+  { title: "Health Insurance", description: "Covers medical expenses, hospitalization, and emergencies, ensuring quality healthcare access for you and your family with complete financial protection.", path: "/health-insurance" },
+  { title: "Motor Insurance", description: "Protects vehicles against accidents, theft, and damages, including third-party liabilities, ensuring worry-free driving and fast, reliable claims support.", path: "/motor-insurance" },
+  { title: "Liability Insurance", description: "Provides coverage against legal claims for property damage or injuries, protecting individuals and businesses from unexpected financial liabilities and lawsuits.", path: "/liability-insurance" },
+  { title: "Travel Insurance", description: "Covers medical emergencies, trip cancellations, lost luggage, and travel delays for worry-free journeys.", path: "/travel-insurance" },
+  { title: "Property Insurance", description: "Secures homes, offices, and commercial properties against fire, theft, and natural disasters.", path: "/property-insurance" },
+  { title: "Fire Insurance", description: "Protects property from fire, lightning, and explosion damage with financial support after incidents." }, 
+  { title: "Warehouse Insurance", description: "Covers stored goods against fire, theft, and disasters, safeguarding inventory value." }, 
   { title: "Transit Insurance", description: "Protects goods in transit against theft, fire, and accidental damage during transportation." },
   { title: "Commercial Vehicle Insurance", description: "Protect your business vehicles with comprehensive coverage for smooth operations." },
   { title: "Transport Line Claim Specialist", description: "Expert claim specialists ensuring quick, hassle-free settlements for transport businesses." },
-  { title: "Life Insurance", description: "Secure your family’s future with life insurance and financial protection in times of uncertainty." },
+  { title: "Life Insurance", description: "Secure your family’s future with life insurance and financial protection in times of uncertainty." },  
 ];
 
 const products = productsRaw.map((item, index) => ({
   title: item.title,
   description: item.description,
   image: basePath + productImages[index],
+  path: item.path || "/contact", // fallback भी दे दिया 👍
 }));
-
 
 const partners = [
   { file: "Untitled-design-11.png", name: "Reliance general insurance" },
@@ -138,14 +167,17 @@ const blogCards = [
   {
     image: "https://navlakhainsurance.in/wp-content/uploads/2025/07/127981.jpg",
     title: "Property Insurance Protecting Your Valuable Assets",
+    path: "/property-insurance"
   },
   {
     image: "https://navlakhainsurance.in/wp-content/uploads/2025/07/125089.jpg",
     title: "Travel Insurance Your Trusted Companion",
+    path: "/travel-insurance"
   },
   {
     image: "https://navlakhainsurance.in/wp-content/uploads/2025/07/134016.jpg",
     title: "Liability Insurance Protecting You",
+    path: "/liability-insurance"
   },
 ];
 
@@ -175,29 +207,29 @@ const Index = () => {
 
   {/* Icons Grid */}
   <div className="mt-12 grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-7">
-    {quoteItems.map((item, index) => (
-      <a 
-        key={item.title} 
-        href="#contact" 
-        className="group flex flex-col items-center text-center" 
-        style={{ animationDelay: `${index * 90}ms` }}
-      >
-        {/* Icon Container with Green Border */}
-        <span className="flex size-24 items-center justify-center rounded-xl border-2 border-[#213591] bg-white p-4 transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-lg">
-          <img 
-            src={item.image} 
-            alt={`${item.title} insurance`} 
-            className="h-full w-full object-contain" 
-            loading="lazy" 
-          />
-        </span>
-        
-        {/* Title with Navy Color */}
-        <span className="mt-3 block text-sm font-bold leading-tight text-[#003d63] md:text-base">
-          {item.title}
-        </span>
-      </a>
-    ))}
+   {quoteItems.map((item, index) => (
+  <Link 
+    key={item.title} 
+    to={item.path}   // ✅ THIS is important
+    className="group flex flex-col items-center text-center" 
+    style={{ animationDelay: `${index * 90}ms` }}
+  >
+    {/* Icon */}
+    <span className="flex size-24 items-center justify-center rounded-xl border-2 border-[#213591] bg-white p-4 transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-lg">
+      <img 
+        src={item.image} 
+        alt={`${item.title} insurance`} 
+        className="h-full w-full object-contain" 
+        loading="lazy" 
+      />
+    </span>
+
+    {/* Title */}
+    <span className="mt-3 block text-sm font-bold leading-tight text-[#003d63] md:text-base">
+      {item.title}
+    </span>
+  </Link>
+))}
   </div>
 </section>
 
@@ -264,35 +296,37 @@ const Index = () => {
   </div>
 
   {/* Steps Grid */}
-  <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
-    {steps.map((step, i) => (
-      <div key={i} className="flex flex-col items-center text-center">
-        {/* Title */}
-        <h3 className="text-xl font-bold text-[#213591]">{step.title}</h3>
+ <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+  {steps.map((step, i) => (
+    <div key={i} className="flex flex-col items-center text-center">
 
-        {/* Image with Blue Circle Background */}
-        <div className="relative mt-8 flex h-64 w-64 items-end justify-center">
-          <div className="absolute bottom-4 size-48 rounded-full bg-[#213591]"></div>
-          <img 
-            src={step.image} 
-            alt={step.title} 
-            className="relative z-10 h-full w-full object-contain" 
-          />
-        </div>
+      <h3 className="text-xl font-bold text-[#213591]">{step.title}</h3>
 
-        {/* Description */}
-        <p className="mt-6 min-h-[3rem] text-base font-bold text-[#213591]">
-          {step.description}
-        </p>
-
-        {/* Button with Green Accent */}
-        <button className="relative mt-6 overflow-hidden rounded-sm bg-[#213591] px-8 py-3 text-sm font-bold text-white transition-all hover:opacity-90">
-          <div className="absolute left-0 top-0 h-full w-1.5 bg-[#E8021E]"></div>
-          {step.cta}
-        </button>
+      <div className="relative mt-8 flex h-64 w-64 items-end justify-center">
+        <div className="absolute bottom-4 size-48 rounded-full bg-[#213591]"></div>
+        <img 
+          src={step.image} 
+          alt={step.title} 
+          className="relative z-10 h-full w-full object-contain" 
+        />
       </div>
-    ))}
-  </div>
+
+      <p className="mt-6 min-h-[3rem] text-base font-bold text-[#213591]">
+        {step.description}
+      </p>
+
+      {/* ✅ Navigation Button */}
+      <Link 
+        to={step.path}
+        className="relative mt-6 inline-block overflow-hidden rounded-sm bg-[#213591] px-8 py-3 text-sm font-bold text-white transition-all hover:opacity-90"
+      >
+        <div className="absolute left-0 top-0 h-full w-1.5 bg-[#E8021E]"></div>
+        {step.cta}
+      </Link>
+
+    </div>
+  ))}
+</div>
 </section>
 
       {/* products */}
@@ -302,30 +336,34 @@ const Index = () => {
           <span className="text-[#E8021E]">Insurance Products</span>
         </h2>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 border-l border-t border-gray-300">
-          {products.map((product, i) => (
-            <div key={i} className="border-r border-b border-gray-300 bg-white">
-              
-              <img src={product.image} className="h-48 w-full object-cover" />
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 border-l border-t border-gray-300">
+  {products.map((product, i) => (
+    <div key={i} className="border-r border-b border-gray-300 bg-white">
+      
+      <img src={product.image} className="h-48 w-full object-cover" />
 
-              <div className="p-5 text-center">
-                <h3 className="text-lg font-bold text-[#E8021E]">
-                  {product.title}
-                </h3>
+      <div className="p-5 text-center">
+        <h3 className="text-lg font-bold text-[#E8021E]">
+          {product.title}
+        </h3>
 
-                <p className="text-sm mt-3 text-[#003d63]">
-                  {product.description}
-                </p>
+        <p className="text-sm mt-3 text-[#003d63]">
+          {product.description}
+        </p>
 
-                <button className="mt-5 bg-[#213591] text-white px-6 py-2 rounded relative overflow-hidden">
-                  <span className="absolute left-0 top-0 w-1.5 h-full bg-[#E8021E]"></span>
-                  Quick Enquiry
-                </button>
-              </div>
+        {/* ✅ Navigation */}
+        <Link 
+          to={product.path}
+          className="mt-5 inline-block bg-[#213591] text-white px-6 py-2 rounded relative overflow-hidden"
+        >
+          <span className="absolute left-0 top-0 w-1.5 h-full bg-[#E8021E]"></span>
+          Quick Enquiry
+        </Link>
+      </div>
 
-            </div>
-          ))}
-        </div>
+    </div>
+  ))}
+</div>
       </section>
 
       {/* partners */}
@@ -407,14 +445,15 @@ const Index = () => {
             ))}
           </div>
 
-          <div className="flex justify-center">
-            <a 
-              href="tel:8320291588" 
-              className="inline-flex w-full items-center justify-center gap-3 rounded-md bg-[#213591] px-6 py-3 text-lg font-bold text-white transition hover:bg-[#082d49] active:scale-95 shadow-lg"
-            >
-              Talk to an Advisor
-            </a>
-          </div>
+
+<div className="flex justify-center">
+  <Link 
+    to="/contact"
+    className="inline-flex w-full items-center justify-center gap-3 rounded-md bg-[#213591] px-6 py-3 text-lg font-bold text-white transition hover:bg-[#082d49] active:scale-95 shadow-lg"
+  >
+    Talk to an Advisor
+  </Link>
+</div>
         </div>
 
       </div>
@@ -434,44 +473,43 @@ const Index = () => {
     </h2>
 
     {/* GRID */}
-    <div className="mt-10 grid gap-7 lg:grid-cols-3">
-      {blogCards.map((blog) => (
-        <article
-          key={blog.title}
-          className="overflow-hidden rounded-lg border border-border/50 bg-card shadow-card"
+
+<div className="mt-10 grid gap-7 lg:grid-cols-3">
+  {blogCards.map((blog) => (
+    <article
+      key={blog.title}
+      className="overflow-hidden rounded-lg border border-border/50 bg-card shadow-card"
+    >
+      <img
+        src={blog.image}
+        alt={blog.title}
+        className="h-56 w-full object-cover"
+        loading="lazy"
+      />
+
+      <div className="p-6">
+
+        <p className="font-extrabold text-[#E8021E]">
+          26 Jul, 2025
+        </p>
+
+        <h3 className="mt-3 text-2xl font-extrabold text-[#213591]">
+          {blog.title}
+        </h3>
+
+        {/* ✅ Navigation */}
+        <Link
+          to={blog.path}
+          className="mt-5 inline-flex items-center gap-2 font-extrabold text-[#E8021E] hover:text-[#213591] transition"
         >
-          <img
-            src={blog.image}
-            alt={blog.title}
-            className="h-56 w-full object-cover"
-            loading="lazy"
-          />
+          Read More
+          <ArrowRight className="size-4" />
+        </Link>
 
-          <div className="p-6">
-
-            {/* DATE (GREEN) */}
-            <p className="font-extrabold text-[#E8021E]">
-              26 Jul, 2025
-            </p>
-
-            {/* TITLE (BLUE) */}
-            <h3 className="mt-3 text-2xl font-extrabold text-[#213591]">
-              {blog.title}
-            </h3>
-
-            {/* READ MORE (GREEN + BLUE MIX) */}
-            <a
-              href="#contact"
-              className="mt-5 inline-flex items-center gap-2 font-extrabold text-[#E8021E] hover:text-[#213591] transition"
-            >
-              Read More
-              <ArrowRight className="size-4" />
-            </a>
-
-          </div>
-        </article>
-      ))}
-    </div>
+      </div>
+    </article>
+  ))}
+</div>
   </div>
 </section>
 

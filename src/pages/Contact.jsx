@@ -13,21 +13,21 @@ const ContactPage = () => {
       icon: MapPin,
       title: "Address",
       detail:
-        "A-604, 6th Floor, Block-A, Bijal Business Center, Aslali, Ahmedabad-382427",
+        "1st floor, Avadhpuri Shopping Center, nr. Vishwas City 1, Ghatlodiya, Ahmedabad, Gujarat 380061",
       type: "text",
     },
     {
       icon: MailCheck,
       title: "Email Address",
-      detail: "minaxi@navlakhainsurance.in, info@navlakhainsurance.in",
+      detail: "grivafin@gmail.com",
       type: "email",
     },
-    {
-      icon: Phone,
-      title: "Contact Number",
-      detail: "+91 8238311555",
-      type: "tel",
-    },
+  {
+  icon: Phone,
+  title: "Contact Number",
+  detail: "+91 9904401900\n+91 9737067941\n+91 9099333601",
+  type: "tel",
+}
   ];
 
   return (
@@ -74,7 +74,7 @@ const ContactPage = () => {
                             ? `mailto:${val.trim()}`
                             : `tel:${val.trim()}`
                         }
-                        className="block text-sm text-gray-700 hover:text-[#8CC63F]"
+                        className="block text-sm text-gray-700 hover:text-[#E8021E]"
                       >
                         {val.trim()}
                       </a>
@@ -139,8 +139,8 @@ const ContactPage = () => {
 
           <div className="w-full h-[400px] border overflow-hidden shadow-xl">
             <iframe
-              title="navlakha location"
-              src="https://www.google.com/maps?q=Aslali%20Circle%20Ring%20Road%20Ahmedabad&output=embed"
+              title="griva location"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3670.440927625201!2d72.53538534!3d23.08094956!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e836511e1df43%3A0x73be035d795892b2!2sGriva%20Insurance%20Solution!5e0!3m2!1sen!2sin!4v1777627824019!5m2!1sen!2sin" width="600" height="450" style="border:0"
               width="100%"
               height="100%"
               style={{ border: 0 }}
