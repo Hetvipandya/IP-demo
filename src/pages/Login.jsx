@@ -24,33 +24,45 @@ const Login = () => {
     setError("");
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+// Inside Login.jsx -> handleSubmit
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const { email, password, isAdmin } = formData;
 
-    const { email, password, isAdmin } = formData;
-
-    const adminEmail = "admin@gmail.com";
-    const adminPassword = "admin123";
-
-    if (!email || !password) {
-      setError("Please fill all fields");
-      return;
+  if (isAdmin) {
+    if (email === "admin10@gmail.com" && password === "Admin789") {
+      navigate("/admin");
+    } else {
+      setError("Invalid Admin Credentials");
     }
+    return;
+  }
 
-    // ================= ADMIN LOGIN =================
-    if (isAdmin) {
-      if (email === adminEmail && password === adminPassword) {
-        navigate("/admin-dashboard");
+  // --- DEALER LOGIN LOGIC ---
+  try {
+    const res = await fetch("https://insurance-backend-eufn.onrender.com/api/user/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ emailId: email, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // CHECK IF APPROVED
+      if (data.user.status === "approved" || data.user.isApproved) {
+        localStorage.setItem("token", data.token);
+        navigate("/dealer-dashboard");
       } else {
-        setError("Invalid Admin Credentials");
+        setError("Your account is pending admin approval.");
       }
-      return;
+    } else {
+      setError(data.message || "Login failed");
     }
-
-    // ================= DEALER LOGIN (DEFAULT) =================
-    navigate("/dealer-dashboard");
-  };
-
+  } catch (err) {
+    setError("Server error. Please try again.");
+  }
+};
   const inputBase =
     "w-full pl-12 pr-4 py-3.5 text-sm border rounded-lg outline-none transition shadow-sm bg-white";
 

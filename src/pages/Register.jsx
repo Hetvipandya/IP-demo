@@ -9,7 +9,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+ 
 const Register = () => {
   const navigate = useNavigate();
 
@@ -32,11 +32,48 @@ const Register = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted:", formData);
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  if (formData.password !== formData.confirmPassword) {
+    return alert("Passwords do not match");
+  }
+
+  try {
+    const res = await fetch(
+      "https://insurance-backend-eufn.onrender.com/api/user/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+       // Inside Register.jsx -> handleSubmit function
+body: JSON.stringify({
+  fullName: formData.fullName,
+  mobileNumber: formData.number, // Changed from number to mobileNumber
+  address: formData.address,
+  emailId: formData.email,       // Changed from email to emailId
+  password: formData.password,
+  confirmPassword: formData.confirmPassword,
+}),
+      }
+    );
+
+   // Inside Register.jsx -> handleSubmit
+const data = await res.json();
+
+if (res.ok) {
+  // Use a more descriptive message
+  alert("Registration request sent! Please wait for Admin Approval before logging in.");
+  navigate("/login");
+} else {
+  alert(data.message || "Error during registration");
+}
+  } catch (error) {
+    console.log(error);
+    alert("Server error");
+  }
+};
   const inputBase =
     "w-full pl-12 pr-4 py-3.5 text-sm border rounded-lg outline-none transition shadow-sm bg-white focus:ring-2 focus:ring-[#213591]/20 focus:border-[#213591]";
 

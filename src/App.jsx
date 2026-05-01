@@ -19,13 +19,18 @@ import HealthIns from "./pages/HealthIns";
 import About from "./components/About";
 import Blog from "./components/blog";
 
-// Auth Pages
+// Auth
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 
 // Dashboards
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminHome from "./admin/adminHome";
 import DealerDashboard from "./pages/DealerDashboard";
+
+// Admin Pages
+import DealerApprove from "./admin/dealerApprove";
+import ApplicationApprove from "./admin/applicationDetail";
 
 const App = () => {
   return (
@@ -34,17 +39,24 @@ const App = () => {
 
       <Routes>
 
-        {/* ================= AUTH ROUTES (NO LAYOUT) ================= */}
+        {/* AUTH */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* ================= ADMIN DASHBOARD ================= */}
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        {/* ADMIN */}
+        <Route path="/admin" element={<AdminDashboard />}>
 
-        {/* ================= DEALER DASHBOARD ================= */}
+          {/* default admin page */}
+         <Route index element={<AdminHome />} />
+
+          <Route path="application-detail" element={<ApplicationApprove />} />
+          <Route path="dealer-approval" element={<DealerApprove />} />
+        </Route>
+
+        {/* DEALER */}
         <Route path="/dealer-dashboard" element={<DealerDashboard />} />
 
-        {/* ================= MAIN WEBSITE (WITH LAYOUT) ================= */}
+        {/* MAIN SITE */}
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -53,7 +65,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/quote" element={<Quote />} />
 
-          {/* Insurance Pages */}
+          {/* INSURANCE */}
           <Route path="/property-insurance" element={<PropertyIns />} />
           <Route path="/travel-insurance" element={<TravelIns />} />
           <Route path="/liability-insurance" element={<LiabilityIns />} />

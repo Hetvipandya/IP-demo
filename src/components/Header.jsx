@@ -15,11 +15,11 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate(); // 👈 add this
 
-  const userEmail = "hetvi@gmail.com";
+  const userEmail = "admin@gmail.com";
   const userInitial = userEmail.charAt(0).toUpperCase();
 
   const handleProfileClick = () => {
-    navigate("/register"); // 👈 redirect to register page
+    navigate("/login"); // 👈 redirect to login page
   };
 
   return (
