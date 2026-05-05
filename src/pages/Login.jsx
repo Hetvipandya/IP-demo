@@ -69,18 +69,27 @@ if (isAdmin) {
     const data = await res.json();
 
     console.log("🔐 Admin Login Response:", { status: res.status, data });
+    console.log("🔍 Response keys:", Object.keys(data));
+    console.log("🔍 Full response object:", JSON.stringify(data, null, 2));
 
     if (res.ok) {
-      console.log("✅ Token received:", data.token ? "YES" : "NO");
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("adminToken", data.token);
-        console.log("✅ Tokens saved to localStorage");
+      // Check multiple possible token field names
+      const tokenValue = data.token || data.accessToken || data.access_token || data.jwt;
+      
+      console.log("🔍 Looking for token in: token, accessToken, access_token, jwt");
+      console.log("✅ Token found:", tokenValue ? "YES" : "NO");
+      
+      if (tokenValue) {
+        localStorage.setItem("token", tokenValue);
+        localStorage.setItem("adminToken", tokenValue);
+        console.log("✅ Tokens saved to localStorage:", tokenValue.substring(0, 20) + "...");
         navigate("/admin");
       } else {
+        console.error("❌ No token field found in response");
         setError("Login failed: No token in response");
       }
     } else {
+      console.error("❌ Login failed:", data);
       setError(data.message || "Admin login failed");
     }
   } catch (err) {
