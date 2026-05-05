@@ -3,15 +3,15 @@ import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  useEffect(() => {
-  const adminToken = localStorage.getItem("adminToken");
-
-  if (adminToken) {
-    navigate("/admin");
-  }
-}, []); 
-
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const adminToken = localStorage.getItem("adminToken");
+
+    if (adminToken) {
+      navigate("/admin");
+    }
+  }, [navigate]);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -70,6 +70,7 @@ if (isAdmin) {
 
     if (res.ok) {
       localStorage.setItem("token", data.token); // ✅ REAL TOKEN
+      localStorage.setItem("adminToken", data.token); // admin guard expects this
       navigate("/admin");
     } else {
       setError(data.message || "Admin login failed");
