@@ -68,10 +68,18 @@ if (isAdmin) {
 
     const data = await res.json();
 
+    console.log("🔐 Admin Login Response:", { status: res.status, data });
+
     if (res.ok) {
-      localStorage.setItem("token", data.token); // ✅ REAL TOKEN
-      localStorage.setItem("adminToken", data.token); // admin guard expects this
-      navigate("/admin");
+      console.log("✅ Token received:", data.token ? "YES" : "NO");
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("adminToken", data.token);
+        console.log("✅ Tokens saved to localStorage");
+        navigate("/admin");
+      } else {
+        setError("Login failed: No token in response");
+      }
     } else {
       setError(data.message || "Admin login failed");
     }

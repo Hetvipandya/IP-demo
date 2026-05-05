@@ -25,6 +25,13 @@ const fetchApplications = async () => {
     setLoading(true);
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
+    if (!token) {
+      console.warn("⚠️ No admin token found in localStorage");
+      setApplications([]);
+      setLoading(false);
+      return;
+    }
+
     const res = await fetch(
       "https://insurance-backend-eufn.onrender.com/api/application/admin",
       {
@@ -51,6 +58,7 @@ const fetchApplications = async () => {
     console.error("Fetch error:", err);
     setApplications([]);
   } finally {
+
     setLoading(false);
   }
 };
