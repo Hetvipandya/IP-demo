@@ -9,7 +9,7 @@ const Login = () => {
   if (adminToken) {
     navigate("/admin");
   }
-}, []);
+}, []); 
 
   const navigate = useNavigate();
 
@@ -50,13 +50,34 @@ const Login = () => {
     }
 
     // 🔴 CASE 2: Admin checkbox selected
-   if (isAdmin) {
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-    localStorage.setItem("adminToken", "adminLoggedIn"); // ✅ add this
-    navigate("/admin");
-  } else {
-    setError("Invalid Admin Email or Password");
+if (isAdmin) {
+  try {
+    const res = await fetch(
+      "https://insurance-backend-eufn.onrender.com/api/application/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          emailId: email,
+          password: password,
+        }),
+      }
+    );
+
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem("token", data.token); // ✅ REAL TOKEN
+      navigate("/admin");
+    } else {
+      setError(data.message || "Admin login failed");
+    }
+  } catch (err) {
+    setError("Server error");
   }
+
   return;
 }
 
