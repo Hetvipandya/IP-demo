@@ -32,7 +32,21 @@ const LiabilityIns = () => {
 
   return (
     <>
-      <div className="max-w-6xl mx-auto p-6 font-sans text-[#444444] antialiased">
+     <div className="relative overflow-hidden">
+
+        <div className="absolute inset-0 z-0">
+    
+    {/* RIGHT SKEW SHAPE */}
+    <div className="absolute top-0 right-0 h-full w-1/3 bg-[#eef2ff] skew-x-[-12deg] border-l border-[#dbe4ff]"></div>
+
+    {/* LEFT BLUR CIRCLE */}
+    <div className="absolute bottom-[-10%] left-[-5%] h-72 w-72 rounded-full bg-[#213591]/10 blur-3xl"></div>
+
+    {/* EXTRA TOP GLOW */}
+    <div className="absolute top-[-10%] left-[20%] h-60 w-60 bg-[#E8021E]/10 rounded-full blur-3xl"></div>
+  </div>
+
+    <div className="relative z-10 max-w-6xl mx-auto p-6 font-sans text-[#444444] antialiased">
         
         {/* --- Back Button --- */}
         <button 
@@ -246,6 +260,7 @@ const LiabilityIns = () => {
             </div>
           </aside>
         </div>
+      </div>
       </div>
       <Footer />
     </>

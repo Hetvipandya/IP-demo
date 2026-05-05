@@ -32,7 +32,14 @@ const MotorIns = () => {
 
   return (
     <>
-      <div className="max-w-6xl mx-auto p-6 font-sans text-[#444444] antialiased">
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#f5f7ff] via-white to-[#fffaf5]">
+
+           <div className="absolute inset-0 z-0">
+      <div className="absolute top-0 right-0 h-full w-1/3 bg-[#eef2ff] skew-x-[-12deg] border-l border-[#dbe4ff]"></div>
+      <div className="absolute bottom-[-10%] left-[-5%] h-72 w-72 rounded-full bg-[#213591]/10 blur-3xl"></div>
+    </div>
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-10 font-sans text-[#444]">
         
         {/* --- Back Button --- */}
         <button 
@@ -246,6 +253,7 @@ const MotorIns = () => {
             </div>
           </aside>
         </div>
+      </div>
       </div>
       <Footer />
     </>

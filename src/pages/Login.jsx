@@ -1,8 +1,16 @@
-import React, { useState } from "react";
+import React, { useState,  useEffect  } from "react";
 import { Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  useEffect(() => {
+  const adminToken = localStorage.getItem("adminToken");
+
+  if (adminToken) {
+    navigate("/admin");
+  }
+}, []);
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -12,6 +20,9 @@ const Login = () => {
   });
 
   const [error, setError] = useState("");
+
+  const ADMIN_EMAIL = "admin10@gmail.com";
+  const ADMIN_PASSWORD = "Admin789";
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -24,45 +35,65 @@ const Login = () => {
     setError("");
   };
 
-// Inside Login.jsx -> handleSubmit
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const { email, password, isAdmin } = formData;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password, isAdmin } = formData;
 
-  if (isAdmin) {
-    if (email === "admin10@gmail.com" && password === "Admin789") {
-      navigate("/admin");
-    } else {
-      setError("Invalid Admin Credentials");
+    // 🔴 CASE 1: Admin credentials entered but checkbox NOT selected
+    if (
+      email === ADMIN_EMAIL &&
+      password === ADMIN_PASSWORD &&
+      !isAdmin
+    ) {
+      setError("Please tick 'Login as Admin' to continue.");
+      return;
     }
-    return;
+
+    // 🔴 CASE 2: Admin checkbox selected
+   if (isAdmin) {
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    localStorage.setItem("adminToken", "adminLoggedIn"); // ✅ add this
+    navigate("/admin");
+  } else {
+    setError("Invalid Admin Email or Password");
   }
+  return;
+}
 
-  // --- DEALER LOGIN LOGIC ---
-  try {
-    const res = await fetch("https://insurance-backend-eufn.onrender.com/api/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ emailId: email, password })
-    });
+    // 🔴 CASE 3: Prevent admin login via dealer API
+    if (email === ADMIN_EMAIL) {
+      setError("Admin must login using 'Login as Admin'");
+      return;
+    }
 
-    const data = await res.json();
+    // ✅ DEALER LOGIN
+    try {
+      const res = await fetch(
+        "https://insurance-backend-eufn.onrender.com/api/user/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ emailId: email, password }),
+        }
+      );
 
-    if (res.ok) {
-      // CHECK IF APPROVED
-      if (data.user.status === "approved" || data.user.isApproved) {
-        localStorage.setItem("token", data.token);
-        navigate("/dealer-dashboard");
+      const data = await res.json();
+
+      if (res.ok) {
+        if (data.user.status === "approved" || data.user.isApproved) {
+          localStorage.setItem("token", data.token);
+          navigate("/dealer-dashboard");
+        } else {
+          setError("Your account is pending admin approval.");
+        }
       } else {
-        setError("Your account is pending admin approval.");
+        setError(data.message || "Login failed");
       }
-    } else {
-      setError(data.message || "Login failed");
+    } catch (err) {
+      setError("Server error. Please try again.");
     }
-  } catch (err) {
-    setError("Server error. Please try again.");
-  }
-};
+  };
+
   const inputBase =
     "w-full pl-12 pr-4 py-3.5 text-sm border rounded-lg outline-none transition shadow-sm bg-white";
 
@@ -138,14 +169,6 @@ const handleSubmit = async (e) => {
             Login
           </button>
         </form>
-
-        {/* Footer */}
-        <p className="text-center mt-6 text-gray-600 text-sm">
-          Don’t have an account?{" "}
-          <a href="/register" className="text-[#E8021E] font-bold hover:underline">
-            Register here
-          </a>
-        </p>
       </div>
     </section>
   );

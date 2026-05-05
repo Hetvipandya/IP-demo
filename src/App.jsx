@@ -27,6 +27,7 @@ import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminHome from "./admin/adminHome";
 import DealerDashboard from "./pages/DealerDashboard";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
 
 // Admin Pages
 import DealerApprove from "./admin/dealerApprove";
@@ -44,7 +45,14 @@ const App = () => {
         <Route path="/register" element={<Register />} />
 
         {/* ADMIN */}
-        <Route path="/admin" element={<AdminDashboard />}>
+        <Route
+  path="/admin"
+  element={
+    <AdminProtectedRoute>
+      <AdminDashboard />
+    </AdminProtectedRoute>
+  }
+>
 
           {/* default admin page */}
          <Route index element={<AdminHome />} />
