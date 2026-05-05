@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const adminToken = localStorage.getItem("adminToken");
+ useEffect(() => {
+  const token = localStorage.getItem("token");
 
-    if (adminToken) {
-      navigate("/admin");
-    }
-  }, [navigate]);
+  if (token) {
+    navigate("/admin");
+  }
+}, [navigate]);
 
   const [formData, setFormData] = useState({
     email: "",

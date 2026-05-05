@@ -23,13 +23,13 @@ const AdminHome = () => {
 const fetchApplications = async () => {
   try {
     setLoading(true);
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
     const res = await fetch(
       "https://insurance-backend-eufn.onrender.com/api/application/admin",
       {
         headers: {
-          "Authorization": `Bearer ${token}`,   // ✅ MUST
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json"
         }
       }
