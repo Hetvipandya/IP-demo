@@ -3,7 +3,6 @@ import {
   Clock, XCircle, FileText, Activity, CheckCircle2, UserCheck, Eye, ShieldCheck, Trash2, RotateCcw, MapPin, Calendar 
 } from "lucide-react";
 import ApplicationDetail from "./applicationDetail";
-import { useNavigate } from "react-router-dom";
 
 const hideScrollbarCSS = `
   .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -16,8 +15,6 @@ const AdminHome = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     fetchDealers();
     fetchApplications();
@@ -26,33 +23,30 @@ const AdminHome = () => {
 const fetchApplications = async () => {
   try {
     setLoading(true);
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
-    const token = localStorage.getItem("adminToken");
-
-    console.log("🚀 FINAL TOKEN:", token);
-
-    if (!token || token === "adminLoggedIn") {
-  console.warn("❌ Invalid token → redirecting to login");
-
-  localStorage.removeItem("adminToken"); // cleanup
-  navigate("/login"); // 🚀 redirect
-
-  return;
-}
+    if (!token) {
+      console.warn("⚠️ No admin token found in localStorage");
+      setApplications([]);
+      setLoading(false);
+      return;
+    }
 
     const res = await fetch(
       "https://insurance-backend-eufn.onrender.com/api/application/admin",
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
       }
     );
 
     const data = await res.json();
 
-    console.log("✅ API DATA:", data);
+    console.log("API DATA:", data);
+    console.log("FRONTEND TOKEN:", token);
+    console.log("userId", data.userId);
 
     if (Array.isArray(data)) {
       setApplications(data);
@@ -61,9 +55,10 @@ const fetchApplications = async () => {
     }
 
   } catch (err) {
-    console.error("❌ Fetch error:", err);
+    console.error("Fetch error:", err);
     setApplications([]);
   } finally {
+
     setLoading(false);
   }
 };

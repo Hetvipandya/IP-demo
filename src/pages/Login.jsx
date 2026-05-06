@@ -11,7 +11,7 @@ useEffect(() => {
   if (token) {
     navigate("/admin");
   }
-}, [navigate]);
+}, []);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -53,7 +53,7 @@ useEffect(() => {
 if (isAdmin) {
   try {
     const res = await fetch(
-      "https://insurance-backend-eufn.onrender.com/api/application/login",
+      "https://insurance-backend-eufn.onrender.com/api/user/login",
       {
         method: "POST",
         headers: {
@@ -91,6 +91,7 @@ if (isAdmin) {
       
       if (tokenValue) {
         console.log("✅ Found token:", tokenValue.substring(0, 30) + "...");
+        localStorage.setItem("token", tokenValue);
         localStorage.setItem("adminToken", tokenValue);
         console.log("✅ Saved to localStorage");
         navigate("/admin");
