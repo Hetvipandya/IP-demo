@@ -14,6 +14,7 @@ const AdminHome = () => {
   const [dealers, setDealers] = useState([]);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [detailLoading, setDetailLoading] = useState(false);
 
   useEffect(() => {
     fetchDealers();
@@ -72,6 +73,34 @@ const fetchApplications = async () => {
       setDealers(dealerList);
     } catch (err) {
       console.error("Failed to fetch dealers:", err);
+    }
+  };
+
+  const handleViewDetails = async (id) => {
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    if (!token) {
+      console.warn("⚠️ No admin token found in localStorage");
+      return;
+    }
+
+    try {
+      setDetailLoading(true);
+      const res = await fetch(`https://insurance-backend-eufn.onrender.com/api/application/${id}`, {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (res.ok && data) {
+        setSelectedApp(data);
+      } else {
+        console.error("Failed to fetch application details:", data);
+      }
+    } catch (err) {
+      console.error("Error fetching application details:", err);
+    } finally {
+      setDetailLoading(false);
     }
   };
 
@@ -160,10 +189,11 @@ const fetchApplications = async () => {
                     </div>
                   </div>
                   <button 
-                    onClick={() => setSelectedApp(app)}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-blue-900/20"
+                    onClick={() => handleViewDetails(app._id)}
+                    disabled={detailLoading}
+                    className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-lg shadow-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Eye size={14}/> View Details
+                    <Eye size={14}/> {detailLoading ? "Loading..." : "View Details"}
                   </button>
                 </div>
               ))
