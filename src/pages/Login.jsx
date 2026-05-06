@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
 
- useEffect(() => {
-  const token = localStorage.getItem("token");
+useEffect(() => {
+  const token = localStorage.getItem("adminToken");
 
   if (token) {
     navigate("/admin");
@@ -91,7 +91,6 @@ if (isAdmin) {
       
       if (tokenValue) {
         console.log("✅ Found token:", tokenValue.substring(0, 30) + "...");
-        localStorage.setItem("token", tokenValue);
         localStorage.setItem("adminToken", tokenValue);
         console.log("✅ Saved to localStorage");
         navigate("/admin");
