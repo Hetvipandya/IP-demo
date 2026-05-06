@@ -23,14 +23,14 @@ const AdminHome = () => {
 const fetchApplications = async () => {
   try {
     setLoading(true);
-    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
 
-    if (!token) {
-      console.warn("⚠️ No admin token found in localStorage");
-      setApplications([]);
-      setLoading(false);
-      return;
-    }
+    if (!token || token === "adminLoggedIn") {
+  console.error("❌ Invalid token:", token);
+  setApplications([]);
+  setLoading(false);
+  return;
+}
 
     const res = await fetch(
       "https://insurance-backend-eufn.onrender.com/api/application/admin",

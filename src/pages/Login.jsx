@@ -68,28 +68,40 @@ if (isAdmin) {
 
     const data = await res.json();
 
-    console.log("🔐 Admin Login Response:", { status: res.status, data });
-    console.log("🔍 Response keys:", Object.keys(data));
-    console.log("🔍 Full response object:", JSON.stringify(data, null, 2));
+    console.log("🔐 ADMIN LOGIN DEBUG START");
+    console.log("📊 HTTP Status:", res.status);
+    console.log("📦 Full Response:", data);
+    console.log("🔑 All Response Keys:", Object.keys(data));
+    
+    // Log every field to see what backend actually sends
+    for (const key in data) {
+      console.log(`  → ${key}:`, data[key]);
+    }
 
     if (res.ok) {
       // Check multiple possible token field names
-      const tokenValue = data.token || data.accessToken || data.access_token || data.jwt;
+      const tokenValue = data.token || data.accessToken || data.access_token || data.jwt || data.adminToken;
       
-      console.log("🔍 Looking for token in: token, accessToken, access_token, jwt");
-      console.log("✅ Token found:", tokenValue ? "YES" : "NO");
+      console.log("🔍 Token search results:");
+      console.log("  - data.token?", data.token ? "✅ YES" : "❌ NO");
+      console.log("  - data.accessToken?", data.accessToken ? "✅ YES" : "❌ NO");
+      console.log("  - data.access_token?", data.access_token ? "✅ YES" : "❌ NO");
+      console.log("  - data.jwt?", data.jwt ? "✅ YES" : "❌ NO");
+      console.log("  - data.adminToken?", data.adminToken ? "✅ YES" : "❌ NO");
       
       if (tokenValue) {
+        console.log("✅ Found token:", tokenValue.substring(0, 30) + "...");
         localStorage.setItem("token", tokenValue);
         localStorage.setItem("adminToken", tokenValue);
-        console.log("✅ Tokens saved to localStorage:", tokenValue.substring(0, 20) + "...");
+        console.log("✅ Saved to localStorage");
         navigate("/admin");
       } else {
-        console.error("❌ No token field found in response");
-        setError("Login failed: No token in response");
+        console.error("❌ NO TOKEN FOUND IN ANY FIELD");
+        console.error("❌ Backend response:", JSON.stringify(data));
+        setError("Login failed: Backend did not return a token");
       }
     } else {
-      console.error("❌ Login failed:", data);
+      console.error("❌ Login HTTP Error:", res.status, data);
       setError(data.message || "Admin login failed");
     }
   } catch (err) {
