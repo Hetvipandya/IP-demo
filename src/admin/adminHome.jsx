@@ -3,6 +3,7 @@ import {
   Clock, XCircle, FileText, Activity, CheckCircle2, UserCheck, Eye, ShieldCheck, Trash2, RotateCcw, MapPin, Calendar 
 } from "lucide-react";
 import ApplicationDetail from "./applicationDetail";
+import { useNavigate } from "react-router-dom";
 
 const hideScrollbarCSS = `
   .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -14,6 +15,8 @@ const AdminHome = () => {
   const [dealers, setDealers] = useState([]);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchDealers();
@@ -29,11 +32,13 @@ const fetchApplications = async () => {
     console.log("🚀 FINAL TOKEN:", token);
 
     if (!token || token === "adminLoggedIn") {
-      console.warn("⚠️ Invalid or missing token");
-      setApplications([]);
-      setLoading(false);
-      return;
-    }
+  console.warn("❌ Invalid token → redirecting to login");
+
+  localStorage.removeItem("adminToken"); // cleanup
+  navigate("/login"); // 🚀 redirect
+
+  return;
+}
 
     const res = await fetch(
       "https://insurance-backend-eufn.onrender.com/api/application/admin",
