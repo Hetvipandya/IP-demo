@@ -23,30 +23,31 @@ const AdminHome = () => {
 const fetchApplications = async () => {
   try {
     setLoading(true);
+
     const token = localStorage.getItem("adminToken");
 
+    console.log("🚀 FINAL TOKEN:", token);
+
     if (!token || token === "adminLoggedIn") {
-  console.error("❌ Invalid token:", token);
-  setApplications([]);
-  setLoading(false);
-  return;
-}
+      console.warn("⚠️ Invalid or missing token");
+      setApplications([]);
+      setLoading(false);
+      return;
+    }
 
     const res = await fetch(
       "https://insurance-backend-eufn.onrender.com/api/application/admin",
       {
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       }
     );
 
     const data = await res.json();
 
-    console.log("API DATA:", data);
-    console.log("FRONTEND TOKEN:", token);
-    console.log("userId", data.userId);
+    console.log("✅ API DATA:", data);
 
     if (Array.isArray(data)) {
       setApplications(data);
@@ -55,10 +56,9 @@ const fetchApplications = async () => {
     }
 
   } catch (err) {
-    console.error("Fetch error:", err);
+    console.error("❌ Fetch error:", err);
     setApplications([]);
   } finally {
-
     setLoading(false);
   }
 };
