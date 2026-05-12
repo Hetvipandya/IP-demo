@@ -5,14 +5,29 @@ import {
   CheckCircle2, XCircle, UploadCloud
 } from "lucide-react";
 
-/* ================= SUB COMPONENTS (TOP પર રાખવા) ================= */
+/* ================= HELPER FUNCTIONS ================= */
+
+const getFullImageUrl = (path) => {
+  if (!path) return '';
+  // If it's already a full URL, return as is
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path;
+  }
+  // Otherwise join with base URL
+  const baseUrl = 'https://insurance-backend-eufn.onrender.com';
+  // Remove leading slash if present to avoid double slashes
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${baseUrl}/${cleanPath}`;
+};
+
+/* ================= SUB COMPONENTS ================= */
 
 const DetailBox = ({ label, value, icon }) => (
   <div>
     <div className="flex items-center gap-1 text-gray-400 text-xs">
       {icon} {label}
     </div>
-    <p className="text-sm font-semibold break-all">{value}</p>
+    <p className="text-sm font-semibold break-all">{value || "N/A"}</p>
   </div>
 );
 
@@ -38,14 +53,22 @@ const DocCategory = ({ title, files }) => {
     <div className="border rounded-lg">
       <div className="bg-gray-100 px-3 py-1 text-xs font-bold">{title}</div>
 
-      {files.map((path, i) => (
-        <div key={i} className="flex justify-between p-2 text-xs">
-          <span>{path.split("/").pop()}</span>
-          <a href={path} target="_blank" rel="noreferrer" className="text-blue-600 flex items-center gap-1">
-            <Download size={12}/> View
-          </a>
-        </div>
-      ))}
+      {files.map((path, i) => {
+        const fullUrl = getFullImageUrl(path);
+        return (
+          <div key={i} className="flex justify-between p-2 text-xs border-b last:border-b-0">
+            <span className="truncate flex-1 mr-2">{path.split("/").pop()}</span>
+            <a 
+              href={fullUrl} 
+              target="_blank" 
+              rel="noreferrer" 
+              className="text-blue-600 flex items-center gap-1 hover:text-blue-800"
+            >
+              <Download size={12}/> View
+            </a>
+          </div>
+        );
+      })}
     </div>
   );
 };
@@ -70,7 +93,7 @@ const ApplicationDetail = ({ application, onBack }) => {
 
   const updateApplication = async (formData, successMessage, loadingKey) => {
     if (!token) {
-      setMessage("Admin token not found. Please login again.");
+      setMessage("Executive token not found. Please login again.");
       return;
     }
 
@@ -131,6 +154,7 @@ const ApplicationDetail = ({ application, onBack }) => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString('en-IN', {
       day: '2-digit',
       month: 'long',
@@ -147,7 +171,7 @@ const ApplicationDetail = ({ application, onBack }) => {
         {/* BACK BUTTON */}
         <button 
           onClick={onBack}
-          className="flex items-center gap-2 text-gray-500 hover:text-blue-600 mb-6"
+          className="flex items-center gap-2 text-gray-500 hover:text-blue-600 mb-6 transition-colors"
         >
           <ArrowLeft size={18} />
           <span className="font-semibold">Back</span>
@@ -163,14 +187,14 @@ const ApplicationDetail = ({ application, onBack }) => {
               </div>
               <div>
                 <p className="text-xs text-blue-400">Vehicle Number</p>
-                <h1 className="text-2xl font-bold">{currentApplication.carNo}</h1>
+                <h1 className="text-2xl font-bold">{currentApplication.carNo || "N/A"}</h1>
               </div>
             </div>
 
             <div className="bg-white/10 px-4 py-2 rounded-lg">
               <p className="text-xs text-gray-300">Type</p>
               <p className="font-bold capitalize">
-                {currentApplication.tp === "full" ? "Comprehensive" : currentApplication.tp}
+                {currentApplication.tp === "full" ? "Comprehensive" : currentApplication.tp || "N/A"}
               </p>
             </div>
           </div>
@@ -189,11 +213,11 @@ const ApplicationDetail = ({ application, onBack }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <DetailBox label="ID" value={currentApplication._id} icon={<Hash size={14}/>}/>
-               <DetailBox 
-  label="Delear Agency Name" 
-  value={currentApplication.user?.fullName || "N/A"} 
-  icon={<User size={14}/>}
-/>
+                  <DetailBox 
+                    label="Dealer Agency Name" 
+                    value={currentApplication.user?.fullName || "N/A"} 
+                    icon={<User size={14}/>}
+                  />
                   <DetailBox label="Created" value={formatDate(currentApplication.createdAt)} icon={<Calendar size={14}/>}/>
                   <DetailBox label="Updated" value={formatDate(currentApplication.updatedAt)} icon={<Clock size={14}/>}/>
                   
@@ -215,44 +239,65 @@ const ApplicationDetail = ({ application, onBack }) => {
 
                 <div className="space-y-3">
                   <DocCategory title="RC Book" files={currentApplication.rcBookImages} />
-                  <DocCategory title="Aadhar" files={currentApplication.aadharCardImages} />
-                  <DocCategory title="PAN" files={currentApplication.panCardImages} />
+                  <DocCategory title="Aadhar Card" files={currentApplication.aadharCardImages} />
+                  <DocCategory title="PAN Card" files={currentApplication.panCardImages} />
                   <DocCategory title="Old Policy" files={currentApplication.oldPolicyImages} />
-                  <DocCategory title="Other" files={currentApplication.otherImages} />
+                  <DocCategory title="Other Documents" files={currentApplication.otherImages} />
                   <DocCategory title="Admin Policy Document" files={currentApplication.adminPolicyDocument ? [currentApplication.adminPolicyDocument] : []} />
                 </div>
               </div>
 
             </div>
 
-            {/* RIGHT */}
+            {/* RIGHT - SUMMARY */}
             <div>
               <div className="bg-gray-50 p-4 rounded-xl">
-                <h4 className="font-bold mb-3">Summary</h4>
-
-                <StatRow label="RC" count={currentApplication.rcBookImages?.length}/>
-                <StatRow label="Aadhar" count={currentApplication.aadharCardImages?.length}/>
-                <StatRow label="PAN" count={currentApplication.panCardImages?.length}/>
-                <StatRow label="Policy" count={currentApplication.oldPolicyImages?.length}/>
-
-                <div className="mt-4 bg-blue-50 text-blue-600 p-2 rounded-lg flex items-center gap-2">
+                <h4 className="font-bold mb-3 flex items-center gap-2">
                   <Shield size={16}/>
-                  <span className="text-xs font-bold">Verified</span>
+                  Documents Summary
+                </h4>
+
+                <div className="space-y-2">
+                  <StatRow label="RC Book" count={currentApplication.rcBookImages?.length || 0}/>
+                  <StatRow label="Aadhar Card" count={currentApplication.aadharCardImages?.length || 0}/>
+                  <StatRow label="PAN Card" count={currentApplication.panCardImages?.length || 0}/>
+                  <StatRow label="Old Policy" count={currentApplication.oldPolicyImages?.length || 0}/>
+                  <StatRow label="Other Documents" count={currentApplication.otherImages?.length || 0}/>
+                </div>
+
+                <div className="mt-4 bg-blue-50 text-blue-600 p-3 rounded-lg flex items-center gap-2">
+                  <Shield size={16}/>
+                  <span className="text-xs font-bold">Total Documents: {
+                    (currentApplication.rcBookImages?.length || 0) +
+                    (currentApplication.aadharCardImages?.length || 0) +
+                    (currentApplication.panCardImages?.length || 0) +
+                    (currentApplication.oldPolicyImages?.length || 0) +
+                    (currentApplication.otherImages?.length || 0)
+                  }</span>
                 </div>
               </div>
             </div>
 
           </div>
 
+          {/* BOTTOM SECTION - ACTIONS */}
           <div className="border-t bg-[#f8fafc] p-6">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1.1fr]">
+              
+              {/* Status Update Section */}
               <div className="rounded-2xl border border-[#d9e3f5] bg-white p-4">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.16em] text-[#1f2f86]">Application Status</p>
                     <h4 className="mt-1 text-lg font-black text-[#10183f]">Approve or reject</h4>
                   </div>
-                  <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-black uppercase text-amber-700 ring-1 ring-amber-200">
+                  <span className={`rounded-full px-3 py-1 text-xs font-black uppercase ring-1 ${
+                    currentApplication.status === "approved" 
+                      ? "bg-green-50 text-green-700 ring-green-200"
+                      : currentApplication.status === "rejected"
+                      ? "bg-red-50 text-red-700 ring-red-200"
+                      : "bg-amber-50 text-amber-700 ring-amber-200"
+                  }`}>
                     {currentApplication.status || "pending"}
                   </span>
                 </div>
@@ -260,14 +305,14 @@ const ApplicationDetail = ({ application, onBack }) => {
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => handleStatusUpdate("approved")}
-                    disabled={actionLoading === "approved"}
+                    disabled={actionLoading === "approved" || currentApplication.status === "approved"}
                     className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[#cbdcff] bg-[#f3f7ff] text-sm font-black text-[#1f2f86] transition hover:border-[#1f2f86] hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <CheckCircle2 size={17} /> {actionLoading === "approved" ? "Approving..." : "Approve"}
                   </button>
                   <button
                     onClick={() => handleStatusUpdate("rejected")}
-                    disabled={actionLoading === "rejected"}
+                    disabled={actionLoading === "rejected" || currentApplication.status === "rejected"}
                     className="flex h-11 items-center justify-center gap-2 rounded-xl border border-[#ffd4d0] bg-[#fff5f4] text-sm font-black text-[#e6362e] transition hover:border-[#e6362e] hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     <XCircle size={17} /> {actionLoading === "rejected" ? "Rejecting..." : "Reject"}
@@ -275,6 +320,7 @@ const ApplicationDetail = ({ application, onBack }) => {
                 </div>
               </div>
 
+              {/* Policy Upload Section */}
               <div className="rounded-2xl border border-[#d9e3f5] bg-white p-4">
                 <div className="mb-4">
                   <p className="text-xs font-black uppercase tracking-[0.16em] text-[#e6362e]">Policy Document</p>
@@ -306,13 +352,13 @@ const ApplicationDetail = ({ application, onBack }) => {
                     disabled={!selectedPolicy || actionLoading === "upload"}
                     className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#1f2f86] px-5 text-sm font-black text-white transition hover:bg-[#e6362e] disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    <UploadCloud size={17} /> {actionLoading === "upload" ? "Uploading..." : selectedPolicy ? "Upload" : "Select File"}
+                    <UploadCloud size={17} /> {actionLoading === "upload" ? "Uploading..." : "Upload"}
                   </button>
                 </div>
 
                 {currentApplication.adminPolicyDocument && (
                   <a
-                    href={currentApplication.adminPolicyDocument}
+                    href={getFullImageUrl(currentApplication.adminPolicyDocument)}
                     target="_blank"
                     rel="noreferrer"
                     className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-[#1f2f86] hover:text-[#e6362e]"
