@@ -164,6 +164,20 @@ const ApplicationDetail = ({ application, onBack }) => {
     });
   };
 
+  const formatDateTime = (dateString) => {
+  const date = new Date(dateString);
+
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const yyyy = date.getFullYear();
+
+  const hh = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  const ss = String(date.getSeconds()).padStart(2, "0");
+
+  return `${dd}-${mm}-${yyyy} ${hh}:${min}:${ss}`;
+};
+
   return (
     <div className="min-h-screen bg-[#f8fafc] p-4 md:p-8 font-sans">
       <div className="max-w-5xl mx-auto">
@@ -212,15 +226,19 @@ const ApplicationDetail = ({ application, onBack }) => {
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <DetailBox label="ID" value={currentApplication._id} icon={<Hash size={14}/>}/>
+                  <DetailBox
+  label="Created At"
+  value={formatDateTime(currentApplication.createdAt)}
+  icon={<Hash size={14} />}
+/>
                   <DetailBox 
                     label="Dealer Agency Name" 
                     value={currentApplication.user?.fullName || "N/A"} 
                     icon={<User size={14}/>}
                   />
-                  <DetailBox label="Created" value={formatDate(currentApplication.createdAt)} icon={<Calendar size={14}/>}/>
+                  {/* <DetailBox label="Created" value={formatDate(currentApplication.createdAt)} icon={<Calendar size={14}/>}/> */}
                   <DetailBox label="Updated" value={formatDate(currentApplication.updatedAt)} icon={<Clock size={14}/>}/>
-                  
+                   
                   <div className="md:col-span-2">
                     <DetailBox 
                       label="Details" 
