@@ -227,9 +227,9 @@ const ApplicationDetail = ({ application, onBack }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <DetailBox
-  label="Created At"
+  label="ID"
   value={formatDateTime(currentApplication.createdAt)}
-  icon={<Hash size={14} />}
+  icon={<Hash size={14} />} 
 />
                   <DetailBox 
                     label="Dealer Agency Name" 
