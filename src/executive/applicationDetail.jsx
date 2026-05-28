@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 const getFullImageUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path;
+    return path; 
   }
   const baseUrl = 'https://insurance-backend-eufn.onrender.com';
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
@@ -84,16 +84,32 @@ const ApplicationDetail = ({ application, onBack }) => {
   const [pendingStatus, setPendingStatus] = useState("");
 
   // Format ID as yyyymmdd from createdAt
-  const getDateId = (dateString) => {
-    const date = dateString ? new Date(dateString) : new Date();
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const seconds = String(date.getSeconds()).padStart(2, "0");
-    return `${day}${month}${year}${hours}${minutes}${seconds}`;
+const getDateId = (dateString) => {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+
+  const options = {
+    timeZone: "Asia/Kolkata",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
   };
+
+  const formatter = new Intl.DateTimeFormat("en-GB", options);
+  const parts = formatter.formatToParts(date);
+
+  const obj = {};
+  parts.forEach(({ type, value }) => {
+    obj[type] = value;
+  });
+
+  return `${obj.day}${obj.month}${obj.year}${obj.hour}${obj.minute}${obj.second}`;
+};
 
   useEffect(() => {
     setCurrentApplication(application);
@@ -367,11 +383,11 @@ const ApplicationDetail = ({ application, onBack }) => {
                   <Info size={14} /> Basic Info
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <DetailBox
-                    label="Application ID"
-                    value={currentApplication.applicationId || getDateId(currentApplication.createdAt)}
-                    icon={<Hash size={14} />}
-                  />
+                <DetailBox
+  label="Application ID"
+  value={getDateId(currentApplication.createdAt)}
+  icon={<Hash size={14} />}
+/>
                   <DetailBox
                     label="Dealer Agency Name"
                     value={currentApplication.user?.fullName || "N/A"}
