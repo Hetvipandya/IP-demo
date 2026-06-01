@@ -67,7 +67,7 @@ const PendingApplications = () => {
         localStorage.getItem("adminToken") || localStorage.getItem("token");
 
       const res = await fetch(
-        "https://insurance-backend-eufn.onrender.com/api/executive",
+        "https://insurance-backend-eufn.onrender.com/api/executive", 
         {
           headers: {
             Authorization: `Bearer ${token}`,

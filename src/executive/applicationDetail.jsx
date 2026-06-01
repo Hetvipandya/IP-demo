@@ -1,22 +1,109 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import PreLoader from "../components/PreLoader";
 import {
   ArrowLeft, FileText, Download, Calendar,
   Car, Shield, Image as ImageIcon, User, Info, Hash, Clock,
-  CheckCircle2, XCircle, UploadCloud, MessageCircle
+  CheckCircle2, XCircle, UploadCloud, MessageCircle,
+  ZoomIn, X, ChevronLeft, ChevronRight
 } from "lucide-react";
-import toast from "react-hot-toast";
+import toast from "react-hot-toast"; 
 
 /* ================= HELPER FUNCTIONS ================= */
+
+const BASE_URL = 'https://insurance-backend-eufn.onrender.com';
 
 const getFullImageUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path; 
   }
-  const baseUrl = 'https://insurance-backend-eufn.onrender.com';
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${baseUrl}/${cleanPath}`;
+  return `${BASE_URL}/${cleanPath}`;
+};
+
+const isImageFile = (path = "") =>
+  /\.(jpg|jpeg|png|webp|gif)$/i.test(path);
+
+const isPdfFile = (path = "") =>
+  /\.pdf$/i.test(path);
+
+/* ================= LIGHTBOX ================= */
+
+const Lightbox = ({
+  images,
+  initialIndex,
+  onClose,
+}) => {
+  const [current, setCurrent] = useState(initialIndex);
+
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") setCurrent((prev) => (prev + 1) % images.length);
+      if (e.key === "ArrowLeft") setCurrent((prev) => (prev - 1 + images.length) % images.length);
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [images.length, onClose]);
+
+  const prev = () => setCurrent((prev) => (prev - 1 + images.length) % images.length);
+  const next = () => setCurrent((prev) => (prev + 1) % images.length);
+
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-5 right-5 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+      >
+        <X size={18} />
+      </button>
+
+      <div className="relative flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+        <img
+          src={getFullImageUrl(images[current])}
+          alt={`Document ${current + 1}`}
+          className="max-h-[85vh] max-w-[85vw] rounded-2xl object-contain shadow-2xl"
+        />
+
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={prev}
+              className="absolute -left-14 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            >
+              <ChevronLeft size={22} />
+            </button>
+
+            <button
+              onClick={next}
+              className="absolute -right-14 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            >
+              <ChevronRight size={22} />
+            </button>
+          </>
+        )}
+      </div>
+
+      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
+        <p className="text-xs text-white/70">{images[current]?.split("/")?.pop()}</p>
+        {images.length > 1 && (
+          <div className="flex gap-2">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => { e.stopPropagation(); setCurrent(i); }}
+                className={`h-2 rounded-full transition-all ${current === i ? "w-6 bg-white" : "w-2 bg-white/40"}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 /* ================= SUB COMPONENTS ================= */
@@ -48,26 +135,85 @@ const DocCategory = ({ title, files }) => {
     );
   }
 
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const imageFiles = useMemo(
+    () => files.filter((f) => isImageFile(f)),
+    [files]
+  );
+
+  const otherFiles = useMemo(
+    () => files.filter((f) => !isImageFile(f)),
+    [files]
+  );
+
+  const openLightbox = (index) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
   return (
-    <div className="border rounded-lg">
-      <div className="bg-gray-100 px-3 py-1 text-xs font-bold">{title}</div>
-      {files.map((path, i) => {
-        const fullUrl = getFullImageUrl(path);
-        return (
-          <div key={i} className="flex justify-between p-2 text-xs border-b last:border-b-0">
-            <span className="truncate flex-1 mr-2">{path.split("/").pop()}</span>
-            <a
-              href={fullUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-600 flex items-center gap-1 hover:text-blue-800"
-            >
-              <Download size={12} /> View
-            </a>
+    <>
+      <div className="border rounded-lg overflow-hidden">
+        <div className="bg-gray-100 px-3 py-1 text-xs font-bold">{title}</div>
+
+        {/* Images Grid */}
+        {imageFiles.length > 0 && (
+          <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 md:grid-cols-4">
+            {imageFiles.map((path, index) => (
+              <button
+                key={index}
+                onClick={() => openLightbox(index)}
+                className="group relative aspect-square overflow-hidden rounded-xl border border-slate-200"
+              >
+                <img
+                  src={getFullImageUrl(path)}
+                  alt={`${title}-${index}`}
+                  className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/40">
+                  <ZoomIn size={22} className="opacity-0 transition group-hover:opacity-100 text-white" />
+                </div>
+              </button>
+            ))}
           </div>
-        );
-      })}
-    </div>
+        )}
+
+        {/* PDF and Other Files */}
+        {otherFiles.length > 0 && (
+          <div className="border-t border-slate-100">
+            {otherFiles.map((path, index) => {
+              const fullUrl = getFullImageUrl(path);
+              const fileName = path.split("/").pop();
+
+              return (
+                <div key={index} className="flex justify-between p-2 text-xs border-b last:border-b-0">
+                  <span className="truncate flex-1 mr-2">{fileName}</span>
+                  <a
+                    href={fullUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 flex items-center gap-1 hover:text-blue-800 whitespace-nowrap"
+                  >
+                    <Download size={12} /> {isPdfFile(path) ? "View PDF" : "View"}
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <Lightbox
+          images={imageFiles}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
+    </>
   );
 };
 
@@ -82,6 +228,27 @@ const ApplicationDetail = ({ application, onBack }) => {
   const [rejectReason, setRejectReason] = useState("");
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [pendingStatus, setPendingStatus] = useState("");
+
+  // Helper: Get old documents (excluding new uploads)
+  const getOldDocuments = (field) => {
+    const oldDocs = currentApplication?.[field] || [];
+    const newUploadedUrls = (currentApplication?.newDocuments?.[field] || [])
+      .flatMap(doc => doc.urls || []);
+    return oldDocs.filter(url => !newUploadedUrls.includes(url));
+  };
+
+  // Helper: Get new documents
+  const getNewDocuments = (field) => {
+    return (currentApplication?.newDocuments?.[field] || [])
+      .flatMap(doc => doc.urls || []);
+  };
+
+  // Helper: Merge old and new documents
+  const getAllDocuments = (field) => {
+    const oldDocs = getOldDocuments(field);
+    const newDocs = getNewDocuments(field);
+    return [...oldDocs, ...newDocs];
+  };
 
   // Format ID as yyyymmdd from createdAt
 const getDateId = (dateString) => {
@@ -449,12 +616,102 @@ const getDateId = (dateString) => {
                   <ImageIcon size={14} /> Documents
                 </h3>
                 <div className="space-y-3">
-                  <DocCategory title="RC Book" files={currentApplication.rcBookImages} />
-                  <DocCategory title="Aadhar Card" files={currentApplication.aadharCardImages} />
-                  <DocCategory title="PAN Card" files={currentApplication.panCardImages} />
-                  <DocCategory title="Old Policy" files={currentApplication.oldPolicyImages} />
-                  <DocCategory title="Other Documents" files={currentApplication.otherImages} />
-                  <DocCategory title="Admin Policy Document" files={currentApplication.adminPolicyDocument ? [currentApplication.adminPolicyDocument] : []} />
+                  {/* RC Book */}
+                  {getOldDocuments("rcBookImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-600 mb-2">RC Book (Original)</p>
+                      <DocCategory title="RC Book" files={getOldDocuments("rcBookImages")} />
+                    </div>
+                  )}
+                  {getNewDocuments("rcBookImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-blue-600 mb-2">RC Book (Updated)</p>
+                      <DocCategory title="RC Book" files={getNewDocuments("rcBookImages")} />
+                    </div>
+                  )}
+                  {getOldDocuments("rcBookImages").length === 0 && getNewDocuments("rcBookImages").length === 0 && (
+                    <DocCategory title="RC Book" files={[]} />
+                  )}
+
+                  {/* Aadhar Card */}
+                  {getOldDocuments("aadharCardImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-600 mb-2">Aadhar Card (Original)</p>
+                      <DocCategory title="Aadhar Card" files={getOldDocuments("aadharCardImages")} />
+                    </div>
+                  )}
+                  {getNewDocuments("aadharCardImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-blue-600 mb-2">Aadhar Card (Updated)</p>
+                      <DocCategory title="Aadhar Card" files={getNewDocuments("aadharCardImages")} />
+                    </div>
+                  )}
+                  {getOldDocuments("aadharCardImages").length === 0 && getNewDocuments("aadharCardImages").length === 0 && (
+                    <DocCategory title="Aadhar Card" files={[]} />
+                  )}
+
+                  {/* PAN Card */}
+                  {getOldDocuments("panCardImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-600 mb-2">PAN Card (Original)</p>
+                      <DocCategory title="PAN Card" files={getOldDocuments("panCardImages")} />
+                    </div>
+                  )}
+                  {getNewDocuments("panCardImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-blue-600 mb-2">PAN Card (Updated)</p>
+                      <DocCategory title="PAN Card" files={getNewDocuments("panCardImages")} />
+                    </div>
+                  )}
+                  {getOldDocuments("panCardImages").length === 0 && getNewDocuments("panCardImages").length === 0 && (
+                    <DocCategory title="PAN Card" files={[]} />
+                  )}
+
+                  {/* Old Policy */}
+                  {getOldDocuments("oldPolicyImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-600 mb-2">Old Policy (Original)</p>
+                      <DocCategory title="Old Policy" files={getOldDocuments("oldPolicyImages")} />
+                    </div>
+                  )}
+                  {getNewDocuments("oldPolicyImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-blue-600 mb-2">Old Policy (Updated)</p>
+                      <DocCategory title="Old Policy" files={getNewDocuments("oldPolicyImages")} />
+                    </div>
+                  )}
+                  {getOldDocuments("oldPolicyImages").length === 0 && getNewDocuments("oldPolicyImages").length === 0 && (
+                    <DocCategory title="Old Policy" files={[]} />
+                  )}
+
+                  {/* Other Documents */}
+                  {getOldDocuments("otherImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-gray-600 mb-2">Other Documents (Original)</p>
+                      <DocCategory title="Other Documents" files={getOldDocuments("otherImages")} />
+                    </div>
+                  )}
+                  {getNewDocuments("otherImages").length > 0 && (
+                    <div>
+                      <p className="text-xs font-semibold text-blue-600 mb-2">Other Documents (Updated)</p>
+                      <DocCategory title="Other Documents" files={getNewDocuments("otherImages")} />
+                    </div>
+                  )}
+                  {getOldDocuments("otherImages").length === 0 && getNewDocuments("otherImages").length === 0 && (
+                    <DocCategory title="Other Documents" files={[]} />
+                  )}
+
+                  {/* Admin Policy Document */}
+                  <DocCategory
+                    title="Admin Policy Document"
+                    files={
+                      Array.isArray(currentApplication.adminPolicyDocument)
+                        ? currentApplication.adminPolicyDocument
+                        : currentApplication.adminPolicyDocument
+                        ? [currentApplication.adminPolicyDocument]
+                        : []
+                    }
+                  />
                 </div>
               </div>
             </div>

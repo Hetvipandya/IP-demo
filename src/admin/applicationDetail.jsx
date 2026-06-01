@@ -1,205 +1,651 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PreLoader from "../components/PreLoader";
 import {
-  ArrowLeft, FileText, Download, Calendar,
-  Car, Shield, Image as ImageIcon, User, Info, Hash, Clock,
-  CheckCircle2, XCircle, UploadCloud, MessageCircle
+  ArrowLeft,
+  FileText,
+  Download,
+  Calendar,
+  Car,
+  Shield,
+  Image as ImageIcon,
+  User,
+  Info,
+  Hash,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  UploadCloud,
+  MessageCircle,
+  ZoomIn,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Eye,
+  AlertTriangle,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
-/* ================= HELPER FUNCTIONS ================= */
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const BASE_URL =
+  "https://insurance-backend-eufn.onrender.com";
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 const getFullImageUrl = (path) => {
-  if (!path) return '';
-  if (path.startsWith('http://') || path.startsWith('https://')) {
+  if (!path) return "";
+
+  if (
+    path.startsWith("http://") ||
+    path.startsWith("https://")
+  ) {
     return path;
   }
-  const baseUrl = 'https://insurance-backend-eufn.onrender.com';
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${baseUrl}/${cleanPath}`;
+
+  const cleanPath = path.startsWith("/")
+    ? path.slice(1)
+    : path;
+
+  return `${BASE_URL}/${cleanPath}`;
 };
 
-/* ================= SUB COMPONENTS ================= */
+const isImageFile = (path = "") =>
+  /\.(jpg|jpeg|png|webp|gif)$/i.test(path);
 
-const DetailBox = ({ label, value, icon }) => (
-  <div>
-    <div className="flex items-center gap-1 text-gray-400 text-xs">
-      {icon} {label}
+const isPdfFile = (path = "") =>
+  /\.pdf$/i.test(path);
+
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+
+  return new Date(dateString).toLocaleDateString(
+    "en-IN",
+    {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
+};
+
+  const getDateId = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const options = {
+      timeZone: "Asia/Kolkata",
+      day: "2-digit", month: "2-digit", year: "numeric",
+      hour: "2-digit", minute: "2-digit", second: "2-digit",
+      hour12: false,
+    };
+    const formatter = new Intl.DateTimeFormat("en-GB", options);
+    const parts = formatter.formatToParts(date);
+    const obj = {};
+    parts.forEach(({ type, value }) => { obj[type] = value; });
+    return `${obj.year}${obj.month}${obj.day}${obj.hour}${obj.minute}${obj.second}`;
+  };
+
+/* =========================================================
+   LIGHTBOX
+========================================================= */
+
+const Lightbox = ({
+  images,
+  initialIndex,
+  onClose,
+}) => {
+  const [current, setCurrent] =
+    useState(initialIndex);
+
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+
+      if (e.key === "ArrowRight") {
+        setCurrent(
+          (prev) =>
+            (prev + 1) % images.length
+        );
+      }
+
+      if (e.key === "ArrowLeft") {
+        setCurrent(
+          (prev) =>
+            (prev - 1 + images.length) %
+            images.length
+        );
+      }
+    };
+
+    window.addEventListener(
+      "keydown",
+      handleKey
+    );
+
+    return () =>
+      window.removeEventListener(
+        "keydown",
+        handleKey
+      );
+  }, [images.length, onClose]);
+
+  const prev = () => {
+    setCurrent(
+      (prev) =>
+        (prev - 1 + images.length) %
+        images.length
+    );
+  };
+
+  const next = () => {
+    setCurrent(
+      (prev) =>
+        (prev + 1) % images.length
+    );
+  }; 
+
+  return (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      {/* Close */}
+      <button
+        onClick={onClose}
+        className="absolute top-5 right-5 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+      >
+        <X size={18} />
+      </button>
+
+      {/* Image */}
+      <div
+        className="relative flex items-center justify-center"
+        onClick={(e) =>
+          e.stopPropagation()
+        }
+      >
+        <img
+          src={getFullImageUrl(
+            images[current]
+          )}
+          alt={`Document ${
+            current + 1
+          }`}
+          className="max-h-[85vh] max-w-[85vw] rounded-2xl object-contain shadow-2xl"
+        />
+
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={prev}
+              className="absolute -left-14 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            >
+              <ChevronLeft size={22} />
+            </button>
+
+            <button
+              onClick={next}
+              className="absolute -right-14 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            >
+              <ChevronRight size={22} />
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Bottom */}
+      <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2">
+        <p className="text-xs text-white/70">
+          {images[current]
+            ?.split("/")
+            ?.pop()}
+        </p>
+
+        {images.length > 1 && (
+          <div className="flex gap-2">
+            {images.map((_, i) => (
+              <button
+                key={i}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrent(i);
+                }}
+                className={`h-2 rounded-full transition-all ${
+                  current === i
+                    ? "w-6 bg-white"
+                    : "w-2 bg-white/40"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
-    <p className="text-sm font-semibold break-all">{value || "N/A"}</p>
+  );
+};
+
+/* =========================================================
+   SMALL COMPONENTS
+========================================================= */
+
+const DetailBox = ({
+  label,
+  value,
+  icon,
+}) => (
+  <div className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4">
+    <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+      {icon}
+      {label}
+    </div>
+
+    <p className="break-all text-sm font-bold text-slate-800">
+      {value || "N/A"}
+    </p>
   </div>
 );
 
-const StatRow = ({ label, count = 0 }) => (
-  <div className="flex justify-between text-sm">
-    <span>{label}</span>
-    <span className={count > 0 ? "text-blue-600 font-bold" : "text-gray-300"}>
+const StatRow = ({
+  label,
+  count = 0,
+}) => (
+  <div className="flex items-center justify-between rounded-lg bg-white/70 px-3 py-2">
+    <span className="text-sm font-medium text-slate-600">
+      {label}
+    </span>
+
+    <span
+      className={`text-sm font-black ${
+        count > 0
+          ? "text-blue-700"
+          : "text-slate-300"
+      }`}
+    >
       {count}
     </span>
   </div>
 );
 
-const DocCategory = ({ title, files }) => {
-  if (!files || files.length === 0) {
+/* =========================================================
+   DOC CATEGORY
+========================================================= */
+
+const DocCategory = ({
+  title,
+  files = [],
+  showBadge = false,
+  badge = "",
+}) => {
+  const [lightboxOpen, setLightboxOpen] =
+    useState(false);
+
+  const [lightboxIndex, setLightboxIndex] =
+    useState(0);
+
+  const imageFiles = useMemo(
+    () =>
+      files.filter((f) =>
+        isImageFile(f)
+      ),
+    [files]
+  );
+
+  const otherFiles = useMemo(
+    () =>
+      files.filter(
+        (f) => !isImageFile(f)
+      ),
+    [files]
+  );
+
+  const openLightbox = (index) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
+  if (!files?.length) {
     return (
-      <div className="p-3 bg-gray-100 rounded-lg text-xs text-gray-400">
-        {title} - Not Uploaded
+      <div className="flex items-center gap-3 rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-400">
+        <FileText size={16} />
+        <span>
+          {title} — Not Uploaded
+        </span>
       </div>
     );
   }
 
   return (
-    <div className="border rounded-lg">
-      <div className="bg-gray-100 px-3 py-1 text-xs font-bold">{title}</div>
-      {files.map((path, i) => {
-        const fullUrl = getFullImageUrl(path);
-        return (
-          <div key={i} className="flex justify-between p-2 text-xs border-b last:border-b-0">
-            <span className="truncate flex-1 mr-2">{path.split("/").pop()}</span>
-            <a
-              href={fullUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-600 flex items-center gap-1 hover:text-blue-800"
-            >
-              <Download size={12} /> View
-            </a>
+    <>
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-3">
+          <div className="flex items-center gap-2">
+            <h4 className="text-sm font-black uppercase tracking-wide text-slate-600">
+              {title}
+            </h4>
+            {showBadge && badge && (
+              <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-700">
+                {badge}
+              </span>
+            )}
           </div>
-        );
-      })}
+
+          <span className="text-xs font-semibold text-slate-400">
+            {files.length} File
+            {files.length > 1 ? "s" : ""}
+          </span>
+        </div>
+
+        {/* Images Grid */}
+        {imageFiles.length > 0 && (
+          <div className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-3 md:grid-cols-4">
+            {imageFiles.map(
+              (path, index) => (
+                <button
+                  key={index}
+                  onClick={() =>
+                    openLightbox(index)
+                  }
+                  className="group relative aspect-square overflow-hidden rounded-xl border border-slate-200"
+                >
+                  <img
+                    src={getFullImageUrl(
+                      path
+                    )}
+                    alt={`${title}-${index}`}
+                    className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                  />
+
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/40">
+                    <ZoomIn
+                      size={22}
+                      className="opacity-0 transition group-hover:opacity-100 text-white"
+                    />
+                  </div>
+                </button>
+              )
+            )}
+          </div>
+        )}
+
+        {/* PDF and Other Files */}
+        {otherFiles.length > 0 && (
+          <div className="border-t border-slate-100">
+            {otherFiles.map(
+              (path, index) => {
+                const fullUrl =
+                  getFullImageUrl(path);
+                const fileName = path
+                  .split("/")
+                  .pop();
+
+                return (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 border-b border-slate-100 px-4 py-3 last:border-none"
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-500">
+                      <FileText size={18} />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-slate-700">
+                        {fileName}
+                      </p>
+
+                      <p className="text-xs text-slate-400">
+                        {isPdfFile(path)
+                          ? "PDF Document"
+                          : "Document"}
+                      </p>
+                    </div>
+
+                    <a
+                      href={fullUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-sm font-bold text-blue-700 transition hover:bg-blue-100 whitespace-nowrap"
+                    >
+                      <Download size={15} />
+                      {isPdfFile(path)
+                        ? "View PDF"
+                        : "View"}
+                    </a>
+                  </div>
+                );
+              }
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <Lightbox
+          images={imageFiles}
+          initialIndex={
+            lightboxIndex
+          }
+          onClose={() =>
+            setLightboxOpen(false)
+          }
+        />
+      )}
+    </>
+  );
+};
+
+/* =========================================================
+   CONFIRM POPUP
+========================================================= */
+
+const ConfirmPopup = ({
+  pendingStatus,
+  rejectReason,
+  loading,
+  onCancel,
+  onConfirm,
+}) => {
+  return (
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 px-4">
+      <div className="w-full max-w-md rounded-3xl bg-white p-7 shadow-2xl">
+        <div className="flex items-start gap-4">
+          <div
+            className={`flex h-14 w-14 items-center justify-center rounded-full ${
+              pendingStatus ===
+              "approved"
+                ? "bg-green-100 text-green-600"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {pendingStatus ===
+            "approved" ? (
+              <CheckCircle2 size={26} />
+            ) : (
+              <AlertTriangle size={26} />
+            )}
+          </div>
+
+          <div className="flex-1">
+            <h3 className="text-xl font-black capitalize text-slate-900">
+              Confirm{" "}
+              {pendingStatus}
+            </h3>
+
+            <p className="mt-1 text-sm text-slate-500">
+              Are you sure you want
+              to{" "}
+              <span className="font-bold capitalize">
+                {pendingStatus}
+              </span>{" "}
+              this application?
+            </p>
+          </div>
+        </div>
+
+        {pendingStatus ===
+          "rejected" &&
+          rejectReason && (
+            <div className="mt-5 rounded-2xl border border-red-200 bg-red-50 p-4">
+              <p className="text-xs font-black uppercase tracking-wide text-red-700">
+                Rejection Reason
+              </p>
+
+              <p className="mt-2 text-sm text-red-600">
+                {rejectReason}
+              </p>
+            </div>
+          )}
+
+        <div className="mt-7 flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm font-black text-slate-700 transition hover:bg-slate-100"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={onConfirm}
+            disabled={loading}
+            className={`flex-1 rounded-xl px-4 py-3 text-sm font-black text-white transition disabled:opacity-60 ${
+              pendingStatus ===
+              "approved"
+                ? "bg-green-600 hover:bg-green-700"
+                : "bg-red-600 hover:bg-red-700"
+            }`}
+          >
+            {loading
+              ? "Processing..."
+              : `Yes, ${pendingStatus}`}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
-/* ================= MAIN COMPONENT ================= */
+/* =========================================================
+   MAIN COMPONENT
+========================================================= */
 
-const ApplicationDetail = ({ application, onBack }) => {
-  const [currentApplication, setCurrentApplication] = useState(application);
-  const [selectedPolicy, setSelectedPolicy] = useState(null);
-  const [actionLoading, setActionLoading] = useState("");
-  const [message, setMessage] = useState("");
-  const [showRejectBox, setShowRejectBox] = useState(false);
-  const [rejectReason, setRejectReason] = useState("");
-  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState("");
+const ApplicationDetail = ({
+  application,
+  onBack,
+}) => {
+  const [
+    currentApplication,
+    setCurrentApplication,
+  ] = useState(application);
 
-  // Format ID as yyyymmdd from createdAt
-const getDateId = (dateString) => {
-  if (!dateString) return "";
+  const [
+    selectedPolicy,
+    setSelectedPolicy,
+  ] = useState(null);
 
-  const date = new Date(dateString);
+  const [
+    actionLoading,
+    setActionLoading,
+  ] = useState("");
 
-  const options = {
-    timeZone: "Asia/Kolkata",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  };
+  const [
+    showRejectBox,
+    setShowRejectBox,
+  ] = useState(false);
 
-  const formatter = new Intl.DateTimeFormat("en-GB", options);
-  const parts = formatter.formatToParts(date);
+  const [
+    rejectReason,
+    setRejectReason,
+  ] = useState("");
 
-  const obj = {};
-  parts.forEach(({ type, value }) => {
-    obj[type] = value;
-  });
+  const [
+    showConfirmPopup,
+    setShowConfirmPopup,
+  ] = useState(false);
 
-  return `${obj.day}${obj.month}${obj.year}${obj.hour}${obj.minute}${obj.second}`;
-};
+  const [
+    pendingStatus,
+    setPendingStatus,
+  ] = useState("");
+
+
   useEffect(() => {
     setCurrentApplication(application);
   }, [application]);
 
+  // ================= HELPER: GET OLD DOCUMENTS (EXCLUDING NEW UPLOADS) =================
+  const getOldDocuments = (field) => {
+    const oldDocs = currentApplication?.[field] || [];
+    const newUploadedUrls = (currentApplication?.newDocuments?.[field] || [])
+      .flatMap(doc => doc.urls || []);
+    
+    // Filter out URLs that were re-uploaded in newDocuments
+    return oldDocs.filter(url => !newUploadedUrls.includes(url));
+  };
+
+  // ================= HELPER: GET NEW DOCUMENTS =================
+  const getNewDocuments = (field) => {
+    return (currentApplication?.newDocuments?.[field] || [])
+      .flatMap(doc => doc.urls || []);
+  };
+
+  // ================= HELPER: MERGE OLD AND NEW DOCUMENTS =================
+  const getAllDocuments = (field) => {
+    const oldDocs = getOldDocuments(field);
+    const newDocs = getNewDocuments(field);
+    return [...oldDocs, ...newDocs];
+  };
+
+  const token =
+    localStorage.getItem(
+      "executiveToken"
+    ) ||
+    localStorage.getItem("token");
+
+  /* ======================================================
+     NO DATA
+  ====================================================== */
+
   if (!currentApplication) {
-    return <div className="p-10 text-center">No Record Found.</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center text-xl font-bold text-slate-500">
+        No Record Found
+      </div>
+    );
   }
 
   if (actionLoading === "policy") {
     return <PreLoader />;
   }
 
-  const token = localStorage.getItem("executiveToken") || localStorage.getItem("token");
+  /* ======================================================
+     API UPDATE
+  ====================================================== */
 
-  const updateApplication = async (formData, successMessage, loadingKey) => {
+  const updateApplication = async (
+    formData,
+    successMessage,
+    loadingKey
+  ) => {
     if (!token) {
-      toast.error("Executive token not found. Please login again.");
+      toast.error(
+        "Token not found. Please login again."
+      );
       return;
     }
 
     try {
       setActionLoading(loadingKey);
-      setMessage("");
-
-      const res = await fetch(`https://insurance-backend-eufn.onrender.com/api/application/update/${currentApplication._id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.message || "Action failed. Please try again.");
-        return;
-      }
-
-      const updatedApplication = data.data || {};
-      setCurrentApplication({
-        ...currentApplication,
-        ...updatedApplication,
-        user: typeof updatedApplication.user === "object" ? updatedApplication.user : currentApplication.user,
-      });
-      toast.success(successMessage);
-      setSelectedPolicy(null);
-    } catch (err) {
-      console.error("Application update failed:", err);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setActionLoading("");
-    }
-  };
-
-  const handleStatusUpdate = async (status) => {
-    // Prevent approved -> rejected
-    if (currentApplication.status === "approved" && status === "rejected") {
-      toast.error("Approved application cannot be rejected.");
-      return;
-    }
-
-    try {
-      setActionLoading(status);
-
-      const token = localStorage.getItem("executiveToken") || localStorage.getItem("token");
-
-      if (!token) {
-        toast.error("Token not found");
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("status", status);
-
-      // Rejection validation
-      if (status === "rejected") {
-        if (!rejectReason.trim()) {
-          toast.error("Please enter rejection reason");
-          setActionLoading("");
-          return;
-        }
-        formData.append("rejectionReason", rejectReason.trim());
-      } else {
-        // Clear rejection reason if status is not rejected
-        formData.append("rejectionReason", "");
-      }
 
       const res = await fetch(
-        `https://insurance-backend-eufn.onrender.com/api/application/update/${currentApplication._id}`,
+        `${BASE_URL}/api/application/update/${currentApplication._id}`,
         {
           method: "PUT",
           headers: {
@@ -209,541 +655,1030 @@ const getDateId = (dateString) => {
         }
       );
 
-      const data = await res.json();
+      const data =
+        await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || "Failed to update status");
+        toast.error(
+          data.message ||
+            "Something went wrong"
+        );
+
+        return;
       }
 
-      // Update latest backend data
-      setCurrentApplication((prev) => ({
-        ...prev,
-        ...data.data,
-        status: status,
-        rejectionReason: status === "rejected" ? rejectReason : "",
-      }));
+      const updatedApplication =
+        data.data || {};
 
-      // Close reject UI
-      setShowRejectBox(false);
-      setShowConfirmPopup(false);
-      setRejectReason("");
-      setPendingStatus("");
+      // setCurrentApplication(
+      //   (prev) => ({
+      //     ...prev,
+      //     ...updatedApplication,
+      //     user:
+      //       typeof updatedApplication.user ===
+      //       "object"
+      //         ? updatedApplication.user
+      //         : prev.user,
+      //   })
+      // );
+      setCurrentApplication(
+  (prev) => ({
+    ...prev,
+    ...updatedApplication,
 
-      toast.success(`Application ${status} successfully`);
+    user:
+      typeof updatedApplication.user ===
+      "object"
+        ? updatedApplication.user
+        : prev.user,
+
+    executive:
+      typeof updatedApplication.executive ===
+      "object"
+        ? updatedApplication.executive
+        : prev.executive,
+  })
+);
+
+      toast.success(successMessage);
+
+      setSelectedPolicy(null);
     } catch (error) {
       console.error(error);
-      toast.error(error.message);
+
+      toast.error(
+        "Failed to update application"
+      );
     } finally {
       setActionLoading("");
     }
   };
 
-  const handlePolicyUpload = async () => {
-    if (!selectedPolicy) {
-      toast.error("Please select a policy document first.");
-      return;
-    }
+  /* ======================================================
+     STATUS UPDATE
+  ====================================================== */
 
-    const formData = new FormData();
-    formData.append("adminPolicyDocument", selectedPolicy);
-    await updateApplication(formData, "Policy document uploaded successfully.", "upload");
-  };
+  const handleStatusUpdate =
+    async (status) => {
+      try {
+        setActionLoading(status);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString('en-IN', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+        const formData =
+          new FormData();
 
-  const handleShareWhatsApp = () => {
-    const appNumber = currentApplication.applicationId || getDateId(currentApplication.createdAt);
-    const carNo = currentApplication.carNo || "N/A";
-    const dealerName = currentApplication.user?.fullName || "N/A";
-    const policyDocumentUrl = currentApplication.adminPolicyDocument
-      ? getFullImageUrl(currentApplication.adminPolicyDocument)
-      : "Not uploaded";
+        formData.append(
+          "status",
+          status
+        );
 
-    const message = `📄 Insurance Policy Details\n\n━━━━━━━━━━━━━━━━━━━━\n📋 Application ID: ${appNumber}\n🚗 Vehicle Number: ${carNo}\n👤 Dealer Name: ${dealerName}\n📎 Policy Document: ${policyDocumentUrl}\n━━━━━━━━━━━━━━━━━━━━\n✅ Policy Generated By: Griva Insurance Solution\n📅 Date: ${new Date().toLocaleDateString()}\n\n🔗 Click here to view: ${policyDocumentUrl !== "Not uploaded" ? policyDocumentUrl : "Not available"}\n\nThank you for choosing Griva Insurance! 🛡️`;
+        if (
+          status === "rejected"
+        ) {
+          formData.append(
+            "rejectionReason",
+            rejectReason.trim()
+          );
+        }
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
-  };
+        const res = await fetch(
+          `${BASE_URL}/api/application/update/${currentApplication._id}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          }
+        );
 
-  // Confirmation Popup Component
-  const ConfirmPopup = () => (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="flex items-center gap-3">
-          <div className={`flex h-12 w-12 items-center justify-center rounded-full ${pendingStatus === "approved"
-            ? "bg-green-100 text-green-600"
-            : "bg-red-100 text-red-600"
-            }`}>
-            {pendingStatus === "approved" ? (
-              <CheckCircle2 size={24} />
-            ) : (
-              <XCircle size={24} />
-            )}
-          </div>
-          <div>
-            <h3 className="text-lg font-black text-slate-900">
-              Confirm {pendingStatus}
-            </h3>
-            <p className="text-sm text-slate-500">
-              Are you sure you want to{" "}
-              <span className="font-bold capitalize">{pendingStatus}</span>{" "}
-              this application?
-            </p>
-          </div>
-        </div>
+        const data =
+          await res.json();
 
-        {pendingStatus === "rejected" && rejectReason && (
-          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3">
-            <p className="text-xs font-bold text-red-700">Rejection Reason</p>
-            <p className="mt-1 text-sm text-red-600">{rejectReason}</p>
-          </div>
-        )}
+        if (!res.ok) {
+          throw new Error(
+            data.message ||
+              "Failed to update"
+          );
+        }
 
-        <div className="mt-6 flex gap-3">
-          <button
-            onClick={() => {
-              setShowConfirmPopup(false);
-              setPendingStatus("");
-            }}
-            className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => handleStatusUpdate(pendingStatus)}
-            disabled={actionLoading === pendingStatus}
-            className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold text-white transition ${pendingStatus === "approved"
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-red-600 hover:bg-red-700"
-              } disabled:opacity-60`}
-          >
-            {actionLoading === pendingStatus ? "Processing..." : `Yes, ${pendingStatus}`}
-          </button>
-        </div>
-      </div>
-    </div>
+        setCurrentApplication(
+          (prev) => ({
+            ...prev,
+            ...data.data,
+            status,
+            rejectionReason:
+              status ===
+              "rejected"
+                ? rejectReason
+                : "",
+          })
+        );
+
+        toast.success(
+          `Application ${status} successfully`
+        );
+
+        setShowConfirmPopup(
+          false
+        );
+
+        setShowRejectBox(false);
+
+        setRejectReason("");
+
+        setPendingStatus("");
+      } catch (error) {
+        console.error(error);
+
+        toast.error(
+          error.message
+        );
+      } finally {
+        setActionLoading("");
+      }
+    };
+
+  /* ======================================================
+     POLICY UPLOAD
+  ====================================================== */
+const handlePolicyUpload = async () => {
+  if (!selectedPolicy) {
+    toast.error(
+      "Please select policy document"
+    );
+    return;
+  }
+
+  const formData = new FormData();
+
+  formData.append(
+    "adminPolicyDocument",
+    selectedPolicy
   );
 
+  // rejected pachi upload thay to backend ne indication
+  if (
+    currentApplication.status ===
+    "rejected"
+  ) {
+    formData.append(
+      "uploadedAfterReject",
+      true
+    );
+  }
+
+  await updateApplication(
+    formData,
+    "Policy uploaded successfully",
+    "upload"
+  );
+};
+
+  // const handlePolicyUpload =
+  //   async () => {
+  //     if (!selectedPolicy) {
+  //       toast.error(
+  //         "Please select policy document"
+  //       );
+
+  //       return;
+  //     }
+
+  //     const formData =
+  //       new FormData();
+
+  //     formData.append(
+  //       "adminPolicyDocument",
+  //       selectedPolicy
+  //     );
+
+  //     await updateApplication(
+  //       formData,
+  //       "Policy uploaded successfully",
+  //       "upload"
+  //     );
+  //   };
+
+  /* ======================================================
+     WHATSAPP SHARE
+  ====================================================== */
+
+  const handleShareWhatsApp =
+    () => {
+      const appNumber =
+        currentApplication.applicationId ||
+        getDateId(
+          currentApplication.createdAt
+        );
+
+      const carNo =
+        currentApplication.carNo ||
+        "N/A";
+
+      const dealerName =
+        currentApplication.user
+          ?.fullName || "N/A";
+
+      const policyDocumentUrl =
+        currentApplication.adminPolicyDocument
+          ? getFullImageUrl(
+              currentApplication.adminPolicyDocument
+            )
+          : "Not Uploaded";
+
+      const message = `
+📄 Insurance Policy Details
+
+━━━━━━━━━━━━━━━━━━━━
+📋 Application ID: ${appNumber}
+🚗 Vehicle Number: ${carNo}
+👤 Dealer Name: ${dealerName}
+📎 Policy Document: ${policyDocumentUrl}
+━━━━━━━━━━━━━━━━━━━━
+
+✅ Policy Generated By:
+Griva Insurance Solution
+
+📅 Date:
+${new Date().toLocaleDateString()}
+
+🔗 View Policy:
+${policyDocumentUrl}
+
+Thank you for choosing Griva Insurance 🛡️
+`;
+
+      window.open(
+        `https://wa.me/?text=${encodeURIComponent(
+          message
+        )}`,
+        "_blank"
+      );
+    };
+
+  /* ======================================================
+     TOTAL DOCS
+  ====================================================== */
+
+const totalDocuments =
+  (currentApplication
+    .rcBookImages?.length ||
+    0) +
+  (currentApplication
+    .aadharCardImages
+    ?.length || 0) +
+  (currentApplication
+    .panCardImages?.length ||
+    0) +
+  (currentApplication
+    .oldPolicyImages
+    ?.length || 0) +
+  (currentApplication
+    .otherImages?.length ||
+    0) +
+  (currentApplication
+    .adminPolicyDocument
+    ? 1
+    : 0);
+
+  /* ======================================================
+     RENDER
+  ====================================================== */
+  
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] p-4 md:p-8 font-sans">
-      <div className="max-w-5xl mx-auto">
-        {/* BACK BUTTON */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4 md:p-8">
+      <div className="mx-auto max-w-7xl">
+        {/* Back */}
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-gray-500 hover:text-blue-600 mb-6 transition-colors"
+          className="mb-8 flex items-center gap-2 text-sm font-black text-slate-600 transition hover:text-blue-700"
         >
           <ArrowLeft size={18} />
-          <span className="font-semibold">Back</span>
+          Back
         </button>
 
-        <div className="bg-white rounded-3xl shadow border overflow-hidden">
-          {/* TOP SECTION */}
-          <div className="bg-slate-900 p-6 text-white flex flex-col md:flex-row justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="h-14 w-14 bg-blue-500/20 rounded-xl flex items-center justify-center text-blue-400">
-                <Car size={28} />
+        {/* Main Card */}
+        <div className="overflow-hidden rounded-[32px] border border-white/70 bg-white shadow-2xl">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-950 via-blue-900 to-indigo-800 p-8 text-white md:p-10">
+            <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
+              {/* Left */}
+              <div className="flex items-center gap-6">
+                <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white/10 shadow-xl backdrop-blur">
+                  <Car size={42} />
+                </div>
+
+                <div>
+                  <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-200">
+                    Vehicle Number
+                  </p>
+
+                  <h1 className="mt-2 text-4xl font-black tracking-tight md:text-5xl">
+                    {currentApplication.carNo ||
+                      "N/A"}
+                  </h1>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-blue-400">Vehicle Number</p>
-                <h1 className="text-2xl font-bold">{currentApplication.carNo || "N/A"}</h1>
+
+              {/* Right */}
+              <div className="flex flex-wrap gap-4">
+                <div className="rounded-2xl bg-white/10 px-6 py-4 backdrop-blur">
+                  <p className="text-xs font-bold uppercase tracking-wide text-blue-200">
+                    Policy Type
+                  </p>
+
+                  <p className="mt-1 text-lg font-black capitalize">
+                    {currentApplication.tp ===
+                    "full"
+                      ? "Comprehensive"
+                      : currentApplication.tp ||
+                        "N/A"}
+                  </p>
+                </div>
+
+                <div
+                  className={`rounded-2xl px-6 py-4 backdrop-blur ${
+                    currentApplication.status ===
+                    "approved"
+                      ? "bg-green-500/20"
+                      : currentApplication.status ===
+                        "rejected"
+                      ? "bg-red-500/20"
+                      : "bg-yellow-500/20"
+                  }`}
+                >
+                  <p className="text-xs font-bold uppercase tracking-wide text-white/70">
+                    Status
+                  </p>
+
+                  <p className="mt-1 text-lg font-black capitalize">
+                    {currentApplication.status ||
+                      "pending"}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="bg-white/10 px-4 py-2 rounded-lg">
-              <p className="text-xs text-gray-300">Type</p>
-              <p className="font-bold capitalize">
-                {currentApplication.tp === "full" ? "Comprehensive" : currentApplication.tp || "N/A"}
-              </p>
             </div>
           </div>
 
-          {/* MAIN */}
-          <div className="p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Content */}
+          <div className="grid gap-8 p-5 lg:grid-cols-[1.7fr_0.8fr] lg:p-8">
             {/* LEFT */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* BASIC INFO */}
-              <div>
-                <h3 className="text-xs text-gray-400 mb-4 flex items-center gap-2">
-                  <Info size={14} /> Basic Info
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             <DetailBox
-  label="Application ID"
-  value={getDateId(currentApplication.createdAt)}
-  icon={<Hash size={14} />}
-/>
-                  <DetailBox
-                    label="Dealer Agency Name"
-                    value={currentApplication.user?.fullName || "N/A"}
-                    icon={<User size={14} />}
-                  />
-                  <DetailBox
-                    label="Created"
-                    value={formatDate(currentApplication.createdAt)}
-                    icon={<Calendar size={14} />}
-                  />
-                  <DetailBox
-                    label="Updated"
-                    value={formatDate(currentApplication.updatedAt)}
-                    icon={<Clock size={14} />}
-                  />
-                  <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <DetailBox
-                      label="Details"
-                      value={currentApplication.otherDetails || "No details"}
-                      icon={<FileText size={14} />}
-                    />
-                    <DetailBox
-                      label="Executive"
-                      value={currentApplication.executive?.Name || "Not Assigned"}
-                      icon={<User size={14} />}
-                    />
+            <div className="space-y-8">
+              {/* Basic Info */}
+              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="rounded-xl bg-blue-100 p-3 text-blue-700">
+                    <Info size={20} />
                   </div>
 
+                  <div>
+                    <h2 className="text-xl font-black text-slate-900">
+                      Basic Information
+                    </h2>
+
+                    <p className="text-sm text-slate-500">
+                      Application details
+                    </p>
+                  </div>
                 </div>
 
-                {/* Rejection Reason Section - Full Width */}
-                {currentApplication.status === "rejected" && currentApplication.rejectionReason && (
-                  <div className="mt-6 rounded-xl border-l-4 border-red-500 bg-red-50 p-4 shadow-sm">
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0">
-                        <div className="rounded-full bg-red-100 p-2">
-                          <XCircle size={18} className="text-red-600" />
+                <div className="grid gap-4 md:grid-cols-2">
+                  <DetailBox
+                    label="Application ID"
+                    value={getDateId(
+                      currentApplication.createdAt
+                    )}
+                    icon={<Hash size={15} />}
+                  />
+
+                  <DetailBox
+                    label="Dealer Agency"
+                    value={
+                      currentApplication
+                        .user?.fullName
+                    }
+                    icon={<User size={15} />}
+                  />
+
+                  <DetailBox
+                    label="Created"
+                    value={formatDate(
+                      currentApplication.createdAt
+                    )}
+                    icon={
+                      <Calendar size={15} />
+                    }
+                  />
+
+                  <DetailBox
+                    label="Updated"
+                    value={formatDate(
+                      currentApplication.updatedAt
+                    )}
+                    icon={<Clock size={15} />}
+                  />
+
+                  <DetailBox
+                    label="Executive"
+                    value={
+                      currentApplication
+                        .executive?.Name ||
+                      "Not Assigned"
+                    }
+                    icon={<User size={15} />}
+                  />
+
+                  <DetailBox
+                    label="Details"
+                    value={
+                      currentApplication.otherDetails ||
+                      "No details"
+                    }
+                    icon={
+                      <FileText size={15} />
+                    }
+                  />
+                </div>
+
+                {/* Rejection */}
+                {currentApplication.status ===
+                  "rejected" &&
+                  currentApplication.rejectionReason && (
+                    <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-5">
+                      <div className="flex items-start gap-4">
+                        <div className="rounded-full bg-red-100 p-3 text-red-600">
+                          <XCircle size={22} />
                         </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="text-sm font-bold text-red-700">Rejection Reason</h4>
-                          <span className="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
-                            Action Required
-                          </span>
-                        </div>
-                        <p className="text-sm text-red-600 leading-relaxed break-words">
-                          {currentApplication.rejectionReason}
-                        </p>
-                        <div className="mt-3 pt-2 border-t border-red-200">
-                          <p className="text-xs text-red-500 flex items-center gap-1">
-                            <Clock size={12} />
-                            Rejected on: {formatDate(currentApplication.updatedAt)}
+
+                        <div>
+                          <h4 className="text-lg font-black text-red-700">
+                            Rejection Reason
+                          </h4>
+
+                          <p className="mt-2 text-sm leading-relaxed text-red-600">
+                            {
+                              currentApplication.rejectionReason
+                            }
                           </p>
                         </div>
                       </div>
+                    </div>
+                  )}
+              </div>
+
+              {/* Documents */}
+              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-6 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="rounded-xl bg-indigo-100 p-3 text-indigo-700">
+                      <ImageIcon size={20} />
+                    </div>
+
+                    <div>
+                      <h2 className="text-xl font-black text-slate-900">
+                        Documents
+                      </h2>
+
+                      <p className="text-sm text-slate-500">
+                        Click image to
+                        preview
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-5">
+                  {/* RC Book */}
+                  {getOldDocuments("rcBookImages").length > 0 && (
+                    <DocCategory
+                      title="RC Book (Old)"
+                      files={getOldDocuments("rcBookImages")}
+                      showBadge
+                      badge="Original"
+                    />
+                  )}
+                  {getNewDocuments("rcBookImages").length > 0 && (
+                    <DocCategory
+                      title="RC Book (Re-uploaded)"
+                      files={getNewDocuments("rcBookImages")}
+                      showBadge
+                      badge="Updated"
+                    />
+                  )}
+                  {getOldDocuments("rcBookImages").length === 0 && 
+                   getNewDocuments("rcBookImages").length === 0 && (
+                    <DocCategory
+                      title="RC Book"
+                      files={[]}
+                    />
+                  )}
+
+                  {/* Aadhar Card */}
+                  {getOldDocuments("aadharCardImages").length > 0 && (
+                    <DocCategory
+                      title="Aadhar Card (Old)"
+                      files={getOldDocuments("aadharCardImages")}
+                      showBadge
+                      badge="Original"
+                    />
+                  )}
+                  {getNewDocuments("aadharCardImages").length > 0 && (
+                    <DocCategory
+                      title="Aadhar Card (Re-uploaded)"
+                      files={getNewDocuments("aadharCardImages")}
+                      showBadge
+                      badge="Updated"
+                    />
+                  )}
+                  {getOldDocuments("aadharCardImages").length === 0 && 
+                   getNewDocuments("aadharCardImages").length === 0 && (
+                    <DocCategory
+                      title="Aadhar Card"
+                      files={[]}
+                    />
+                  )}
+
+                  {/* PAN Card */}
+                  {getOldDocuments("panCardImages").length > 0 && (
+                    <DocCategory
+                      title="PAN Card (Old)"
+                      files={getOldDocuments("panCardImages")}
+                      showBadge
+                      badge="Original"
+                    />
+                  )}
+                  {getNewDocuments("panCardImages").length > 0 && (
+                    <DocCategory
+                      title="PAN Card (Re-uploaded)"
+                      files={getNewDocuments("panCardImages")}
+                      showBadge
+                      badge="Updated"
+                    />
+                  )}
+                  {getOldDocuments("panCardImages").length === 0 && 
+                   getNewDocuments("panCardImages").length === 0 && (
+                    <DocCategory
+                      title="PAN Card"
+                      files={[]}
+                    />
+                  )}
+
+                  {/* Old Policy */}
+                  {getOldDocuments("oldPolicyImages").length > 0 && (
+                    <DocCategory
+                      title="Old Policy (Old)"
+                      files={getOldDocuments("oldPolicyImages")}
+                      showBadge
+                      badge="Original"
+                    />
+                  )}
+                  {getNewDocuments("oldPolicyImages").length > 0 && (
+                    <DocCategory
+                      title="Old Policy (Re-uploaded)"
+                      files={getNewDocuments("oldPolicyImages")}
+                      showBadge
+                      badge="Updated"
+                    />
+                  )}
+                  {getOldDocuments("oldPolicyImages").length === 0 && 
+                   getNewDocuments("oldPolicyImages").length === 0 && (
+                    <DocCategory
+                      title="Old Policy"
+                      files={[]}
+                    />
+                  )}
+
+                  {/* Other Documents */}
+                  {getOldDocuments("otherImages").length > 0 && (
+                    <DocCategory
+                      title="Other Documents (Old)"
+                      files={getOldDocuments("otherImages")}
+                      showBadge
+                      badge="Original"
+                    />
+                  )}
+                  {getNewDocuments("otherImages").length > 0 && (
+                    <DocCategory
+                      title="Other Documents (Re-uploaded)"
+                      files={getNewDocuments("otherImages")}
+                      showBadge
+                      badge="Updated"
+                    />
+                  )}
+                  {getOldDocuments("otherImages").length === 0 && 
+                   getNewDocuments("otherImages").length === 0 && (
+                    <DocCategory
+                      title="Other Documents"
+                      files={[]}
+                    />
+                  )}
+
+{/* Admin Policy Document */}
+<DocCategory
+  title="Admin Policy Document"
+  files={
+    Array.isArray(currentApplication.adminPolicyDocument)
+      ? currentApplication.adminPolicyDocument
+      : currentApplication.adminPolicyDocument
+      ? [currentApplication.adminPolicyDocument]
+      : []
+  }
+/>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT */}
+            <div className="space-y-8">
+              {/* Summary */}
+              <div className="rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-100 p-6 shadow-sm">
+                <div className="mb-5 flex items-center gap-3">
+                  <div className="rounded-xl bg-blue-200 p-3 text-blue-800">
+                    <Shield size={20} />
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-black text-slate-900">
+                      Documents Summary
+                    </h3>
+
+                    <p className="text-sm text-slate-500">
+                      Uploaded documents
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <StatRow
+                    label="RC Book"
+                    count={
+                      currentApplication
+                        .rcBookImages
+                        ?.length
+                    }
+                  />
+
+                  <StatRow
+                    label="Aadhar Card"
+                    count={
+                      currentApplication
+                        .aadharCardImages
+                        ?.length
+                    }
+                  />
+
+                  <StatRow
+                    label="PAN Card"
+                    count={
+                      currentApplication
+                        .panCardImages
+                        ?.length
+                    }
+                  />
+
+                  <StatRow
+                    label="Old Policy"
+                    count={
+                      currentApplication
+                        .oldPolicyImages
+                        ?.length
+                    }
+                  />
+
+                  <StatRow
+                    label="Other Docs"
+                    count={
+                      currentApplication
+                        .otherImages
+                        ?.length
+                    }
+                  />
+                </div>
+
+                <div className="mt-5 rounded-2xl bg-white/70 p-4">
+                  <p className="text-sm font-bold text-slate-500">
+                    Total Documents
+                  </p>
+
+                  <h2 className="mt-1 text-3xl font-black text-blue-900">
+                    {totalDocuments}
+                  </h2>
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-6">
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700">
+                    Application Status
+                  </p>
+
+                  <h3 className="mt-2 text-2xl font-black text-slate-900">
+                    Approve or Reject
+                  </h3>
+                </div>
+
+                {!currentApplication.adminPolicyDocument &&
+                  currentApplication.status !==
+                    "approved" &&
+                  currentApplication.status !==
+                    "rejected" && (
+                    <div className="mb-5 rounded-2xl border border-yellow-200 bg-yellow-50 p-4">
+                      <p className="text-sm font-semibold text-yellow-700">
+                        Upload policy
+                        document before
+                        approving.
+                      </p>
+                    </div>
+                  )}
+
+                <div className="grid gap-4">
+                  {/* Approve */}
+                  <button
+                    onClick={() => {
+                      if (
+                        !currentApplication.adminPolicyDocument
+                      ) {
+                        toast.error(
+                          "Upload policy document first"
+                        );
+                        return;
+                      }
+
+                      setPendingStatus(
+                        "approved"
+                      );
+
+                      setShowConfirmPopup(
+                        true
+                      );
+                    }}
+                    disabled={
+                      actionLoading ===
+                        "approved" ||
+                      currentApplication.status ===
+                        "approved" ||
+                      currentApplication.status ===
+                        "rejected" ||
+                      !currentApplication.adminPolicyDocument
+                    }
+                    className="flex h-14 items-center justify-center gap-3 rounded-2xl bg-green-600 text-lg font-black text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <CheckCircle2 size={22} />
+
+                    {actionLoading ===
+                    "approved"
+                      ? "Approving..."
+                      : currentApplication.status ===
+                        "approved"
+                      ? "Already Approved"
+                      : "Approve"}
+                  </button>
+
+                  {/* Reject */}
+                  <button
+                    onClick={() =>
+                      setShowRejectBox(
+                        true
+                      )
+                    }
+                    disabled={
+                      actionLoading ===
+                        "rejected" ||
+                      currentApplication.status ===
+                        "approved" ||
+                      currentApplication.status ===
+                        "rejected"
+                    }
+                    className="flex h-14 items-center justify-center gap-3 rounded-2xl bg-red-600 text-lg font-black text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <XCircle size={22} />
+
+                    {actionLoading ===
+                    "rejected"
+                      ? "Rejecting..."
+                      : currentApplication.status ===
+                        "rejected"
+                      ? "Already Rejected"
+                      : "Reject"}
+                  </button>
+                </div>
+
+                {/* Reject Box */}
+                {showRejectBox && (
+                  <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-5">
+                    <label className="text-sm font-black uppercase tracking-wide text-red-700">
+                      Rejection Reason
+                    </label>
+
+                    <textarea
+                      rows={4}
+                      value={
+                        rejectReason
+                      }
+                      onChange={(e) =>
+                        setRejectReason(
+                          e.target.value
+                        )
+                      }
+                      placeholder="Enter rejection reason..."
+                      className="mt-3 w-full rounded-2xl border border-red-200 bg-white p-4 outline-none focus:border-red-500"
+                    />
+
+                    <div className="mt-5 flex gap-3">
+                      <button
+                        onClick={() => {
+                          if (
+                            !rejectReason.trim()
+                          ) {
+                            toast.error(
+                              "Please enter rejection reason"
+                            );
+                            return;
+                          }
+
+                          setPendingStatus(
+                            "rejected"
+                          );
+
+                          setShowConfirmPopup(
+                            true
+                          );
+
+                          setShowRejectBox(
+                            false
+                          );
+                        }}
+                        className="flex-1 rounded-xl bg-red-600 px-4 py-3 text-sm font-black text-white transition hover:bg-red-700"
+                      >
+                        Submit Reject
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setShowRejectBox(
+                            false
+                          );
+
+                          setRejectReason(
+                            ""
+                          );
+                        }}
+                        className="flex-1 rounded-xl border border-slate-300 px-4 py-3 text-sm font-black text-slate-700 transition hover:bg-slate-100"
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* DOCUMENTS */}
-              <div>
-                <h3 className="text-xs text-gray-400 mb-4 flex items-center gap-2">
-                  <ImageIcon size={14} /> Documents
-                </h3>
-                <div className="space-y-3">
-                  <DocCategory title="RC Book" files={currentApplication.rcBookImages} />
-                  <DocCategory title="Aadhar Card" files={currentApplication.aadharCardImages} />
-                  <DocCategory title="PAN Card" files={currentApplication.panCardImages} />
-                  <DocCategory title="Old Policy" files={currentApplication.oldPolicyImages} />
-                  <DocCategory title="Other Documents" files={currentApplication.otherImages} />
-                  <DocCategory title="Admin Policy Document" files={currentApplication.adminPolicyDocument ? [currentApplication.adminPolicyDocument] : []} />
+              {/* Upload */}
+              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-6">
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-red-600">
+                    Policy Document
+                  </p>
+
+                  <h3 className="mt-2 text-2xl font-black text-slate-900">
+                    Upload Policy
+                  </h3>
                 </div>
+
+                <label className="flex cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed border-blue-300 bg-blue-50 p-7 text-center transition hover:border-blue-600 hover:bg-blue-100">
+                  <input
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    className="hidden"
+                    disabled={
+                      currentApplication.status ===
+                      "approved"
+                    }
+                    onChange={(e) =>
+                      setSelectedPolicy(
+                        e.target
+                          .files?.[0] ||
+                          null
+                      )
+                    }
+                  />
+
+                  <div className="mb-4 rounded-2xl bg-white p-4 text-blue-700 shadow">
+                    <UploadCloud
+                      size={32}
+                    />
+                  </div>
+
+                  <h4 className="text-lg font-black text-slate-900">
+                    {selectedPolicy
+                      ? "Selected File"
+                      : currentApplication.adminPolicyDocument
+                      ? "Replace Policy Document"
+                      : "Choose Policy Document"}
+                  </h4>
+
+                  <p className="mt-2 text-xs font-semibold text-slate-500">
+                    {selectedPolicy
+                      ? selectedPolicy.name
+                      : "PDF, JPG, JPEG, PNG"}
+                  </p>
+                </label>
+
+                <button
+                  onClick={
+                    handlePolicyUpload
+                  }
+                  disabled={
+                    !selectedPolicy ||
+                    actionLoading ===
+                      "upload" ||
+                    currentApplication.status ===
+                      "approved"
+                  }
+                  className="mt-5 flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-blue-900 text-lg font-black text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <UploadCloud
+                    size={22}
+                  />
+
+                  {actionLoading ===
+                  "upload"
+                    ? "Uploading..."
+                    : currentApplication.adminPolicyDocument
+                    ? "Replace Policy"
+                    : "Upload Policy"}
+                </button>
+
+                {currentApplication.adminPolicyDocument && (
+                  <a
+                    href={getFullImageUrl(
+                      currentApplication.adminPolicyDocument
+                    )}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-5 flex items-center justify-center gap-2 text-sm font-black text-blue-700 hover:text-blue-900"
+                  >
+                    <Download
+                      size={18}
+                    />
+                    View Uploaded Policy
+                  </a>
+                )}
+              </div>
+
+              {/* WhatsApp */}
+              <div className="rounded-3xl border border-green-200 bg-green-50 p-6 shadow-sm">
+                <button
+                  onClick={
+                    handleShareWhatsApp
+                  }
+                  className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#25d366] text-lg font-black text-white transition hover:bg-[#1ebe5b]"
+                >
+                  <MessageCircle
+                    size={22}
+                  />
+
+                  Share on WhatsApp
+                </button>
+
+                <p className="mt-3 text-center text-xs font-semibold text-slate-500">
+                  Share application
+                  details instantly
+                </p>
               </div>
             </div>
-
-            {/* RIGHT - SUMMARY */}
-            <div>
-              <div className="bg-gray-50 p-4 rounded-xl">
-                <h4 className="font-bold mb-3 flex items-center gap-2">
-                  <Shield size={16} />
-                  Documents Summary
-                </h4>
-                <div className="space-y-2">
-                  <StatRow label="RC Book" count={currentApplication.rcBookImages?.length || 0} />
-                  <StatRow label="Aadhar Card" count={currentApplication.aadharCardImages?.length || 0} />
-                  <StatRow label="PAN Card" count={currentApplication.panCardImages?.length || 0} />
-                  <StatRow label="Old Policy" count={currentApplication.oldPolicyImages?.length || 0} />
-                  <StatRow label="Other Documents" count={currentApplication.otherImages?.length || 0} />
-                </div>
-                <div className="mt-4 bg-blue-50 text-blue-600 p-3 rounded-lg flex items-center gap-2">
-                  <Shield size={16} />
-                  <span className="text-xs font-bold">Total Documents: {
-                    (currentApplication.rcBookImages?.length || 0) +
-                    (currentApplication.aadharCardImages?.length || 0) +
-                    (currentApplication.panCardImages?.length || 0) +
-                    (currentApplication.oldPolicyImages?.length || 0) +
-                    (currentApplication.otherImages?.length || 0)
-                  }</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* BOTTOM SECTION - ACTIONS */}
-          <div className="border-t bg-[#f8fafc] p-6">
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_1.1fr]">
-  {/* Status Update Section */}
-  <div className="rounded-2xl border border-[#d9e3f5] bg-white p-4">
-    <div className="mb-4 flex items-center justify-between gap-3">
-      <div>
-        <p className="text-xs font-black uppercase tracking-[0.16em] text-[#1f2f86]">Application Status</p>
-        <h4 className="mt-1 text-lg font-black text-[#10183f]">Approve or reject</h4>
-      </div>
-      <div className="flex flex-col items-end gap-2">
-        <span className={`rounded-full px-3 py-1 text-xs font-black uppercase ring-1 ${currentApplication.status === "approved"
-          ? "bg-green-50 text-green-700 ring-green-200"
-          : currentApplication.status === "rejected"
-            ? "bg-red-50 text-red-700 ring-red-200"
-            : "bg-amber-50 text-amber-700 ring-amber-200"
-          }`}>
-          {currentApplication.status || "pending"}
-        </span>
-      </div>
-    </div>
-
-    {/* Show warning if no policy document uploaded */}
-    {currentApplication.status !== "approved" && 
-     currentApplication.status !== "rejected" && 
-     !currentApplication.adminPolicyDocument && (
-      <div className="mb-4 rounded-lg bg-yellow-50 border border-yellow-200 p-3">
-        <div className="flex items-center gap-2">
-          <UploadCloud size={16} className="text-yellow-600" />
-          <p className="text-xs text-yellow-700">
-            <span className="font-bold">Note:</span> Please upload policy document before approving this application.
-          </p>
-        </div>
-      </div>
-    )}
-
-    <div className="grid grid-cols-2 gap-3">
-      <button
-        onClick={() => {
-          if (currentApplication.status === "approved") {
-            toast.error("Application is already approved");
-            return;
-          }
-          if (currentApplication.status === "rejected") {
-            toast.error("Rejected application cannot be approved");
-            return;
-          }
-          
-          // Check if policy document is uploaded
-          if (!currentApplication.adminPolicyDocument) {
-            toast.error("Please upload policy document before approving the application");
-            return;
-          }
-          
-          setPendingStatus("approved");
-          setShowConfirmPopup(true);
-        }}
-        disabled={
-          actionLoading === "approved" ||
-          currentApplication.status === "approved" ||
-          currentApplication.status === "rejected" ||
-          !currentApplication.adminPolicyDocument // Disable if no policy document
-        }
-        className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-black transition disabled:cursor-not-allowed disabled:opacity-60 ${
-          currentApplication.status === "rejected" || !currentApplication.adminPolicyDocument
-            ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
-            : "border-[#cbdcff] bg-[#f3f7ff] text-[#1f2f86] hover:border-[#1f2f86] hover:bg-white"
-        }`}
-      >
-        <CheckCircle2 size={17} />
-        {currentApplication.status === "approved"
-          ? "Already Approved"
-          : currentApplication.status === "rejected"
-            ? "Cannot Approve"
-            : !currentApplication.adminPolicyDocument
-              ? "Upload Policy First"
-              : actionLoading === "approved"
-                ? "Approving..."
-                : "Approve"}
-      </button>
-
-      <button
-        onClick={() => {
-          if (currentApplication.status === "approved") {
-            toast.error("Approved application cannot be rejected");
-            return;
-          }
-          if (currentApplication.status === "rejected") {
-            toast.error("Application is already rejected");
-            return;
-          }
-          setShowRejectBox(true);
-        }}
-        disabled={
-          actionLoading === "rejected" ||
-          currentApplication.status === "approved" ||
-          currentApplication.status === "rejected"
-        }
-        className={`flex h-11 items-center justify-center gap-2 rounded-xl border text-sm font-black transition disabled:cursor-not-allowed disabled:opacity-60 ${
-          currentApplication.status === "rejected"
-            ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
-            : "border-[#ffd4d0] bg-[#fff5f4] text-[#e6362e] hover:border-[#e6362e] hover:bg-white"
-        }`}
-      >
-        <XCircle size={17} />
-        {currentApplication.status === "approved"
-          ? "Already Approved"
-          : currentApplication.status === "rejected"
-            ? "Already Rejected"
-            : actionLoading === "rejected"
-              ? "Rejecting..."
-              : "Reject"}
-      </button>
-    </div>
-
-    {showRejectBox && (
-      <div className="mt-4 border border-red-200 bg-red-50 p-4 rounded-xl">
-        <label className="text-sm font-bold text-red-700">
-          Rejection Reason
-        </label>
-        <textarea
-          className="w-full mt-2 border p-2 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500"
-          rows={3}
-          value={rejectReason}
-          onChange={(e) => setRejectReason(e.target.value)}
-          placeholder="Enter rejection reason..."
-        />
-        <div className="flex gap-3 mt-3">
-          <button
-            onClick={() => {
-              if (!rejectReason.trim()) {
-                toast.error("Please enter rejection reason");
-                return;
-              }
-              setPendingStatus("rejected");
-              setShowConfirmPopup(true);
-              setShowRejectBox(false);
-            }}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-            disabled={actionLoading === "rejected"}
-          >
-            {actionLoading === "rejected" ? "Submitting..." : "Submit Reject"}
-          </button>
-          <button
-            onClick={() => {
-              setShowRejectBox(false);
-              setRejectReason("");
-            }}
-            className="border px-4 py-2 rounded hover:bg-gray-50 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    )}
-  </div>
-
-  {/* Policy Upload Section */}
-  <div className="rounded-2xl border border-[#d9e3f5] bg-white p-4">
-    <div className="mb-4">
-      <p className="text-xs font-black uppercase tracking-[0.16em] text-[#e6362e]">Policy Document</p>
-      <h4 className="mt-1 text-lg font-black text-[#10183f]">Upload policy document</h4>
-    </div>
-
-    {/* Show success indicator when policy is uploaded */}
-    {currentApplication.adminPolicyDocument && (
-      <div className="mb-4 rounded-lg bg-green-50 border border-green-200 p-3">
-        <div className="flex items-center gap-2">
-          <CheckCircle2 size={16} className="text-green-600" />
-          <p className="text-xs text-green-700">
-            <span className="font-bold">Success:</span> Policy document uploaded successfully. You can now approve this application.
-          </p>
-        </div>
-      </div>
-    )}
-
-    <div className="grid gap-3 md:grid-cols-[1fr_auto]">
-      <label className={`flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed p-4 transition ${
-        currentApplication.adminPolicyDocument
-          ? "border-green-300 bg-green-50 hover:border-green-500"
-          : "border-[#b9c9ee] bg-[#f7faff] hover:border-[#1f2f86] hover:bg-white"
-      }`}>
-        <input
-          type="file"
-          accept=".pdf,.jpg,.jpeg,.png"
-          onChange={(event) => setSelectedPolicy(event.target.files?.[0] || null)}
-          className="hidden"
-          disabled={currentApplication.status === "approved"} // Disable if already approved
-        />
-        <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white shadow-sm ${
-          currentApplication.adminPolicyDocument ? "text-green-600" : "text-[#1f2f86]"
-        }`}>
-          <UploadCloud size={20} />
-        </span>
-        <span className="min-w-0">
-          <span className="block text-sm font-black text-[#10183f]">
-            {selectedPolicy ? "Selected file" : currentApplication.adminPolicyDocument ? "Policy Uploaded" : "Choose policy document"}
-          </span>
-          <span className="mt-0.5 block truncate text-xs font-semibold text-slate-500">
-            {selectedPolicy 
-              ? selectedPolicy.name 
-              : currentApplication.adminPolicyDocument 
-                ? "Click to replace policy document"
-                : "Click here to select PDF, JPG, JPEG, or PNG"}
-          </span>
-        </span>
-      </label>
-      <button
-        onClick={handlePolicyUpload}
-        disabled={!selectedPolicy || actionLoading === "upload" || currentApplication.status === "approved"}
-        className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#1f2f86] px-5 text-sm font-black text-white transition hover:bg-[#e6362e] disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        <UploadCloud size={17} /> 
-        {actionLoading === "upload" 
-          ? "Uploading..." 
-          : currentApplication.adminPolicyDocument 
-            ? "Replace" 
-            : "Upload"}
-      </button>
-    </div>
-
-    {currentApplication.adminPolicyDocument && (
-      <a
-        href={getFullImageUrl(currentApplication.adminPolicyDocument)}
-        target="_blank"
-        rel="noreferrer"
-        className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-[#1f2f86] hover:text-[#e6362e]"
-      >
-        <Download size={15} /> View uploaded policy document
-      </a>
-    )}
-  </div>
-</div>
-
-            {/* WhatsApp Share Section */}
-            <div className="mt-4 rounded-2xl border border-[#25d366]/30 bg-[#f0fdf4] p-4">
-              <button
-                onClick={handleShareWhatsApp}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#25d366] px-5 py-3 text-sm font-black text-white transition hover:bg-[#20ba5a]"
-              >
-                <MessageCircle size={18} /> Share on WhatsApp
-              </button>
-              <p className="mt-2 text-center text-xs text-slate-600">
-                Sends application details and policy document status
-              </p>
-            </div>
-
-            {message && (
-              <div className="mt-4 rounded-xl border border-[#d9e3f5] bg-white px-4 py-3 text-sm font-bold text-[#1f2f86]">
-                {message}
-              </div>
-            )}
           </div>
         </div>
       </div>
 
-      {/* Confirmation Popup */}
-      {showConfirmPopup && <ConfirmPopup />}
+      {/* Confirm Popup */}
+      {showConfirmPopup && (
+        <ConfirmPopup
+          pendingStatus={
+            pendingStatus
+          }
+          rejectReason={
+            rejectReason
+          }
+          loading={
+            actionLoading ===
+            pendingStatus
+          }
+          onCancel={() => {
+            setShowConfirmPopup(
+              false
+            );
+
+            setPendingStatus("");
+          }}
+          onConfirm={() =>
+            handleStatusUpdate(
+              pendingStatus
+            )
+          }
+        />
+      )}
     </div>
   );
 };
