@@ -1,239 +1,294 @@
 import React from "react";
-import { Phone, Mail, Share2 } from "lucide-react";
-import TestimonialsSection from "./TestimonialsSection";
-import Footer from "./Footer";
+import { Phone, Mail, Shield, Target, Award, Users, CheckCircle, ChevronRight, Star, Heart, MapPin, Clock, Building, Truck, Globe, Briefcase } from "lucide-react";
+import { Link } from "react-router-dom";
+import Footer from "./Footer"
 
-/* ✅ Testimonials (FIXED - missing issue solved) */
+// ========== TESTIMONIALS SECTION COMPONENT ==========
+const TestimonialsSection = ({ testimonials }) => {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [isAnimating, setIsAnimating] = React.useState(false);
+
+  const nextSlide = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setActiveIndex((prev) => (prev + 1) % testimonials.length);
+    setTimeout(() => setIsAnimating(false), 500);
+  };
+
+  const prevSlide = () => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setTimeout(() => setIsAnimating(false), 500);
+  };
+
+  const visibleTestimonials = testimonials.slice(activeIndex, activeIndex + 3);
+  if (visibleTestimonials.length < 3) {
+    visibleTestimonials.push(...testimonials.slice(0, 3 - visibleTestimonials.length));
+  }
+
+  return (
+    <section className="py-16 bg-gradient-to-br from-white to-red-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">Testimonials</span>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-3">
+            What Our <span className="text-red-600">Customers Say</span>
+          </h2>
+          <div className="w-20 h-1 bg-gradient-to-r from-red-600 to-blue-600 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div className="relative">
+          <div className="grid md:grid-cols-3 gap-6">
+            {visibleTestimonials.map((testimonial, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-l-red-600"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-100 to-blue-100 flex items-center justify-center overflow-hidden">
+                    {testimonial.image ? (
+                      <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <Users className="w-6 h-6 text-red-600" />
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                    <p className="text-xs text-gray-500">{testimonial.role}</p>
+                  </div>
+                </div>
+                <div className="flex gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-gray-600 text-sm leading-relaxed italic">"{testimonial.quote}"</p>
+              </div>
+            ))}
+          </div>
+
+          {testimonials.length > 3 && (
+            <div className="flex justify-center gap-3 mt-8">
+              <button
+                onClick={prevSlide}
+                className="w-8 h-8 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300"
+              >
+                ←
+              </button>
+              <button
+                onClick={nextSlide}
+                className="w-8 h-8 rounded-full bg-white border border-gray-300 flex items-center justify-center hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300"
+              >
+                →
+              </button>
+            </div>
+          )}
+
+          <div className="flex justify-center gap-2 mt-4">
+            {testimonials.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  if (!isAnimating) {
+                    setIsAnimating(true);
+                    setActiveIndex(idx);
+                    setTimeout(() => setIsAnimating(false), 500);
+                  }
+                }}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  idx === activeIndex ? "w-6 bg-red-600" : "w-1.5 bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
 const testimonials = [
   {
-    name: "Priya Nair", 
+    name: "Priya Nair",
     role: "Logistics Manager",
     image: "/assets/21.jpg",
-    quote:
-      "Warehouse insurance policy lene ka process simple aur transparent tha. Navlakha Insurance ne best plan recommend kiya.",
+    quote: "Warehouse insurance policy lene ka process simple aur transparent tha. Griva Insurance ne best plan recommend kiya.",
+    rating: 5
   },
   {
     name: "Arjun Verma",
-    role: "Entrepreneur", 
+    role: "Entrepreneur",
     image: "/assets/24.jpg",
-    quote:
-      "Transit insurance ke liye quick aur hassle-free service mili. Truly reliable team!",
+    quote: "Transit insurance ke liye quick aur hassle-free service mili. Truly reliable team!",
+    rating: 5
   },
   {
     name: "Shreya Mehta",
     role: "Teacher",
     image: "/assets/31.jpg",
-    quote:
-      "Health insurance select karva ma bahu saras guidance mali. Smooth experience.",
+    quote: "Health insurance select karva ma bahu saras guidance mali. Smooth experience.",
+    rating: 5
+  },
+  {
+    name: "Rohan Patel",
+    role: "Business Owner",
+    image: "/assets/11.jpg",
+    quote: "Commercial insurance was explained perfectly. Very fast claim processing experience.",
+    rating: 5
+  },
+  {
+    name: "Ananya Joshi",
+    role: "HR Executive",
+    image: "/assets/42.jpg",
+    quote: "Very responsive customer support. Got proper guidance for health insurance selection.",
+    rating: 5
+  },
+  {
+    name: "Krina Shah",
+    role: "Freelancer",
+    image: "/assets/55.jpg",
+    quote: "Affordable plans with clear explanations. Helped me choose the perfect policy.",
+    rating: 5
   },
 ];
 
 const About = () => {
   return (
-    <div className="flex flex-col w-full">
-       
+    <div className="flex flex-col w-full bg-white">
 
-<section className="relative py-16 md:py-24 bg-white overflow-hidden">
+      {/* ========== SECTION 1: HERO SECTION ========== */}
+      <section className="py-12 md:py-16 bg-gradient-to-br from-white via-red-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-10 items-center">
 
- {/* UNIQUE MODERN ARCHITECTURAL BACKGROUND */}
-<div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#ffffff]">
-   
-  {/* 1. Subtle Radial Gradient for Depth */}
-  <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,_rgba(33,53,145,0.03)_0%,_transparent_50%)]"></div>
+            {/* Left Side - Image */}
+            <div className="order-2 lg:order-1">
+              <div className="rounded-xl overflow-hidden shadow-lg">
+                <img
+                  src="https://media.licdn.com/dms/image/v2/D4D22AQEMyEAvt-vSuQ/feedshare-shrink_800/feedshare-shrink_800/0/1689514965135?e=2147483647&v=beta&t=9b9rSryE0zHjPctw_4CHJr-VHWu_OuRZEbGH1ROYN3I"
+                  alt="Griva Insurance Team"
+                  className="w-full h-[280px] md:h-[350px] object-cover"
+                />
+              </div>
+            </div>
 
-  {/* 2. Floating Glass Cards Decoration (Top Right) */}
-  <div className="absolute top-[-5%] right-[5%] w-72 h-72 bg-[#213591]/[0.02] rounded-3xl rotate-12 border border-slate-100 shadow-sm transition-transform duration-1000 hover:rotate-6"></div>
-  <div className="absolute top-[5%] right-[-2%] w-64 h-64 bg-[#E8021E]/[0.01] rounded-[3rem] -rotate-12 border border-red-50/50"></div>
-
-  {/* 3. Precision Grid Accents (Bottom Left) */}
-  <div className="absolute bottom-10 left-10 opacity-20">
-    <div className="grid grid-cols-4 gap-4">
-      {[...Array(16)].map((_, i) => (
-        <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#213591]"></div>
-      ))}
-    </div>
-  </div>
-
-  {/* 4. The "Security Path" - Diagonal Sleek Lines */}
-  <svg className="absolute right-0 top-0 h-full w-1/2 opacity-[0.15]" viewBox="0 0 400 800" fill="none">
-    <path d="M400 0L150 800" stroke="#213591" strokeWidth="0.5" />
-    <path d="M450 0L200 800" stroke="#213591" strokeWidth="0.5" />
-    <path d="M350 0L100 800" stroke="#E8021E" strokeWidth="1" strokeDasharray="10 10" />
-  </svg>
-
-  {/* 5. Soft Glow behind Content */}
-  <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-[#213591]/5 rounded-full blur-[120px]"></div>
-
-  {/* 6. Subtle Noise Texture Overlay (Optional for Premium Feel) */}
-  <div className="absolute inset-0 opacity-[0.015] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
-</div>
-
-  
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-          {/* LEFT SIDE: IMAGE WITH TECH VIBE */}
-         <div className="relative group">
-  <div className="overflow-hidden rounded-lg shadow-2xl border-4 border-white">
-    <img
-      src="https://media.licdn.com/dms/image/v2/D4D22AQEMyEAvt-vSuQ/feedshare-shrink_800/feedshare-shrink_800/0/1689514965135?e=2147483647&v=beta&t=9b9rSryE0zHjPctw_4CHJr-VHWu_OuRZEbGH1ROYN3I"
-      alt="Griva Insurance Tech Presentation"
-      /* Height h-[350px] rakhi chhe jene tame tamari rite adjust kari shako cho */
-      className="w-full h-[350px] md:h-[400px] object-cover transition duration-500 group-hover:scale-105"
-    />
-  </div>
-  {/* Decorative background element */}
-  <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-[#213591]/10 rounded-full blur-3xl -z-10"></div>
-</div>
-
-          {/* RIGHT SIDE: CONTENT */}
-          <div className="space-y-6">
-            <h2 className="text-3xl md:text-5xl font-bold text-[#213591] leading-tight">
-              Griva <span className="text-[#E8021E]">Insurance Services</span>
-            </h2>
-
-            <div className="space-y-4 text-gray-700 text-[16px] md:text-[18px] leading-relaxed">
-              <p className="font-medium text-lg text-[#003366]">
+            {/* Right Side - Content */}
+            <div className="order-1 lg:order-2 space-y-4">
+              <div className="inline-flex items-center gap-2 bg-red-100 px-3 py-1 rounded-full">
+                <Shield className="w-4 h-4 text-red-600" />
+                <span className="text-xs font-semibold text-red-600 uppercase tracking-wide">About Griva Insurance</span>
+              </div>
+              
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+                <span className="text-gray-900">Griva</span>{" "}
+                <span className="text-red-600">Insurance Services</span>
+              </h1>
+              
+              <p className="text-lg font-semibold text-blue-700">
                 Modern Problems Require Smart Insurance Solutions.
               </p>
               
-              <p>
-                At <b className="text-[#213591]">Griva Insurance Services</b>, we blend traditional trust with modern technology. Founded by <b>Miss Minaxi Navlakha</b>, we bring over a decade of expertise to help you navigate the complex world of risk management.
-              </p>
+              <div className="space-y-3 text-gray-600 text-sm md:text-base leading-relaxed">
+                <p>
+                  At <span className="font-bold text-red-600">Griva Insurance Services</span>, we blend traditional trust with modern technology. 
+                  Founded by <span className="font-semibold text-blue-700">Miss Minaxi Navlakha</span>, we bring over a decade of expertise to 
+                  help you navigate the complex world of risk management.
+                </p>
 
-              <p>
-                As seen in our focus on <b>Generative AI and Innovation</b>, we stay ahead of the curve to provide the most efficient coverage for:
-              </p>
+                <p>
+                  As seen in our focus on <span className="font-semibold text-blue-700">Generative AI and Innovation</span>, we stay ahead 
+                  of the curve to provide the most efficient coverage.
+                </p>
 
-              <ul className="grid grid-cols-2 gap-2 text-[#003366] font-semibold">
-                <li>• Health & Motor</li>
-                <li>• Liability & Travel</li>
-                <li>• Property & Fire</li>
-                <li>• Transit & Warehouse</li>
-              </ul>
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  <div className="flex items-center gap-2"><Shield className="w-4 h-4 text-red-500" /><span className="text-sm">Health & Motor</span></div>
+                  <div className="flex items-center gap-2"><Globe className="w-4 h-4 text-red-500" /><span className="text-sm">Liability & Travel</span></div>
+                  <div className="flex items-center gap-2"><Building className="w-4 h-4 text-red-500" /><span className="text-sm">Property & Fire</span></div>
+                  <div className="flex items-center gap-2"><Truck className="w-4 h-4 text-red-500" /><span className="text-sm">Transit & Warehouse</span></div>
+                </div>
 
-              <p>
-                Our mission is to safeguard your digital and physical assets with <b>hassle-free claims</b> and <b>personalized guidance</b>. We don't just sell policies; we build lasting security for your future.
-              </p>
+                <p className="pt-2">
+                  Our mission is to safeguard your digital and physical assets with <span className="font-semibold text-red-600">hassle-free claims</span> and 
+                  <span className="font-semibold text-blue-700"> personalized guidance</span>.
+                </p>
+              </div>
+
+              <div className="pt-2">
+                <a
+                  href="tel:+918320291588"
+                  className="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-red-700 transition-all duration-300 text-sm"
+                >
+                  <Phone size={18} />
+                  Connect with Griva Insurance
+                  <ChevronRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== SECTION 3: PARTNERS SECTION ========== */}
+      <section className="py-12 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <span className="text-xs font-semibold text-red-600 uppercase tracking-wide">Our Partners</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
+              Our Valued <span className="text-red-600">Partners</span>
+            </h2>
+            <div className="w-20 h-1 bg-gradient-to-r from-red-600 to-blue-600 mx-auto mt-3 rounded-full"></div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-10 items-center max-w-3xl mx-auto">
+            {/* Partner 1 */}
+            <div className="text-center">
+              <div className="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-red-200 shadow-md">
+                <img
+                  src="/assets/Akash Jani.jpeg"
+                  alt="Akash Jani"
+                  className="w-full h-full object-cover"
+                  onError={(e) => { e.target.src = "https://via.placeholder.com/200?text=Akash+Jani"; }}
+                />
+              </div>
+              <h3 className="mt-4 text-xl font-bold text-gray-900">Akash Jani</h3>
+              <p className="text-gray-500 text-sm">Strategic Partner</p>
             </div>
 
-            <div className="pt-4">
-              <a
-                href="tel:+918320291588"
-                className="inline-flex items-center gap-3 bg-[#213591] text-white px-10 py-4 rounded-lg font-bold hover:bg-[#1a2a75] transition-all duration-300 shadow-xl border-l-8 border-[#E8021E] active:scale-95"
-              >
-                <Phone size={22} className="animate-pulse" />
-                Connect with Griva Insurance
-              </a>
+            {/* Partner 2 */}
+            <div className="text-center">
+              <div className="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-blue-200 shadow-md">
+                <img
+                  src="/assets/Dipen Shah.jpeg"
+                  alt="Dipen Shah"
+                  className="w-full h-full object-cover"
+                  onError={(e) => { e.target.src = "https://via.placeholder.com/200?text=Dipen+Shah"; }}
+                />
+              </div>
+              <h3 className="mt-4 text-xl font-bold text-gray-900">Dipen Shah</h3>
+              <p className="text-gray-500 text-sm">Strategic Partner</p>
             </div>
           </div>
 
+          <div className="mt-10 text-center max-w-2xl mx-auto space-y-3">
+            <p className="text-gray-600 text-sm leading-relaxed">
+              Akash Jani and Dipen Shah are key partners contributing to the growth and success of Griva Insurance Services.
+            </p>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              Together, they support a wide range of insurance solutions including Health, Life, Motor, and Commercial Insurance.
+            </p>
+          </div>
         </div>
-      </div>
-    </section> 
-
-      {/* ===================== SECTION 2 ===================== */}
-   <section className="relative py-16 md:py-24 bg-white overflow-hidden">
-
-    
-          {/* UNIQUE MODERN ARCHITECTURAL BACKGROUND */}
-<div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#ffffff]">
-  
-  {/* 1. Subtle Radial Gradient for Depth */}
-  <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,_rgba(33,53,145,0.03)_0%,_transparent_50%)]"></div>
-
-  {/* 2. Floating Glass Cards Decoration (Top Right) */}
-  <div className="absolute top-[-5%] right-[5%] w-72 h-72 bg-[#213591]/[0.02] rounded-3xl rotate-12 border border-slate-100 shadow-sm transition-transform duration-1000 hover:rotate-6"></div>
-  <div className="absolute top-[5%] right-[-2%] w-64 h-64 bg-[#E8021E]/[0.01] rounded-[3rem] -rotate-12 border border-red-50/50"></div>
-
-  {/* 3. Precision Grid Accents (Bottom Left) */}
-  <div className="absolute bottom-10 left-10 opacity-20">
-    <div className="grid grid-cols-4 gap-4">
-      {[...Array(16)].map((_, i) => (
-        <div key={i} className="w-1.5 h-1.5 rounded-full bg-[#213591]"></div>
-      ))}
-    </div>
-  </div>
-
-  {/* 4. The "Security Path" - Diagonal Sleek Lines */}
-  <svg className="absolute right-0 top-0 h-full w-1/2 opacity-[0.15]" viewBox="0 0 400 800" fill="none">
-    <path d="M400 0L150 800" stroke="#213591" strokeWidth="0.5" />
-    <path d="M450 0L200 800" stroke="#213591" strokeWidth="0.5" />
-    <path d="M350 0L100 800" stroke="#E8021E" strokeWidth="1" strokeDasharray="10 10" />
-  </svg>
-
-  {/* 5. Soft Glow behind Content */}
-  <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-[#213591]/5 rounded-full blur-[120px]"></div>
-
-  {/* 6. Subtle Noise Texture Overlay (Optional for Premium Feel) */}
-  <div className="absolute inset-0 opacity-[0.015] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
-</div>
-
-     <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-
-  {/* TITLE */}
-  <div className="text-center mb-14">
-    <h2 className="text-3xl md:text-4xl font-bold text-[#213591]">
-      Our Valued Partners
-    </h2>
-  </div>
-
-  {/* TWO IMAGES SIDE BY SIDE */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-
-    {/* PERSON 1 */}
-    <div className="flex flex-col items-center text-center">
-      <div className="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-gray-100 shadow-lg">
-        <img
-          src="/assets/Akash Jani.jpeg"
-          alt="Akash Jani"
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <h3 className="mt-4 text-2xl font-bold text-gray-900">
-        Akash Jani
-      </h3>
-    </div>
-
-    {/* PERSON 2 */}
-    <div className="flex flex-col items-center text-center">
-      <div className="w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-gray-100 shadow-lg">
-        <img
-          src="/assets/Dipen Shah.jpeg"
-          alt="Dipen Shah"
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <h3 className="mt-4 text-2xl font-bold text-gray-900">
-        Dipen Shah
-      </h3>
-    </div>
-
-  </div>
-
-  {/* DESCRIPTION */}
-  <div className="mt-12 text-center max-w-4xl mx-auto text-gray-600 leading-relaxed text-[15px] space-y-4">
-    <p>
-      Akash Jani and Dipen Shah are key partners contributing to the growth and
-      success of Griva Insurance Services. They play an important role in
-      strengthening client relationships and expanding service offerings.
-    </p>
-
-    <p>
-      Together, they support a wide range of insurance solutions including Health,
-      Life, Motor, and Commercial Insurance, ensuring clients receive trusted
-      guidance and reliable service.
-    </p>
-  </div>
-
-</div>
-    </section>
-
-      <section className="py-16 bg-gray-50">
-        <TestimonialsSection testimonials={testimonials} />
       </section>
 
-<Footer/>
+
+
+      {/* ========== SECTION 6: TESTIMONIALS ========== */}
+      <TestimonialsSection testimonials={testimonials} />
+
+      {/* ========== FOOTER ========== */}
+      <Footer />
     </div>
   );
 };
