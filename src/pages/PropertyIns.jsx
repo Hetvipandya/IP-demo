@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import {
@@ -29,6 +29,10 @@ const PropertyIns = () => {
       path: "/liability-insurance"
     },
   ];
+
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   return (
     <>
@@ -185,8 +189,47 @@ const PropertyIns = () => {
                   <input
                     type="text"
                     placeholder="Search..."
+                    value={query}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setQuery(v);
+                      if (v.trim() === '') {
+                        setResults([]);
+                        setShowDropdown(false);
+                        return;
+                      }
+                      const filtered = recentPosts.filter(p =>
+                        p.title.toLowerCase().includes(v.toLowerCase())
+                      );
+                      setResults(filtered);
+                      setShowDropdown(true);
+                    }}
+                    onFocus={() => { if (query.trim() !== '' && results.length) setShowDropdown(true); }}
+                    onBlur={() => { setTimeout(() => setShowDropdown(false), 150); }}
                     className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-600 transition"
                   />
+
+                  {showDropdown && (
+                    <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-20 max-h-60 overflow-auto">
+                      {results.length > 0 ? (
+                        results.map((r, i) => (
+                          <div
+                            key={i}
+                            onMouseDown={() => navigate(r.path)}
+                            className="px-4 py-3 hover:bg-gray-50 cursor-pointer flex items-start gap-3"
+                          >
+                            <img src={r.img} alt="thumb" className="w-10 h-10 rounded object-cover" />
+                            <div>
+                              <p className="text-sm font-semibold text-gray-800">{r.title}</p>
+                              <p className="text-xs text-gray-500">{r.date}</p>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="px-4 py-3 text-sm text-gray-500">No results found</div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 

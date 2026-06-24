@@ -47,7 +47,7 @@ const Footer = () => {
             <div className="shrink-0">
               <Link to="/quote">
                 <button className="group relative bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 px-7 py-3.5 rounded-xl text-white font-semibold flex items-center gap-2.5 shadow-lg shadow-red-950/40 transition-all duration-300 hover:shadow-red-500/20 hover:-translate-y-0.5">
-                  Request Callback
+                  Call Now
                   <FiArrowRight className="text-lg transition-transform duration-300 group-hover:translate-x-1" />
                 </button>
               </Link>
@@ -158,7 +158,7 @@ const Footer = () => {
               <div className="flex gap-3 items-start">
                 <FiMapPin className="text-red-400 text-base shrink-0 mt-0.5" />
                 <p className="text-slate-400 leading-relaxed">
-                  1st Floor, Avadhpuri Shopping Center, Vishwas City 1, Ghatlodiya, Ahmedabad - 380061
+                  Shop no 10, 1st floor Avadhpuri Shopping Center, nr. Vishwas City 1, Ghatlodiya, Ahmedabad, Gujarat 380061
                 </p>
               </div>
 
@@ -174,7 +174,7 @@ const Footer = () => {
               <div className="flex gap-3 items-start border-t border-slate-800/40 pt-3">
                 <FiPhone className="text-red-400 text-base shrink-0 mt-1" />
                 <div className="space-y-1.5">
-                  {["+91 99044 01900", "+91 97370 67941", "+91 90993 33601"].map((phone) => (
+                  {["+91 99044 01900"].map((phone) => (
                     <a
                       key={phone}
                       href={`tel:${phone.replace(/\s+/g, "")}`}

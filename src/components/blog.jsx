@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import Footer from './Footer';
 import { Link, useNavigate } from "react-router-dom";
 
@@ -59,6 +59,25 @@ const Blog = () => {
   const sidebarIds = [5, 4, 3];
   const sidebarPosts = sidebarIds.map(id => blogPosts.find(post => post.id === id));
 
+  const [query, setQuery] = useState('');
+
+  const filteredPosts = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return blogPosts;
+    return blogPosts.filter((post) => {
+      return (
+        post.title.toLowerCase().includes(q) ||
+        post.category.toLowerCase().includes(q) ||
+        post.description.toLowerCase().includes(q) ||
+        post.date.toLowerCase().includes(q)
+      );
+    });
+  }, [query, blogPosts]);
+
+  const filteredSidebarPosts = useMemo(() => {
+    return sidebarIds.map(id => filteredPosts.find(p => p && p.id === id)).filter(Boolean);
+  }, [filteredPosts]);
+
   return (
     <div className="flex flex-col min-h-screen bg-white font-sans">
 
@@ -102,7 +121,10 @@ const Blog = () => {
 
           {/* LEFT BLOG */}
           <div className="lg:w-[68%] space-y-16">
-            {blogPosts.map((post) => (
+            {filteredPosts.length === 0 ? (
+              <div className="text-center py-12 text-gray-500">No posts found</div>
+            ) : (
+              filteredPosts.map((post) => (
               <div key={post.id} className="bg-white group border-b border-gray-100 pb-16 last:border-0">
 
                 <div className="overflow-hidden rounded-md mb-6 shadow-sm">
@@ -140,7 +162,7 @@ const Blog = () => {
                   </button>
                 </Link>
               </div>
-            ))}
+            )))}
           </div>
 
           {/* RIGHT SIDEBAR */}
@@ -159,8 +181,38 @@ const Blog = () => {
                 <input
                   type="text"
                   placeholder="Search..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      if (filteredPosts && filteredPosts.length > 0) {
+                        const first = filteredPosts[0];
+                        if (first && routeMap[first.id]) {
+                          navigate(routeMap[first.id]);
+                        }
+                      }
+                    }
+                  }}
                   className="w-full p-4 border border-gray-200 rounded-md focus:outline-none focus:border-red-500 text-gray-600 transition"
                 />
+                {/* Autocomplete dropdown (show up to 5 matches) */}
+                {query && filteredPosts.length > 0 && (
+                  <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+                    {filteredPosts.slice(0, 5).map((p) => (
+                      <div
+                        key={p.id}
+                        onMouseDown={() => navigate(routeMap[p.id])}
+                        className="px-4 py-3 hover:bg-gray-100 cursor-pointer flex items-start gap-3"
+                      >
+                        <img src={p.image} alt={p.title} className="w-12 h-12 rounded-md object-cover flex-shrink-0" />
+                        <div className="flex-1">
+                          <div className="text-sm font-semibold text-gray-800">{p.title}</div>
+                          <div className="text-xs text-gray-500">{p.category}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -174,7 +226,7 @@ const Blog = () => {
               </div>
 
               <div className="space-y-6">
-                {sidebarPosts.map((post) => (
+                {filteredSidebarPosts.map((post) => (
                   <div
                     key={post.id}
                     onClick={() => navigate(routeMap[post.id])}

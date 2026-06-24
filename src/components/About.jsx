@@ -192,7 +192,7 @@ const About = () => {
               <div className="space-y-3 text-gray-600 text-sm md:text-base leading-relaxed">
                 <p>
                   At <span className="font-bold text-red-600">Griva Insurance Services</span>, we blend traditional trust with modern technology.
-                  Founded by <span className="font-semibold text-blue-700">Miss Minaxi Navlakha</span>, we bring over a decade of expertise to
+                  Founded by <span className="font-semibold text-blue-700">Miss Neha Dipen Shah,</span>, we bring over a decade of expertise to
                   help you navigate the complex world of risk management.
                 </p>
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { 
@@ -28,6 +28,26 @@ const LiabilityIns = () => {
       path: "/travel-insurance" 
     },
   ];
+
+  const postsList = [
+    { id: 1, title: 'Property Insurance Protecting Your Valuable Assets', category: 'Property', date: 'July 26, 2025', img: 'https://navlakhainsurance.in/wp-content/uploads/2025/07/127981.jpg', path: '/property-insurance' },
+    { id: 2, title: 'Travel Insurance Your Trusted Companion', category: 'Travel', date: 'July 26, 2025', img: 'https://navlakhainsurance.in/wp-content/uploads/2025/07/125089.jpg', path: '/travel-insurance' },
+    { id: 3, title: 'Liability Insurance Protecting Your Business', category: 'Liability', date: 'July 26, 2025', img: 'https://navlakhainsurance.in/wp-content/uploads/2025/07/134016.jpg', path: '/liability-insurance' },
+    { id: 4, title: 'Motor Insurance Ensuring Safety on the Road', category: 'Motor', date: 'November 2, 2022', img: 'https://navlakhainsurance.in/wp-content/uploads/2022/11/167062.jpg', path: '/motor-insurance' },
+    { id: 5, title: 'Health Insurance A Complete Guide', category: 'Health', date: 'November 12, 2021', img: 'https://navlakhainsurance.in/wp-content/uploads/2021/11/132324.jpg', path: '/health-insurance' },
+  ];
+
+  const [query, setQuery] = useState('');
+
+  const filteredPosts = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return postsList;
+    return postsList.filter(p => (
+      p.title.toLowerCase().includes(q) ||
+      p.category.toLowerCase().includes(q) ||
+      p.date.toLowerCase().includes(q)
+    ));
+  }, [query]);
 
   return (
     <>
@@ -218,8 +238,31 @@ const LiabilityIns = () => {
                   <input 
                     type="text" 
                     placeholder="Search..." 
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        if (filteredPosts && filteredPosts.length > 0) {
+                          navigate(filteredPosts[0].path);
+                        }
+                      }
+                    }}
                     className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-600 transition"
                   />
+
+                  {query && filteredPosts.length > 0 && (
+                    <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-20">
+                      {filteredPosts.slice(0,5).map(p => (
+                        <div key={p.id} onMouseDown={() => navigate(p.path)} className="px-4 py-3 hover:bg-gray-100 cursor-pointer flex items-start gap-3">
+                          <img src={p.img} alt={p.title} className="w-12 h-12 rounded-md object-cover flex-shrink-0" />
+                          <div>
+                            <div className="text-sm font-semibold text-gray-800">{p.title}</div>
+                            <div className="text-xs text-gray-500">{p.category}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 

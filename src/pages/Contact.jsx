@@ -13,7 +13,7 @@ const ContactPage = () => {
       icon: MapPin,
       title: "Address",
       detail:
-        "1st floor, Avadhpuri Shopping Center, nr. Vishwas City 1, Ghatlodiya, Ahmedabad, Gujarat 380061",
+        "Shop no 10, 1st floor Avadhpuri Shopping Center, nr. Vishwas City 1, Ghatlodiya, Ahmedabad, Gujarat 380061",
       type: "text",
     },
     {
@@ -25,7 +25,7 @@ const ContactPage = () => {
     {
       icon: Phone,
       title: "Contact Number",
-      detail: "+91 9904401900\n+91 9737067941\n+91 9099333601",
+      detail: "+91 9904401900",
       type: "tel",
     }
   ];

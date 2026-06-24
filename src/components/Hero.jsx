@@ -118,8 +118,16 @@ const insuranceTypes = [
 ];
 
 const quoteItems = [
-  { title: "Bike Insurance", image: basePath + "red-scooter-1.png", path: "/motor-insurance", tag: "Starting at ₹999" },
-  { title: "Car Insurance", image: basePath + "car.png", path: "/motor-insurance", tag: "Zero Dep. Available" },
+  { title: "Bike Insurance", image: basePath + "red-scooter-1.png", path: "/motor-insurance", tag: "Starting at ₹538" },
+{
+  title: "Car Insurance",
+  image: basePath + "car.png",
+  path: "/motor-insurance",
+  tag: [
+    "Zero Dep. Available", 
+    "Starting at ₹2094"
+  ]
+},
   { title: "Health Insurance", image: basePath + "health.png", path: "/health-insurance", tag: "Cover up to 1Cr" },
   { title: "Term Life", image: basePath + "term.png", path: "/health-insurance", tag: "Tax Benefits" },
   { title: "Investment", image: basePath + "investment.png", path: "/property-insurance", tag: "Wealth Growth" },
@@ -129,7 +137,7 @@ const quoteItems = [
 
 const stats = [
   { number: "3 Lakh+", label: "TRAINED ADVISORS", icon: Users },
-  { number: "45 Lakh+", label: "HAPPY CUSTOMERS", icon: Award },
+  { number: "50 Lakh+", label: "HAPPY CUSTOMERS", icon: Award },
   { number: "45+", label: "INSURANCE PARTNERS", icon: Shield },
   { number: "1 Crore+", label: "POLICIES SOLD", icon: FileCheck },
 ];
@@ -211,16 +219,66 @@ const productImages = [
 ];
 
 const productsRaw = [
-  { title: "Health Insurance", description: "Comprehensive medical coverage for you and your family.", path: "/health-insurance", tag: "Popular" },
-  { title: "Motor Insurance", description: "Protect your vehicle with zero depreciation cover.", path: "/motor-insurance", tag: "Best Seller" },
-  { title: "Liability Insurance", description: "Legal liability protection for businesses.", path: "/liability-insurance", tag: "Business" },
-  { title: "Travel Insurance", description: "International & domestic trip coverage.", path: "/travel-insurance", tag: "New" },
-  { title: "Property Insurance", description: "Secure your home and commercial properties.", path: "/property-insurance", tag: "Essential" },
-  { title: "Fire Insurance", description: "Protection against fire and lightning damage.", path: "/contact", tag: "Add-on" },
-  { title: "Warehouse Insurance", description: "Coverage for stored goods and inventory.", path: "/contact", tag: "Commercial" },
-  { title: "Transit Insurance", description: "Goods protection during transportation.", path: "/contact", tag: "Logistics" },
-  { title: "Commercial Vehicle", description: "Comprehensive coverage for business fleets.", path: "/contact", tag: "Fleet" },
-  { title: "Life Insurance", description: "Secure your family's financial future.", path: "/contact", tag: "Term" },
+  {
+    title: "Health Insurance",
+    description: "Comprehensive medical coverage for you and your family.",
+    path: "/health-insurance",
+    tag: "Personal Accident",
+  },
+  {
+    title: "Motor Insurance",
+    description: "Protect your vehicle with zero depreciation cover.",
+    path: "/motor-insurance",
+    tag: "Non Motor Insurance",
+  },
+  {
+    title: "Liability Insurance",
+    description: "Legal liability protection for businesses.",
+    path: "/liability-insurance",
+    tag: "Non Motor Insurance",
+  },
+  {
+    title: "Travel Insurance",
+    description: "International & domestic trip coverage.",
+    path: "/travel-insurance",
+    tag: "Personal Accident",
+  },
+  {
+    title: "Property Insurance",
+    description: "Secure your home and commercial properties.",
+    path: "/property-insurance",
+    tag: "Non Motor Insurance",
+  },
+  {
+    title: "Fire Insurance",
+    description: "Protection against fire and lightning damage.",
+    path: "/contact",
+    tag: "Non Motor Insurance",
+  },
+  {
+    title: "Warehouse Insurance",
+    description: "Coverage for stored goods and inventory.",
+    path: "/contact",
+    tag: "Non Motor Insurance",
+  },
+  {
+    title: "Transit Insurance",
+    description: "Goods protection during transportation.",
+    path: "/contact",
+    tag: "Non Motor Insurance",
+  },
+  {
+    title: "Commercial Vehicle",
+    description: "Comprehensive coverage for business fleets.",
+    path: "/contact",
+    tag: "Non Motor Insurance",
+  },
+  {
+    title: "Life Insurance",
+    description: "Secure your family's financial future.",
+    path: "/contact",
+    tag: "Life Insurance",
+  },
 ];
 
 const products = productsRaw.map((item, index) => ({
@@ -243,6 +301,9 @@ const partners = [
   { file: "Untitled-design-22.png", name: "IFFCO Tokio" },
   { file: "Untitled-design-25.png", name: "Bajaj Allianz" },
   { file: "Untitled-design-24.png", name: "Magma HDI" },
+  {file:  "CholaMs.jpeg"},
+  {file:  "TataAig.jpeg"},
+  {file:  "IndusInd.jpeg"}
 ];
 
 const blogCards = [
@@ -332,7 +393,7 @@ const Index = () => {
             <div className="space-y-8">
               <div className="inline-flex items-center gap-3 bg-gradient-to-r from-red-600/10 to-blue-600/10 backdrop-blur-sm px-4 py-2 rounded-full">
                 <BadgeCheck className="w-4 h-4 text-red-600" />
-                <span className="text-sm font-semibold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent uppercase tracking-wide">Trusted by 45 Lakh+ Customers</span>
+                <span className="text-sm font-semibold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent uppercase tracking-wide">Trusted by 50 Lakh+ Customers</span>
               </div>
               
   <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-tight">
@@ -354,9 +415,12 @@ const Index = () => {
                 >
                   Get Started <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition" />
                 </button>
-                <button className="px-8 py-4 border-2 border-gray-300 rounded-xl font-semibold hover:border-red-600 hover:bg-red-50 transition-all duration-300 flex items-center gap-2">
-                  <Phone className="w-5 h-5 text-red-600" /> Call Advisor
-                </button>
+              <a href="tel:9904401900">
+  <button className="px-8 py-4 border-2 border-gray-300 rounded-xl font-semibold hover:border-red-600 hover:bg-red-50 transition-all duration-300 flex items-center gap-2">
+    <Phone className="w-5 h-5 text-red-600" />
+    Call Advisor
+  </button>
+</a>
               </div>
 
               {/* Trust Badges */}
@@ -462,21 +526,33 @@ const Index = () => {
           </div>
 
           {/* Product Tabs */}
-          <div className="flex justify-center gap-3 mb-12 flex-wrap">
-            {["all", "Popular", "Best Seller", "Business", "New"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveProductTab(tab.toLowerCase())}
-                className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
-                  activeProductTab === tab.toLowerCase()
-                    ? "bg-gradient-to-r from-red-600 to-blue-600 text-white shadow-lg"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {tab === "all" ? "All Products" : tab}
-              </button>
-            ))}
-          </div>
+         <div className="flex justify-center gap-3 mb-12 flex-wrap">
+  {[
+    "All",
+    "Life Insurance",
+    "Non Motor Insurance",
+    "Personal Accident"
+  ].map((tab) => (
+    <button
+      key={tab}
+      onClick={() =>
+        setActiveProductTab(
+          tab.toLowerCase()
+        )
+      }
+      className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
+        activeProductTab ===
+        tab.toLowerCase()
+          ? "bg-gradient-to-r from-red-600 to-blue-600 text-white shadow-lg"
+          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+      }`}
+    >
+      {tab === "All"
+        ? "All Products"
+        : tab}
+    </button>
+  ))}
+</div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.map((product, idx) => (
@@ -515,8 +591,8 @@ const Index = () => {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {partners.map((partner, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-4 flex items-center justify-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 hover:border-red-200">
-                <img src={basePath + partner.file} alt={partner.name} className="h-10 object-contain opacity-80 hover:opacity-100 transition" />
+              <div key={idx} className="bg-white rounded-xl p-6 h-28 flex items-center justify-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 hover:border-red-200">
+                <img src={basePath + partner.file} alt={partner.name} className="h-16 w-auto object-contain opacity-90 hover:opacity-100 transition" />
               </div>
             ))}
           </div>
@@ -538,7 +614,7 @@ const Index = () => {
             Talk to Advisor <ChevronRight className="w-5 h-5" />
           </Link>
           <button className="px-8 py-4 border-2 border-white/30 rounded-xl font-semibold hover:bg-white/10 transition flex items-center gap-2">
-            <Phone className="w-5 h-5" /> +91 98765 43210
+            <Phone className="w-5 h-5" /> +91 9904401900
           </button>
         </div>
       </div>
