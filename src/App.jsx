@@ -17,6 +17,7 @@ import LiabilityIns from "./pages/LiabilityIns";
 import MotorIns from "./pages/MotorIns";
 import HealthIns from "./pages/HealthIns";
 
+
 // Components
 import About from "./components/About";
 import Blog from "./components/blog";
@@ -37,12 +38,22 @@ import ApplicationApprove from "./admin/applicationDetail";
 import PendingApplications from "./admin/PendingApplications";
 import DealerManagement from "./admin/DealerManagement";
 import ExecutiveManagement from "./admin/ExecutiveManagement";
+import TLManagement from "./admin/TL-management";
+import TeamManagement from "./admin/teamManagement";
 
 // Executive Pages
 import ExecutiveProtectedRoute from "./components/ExecutiveProtectedRoute";
 import ExecutiveHome from "./executive/executiveHome";
 import ExecutivePendingApplications from "./executive/PendingApplications";
 import ExecutiveApplicationDetail from "./executive/applicationDetail";
+
+import TLDashboard from "./pages/TL Dashboard";
+import TLHome from "./tl/dashboard";
+import MyPolicy from "./tl/myPolicy";
+import ApprovalRequest from "./tl/approvalRequest";
+import MyProfile from "./tl/profile";
+import TLAppDetail from "./tl/TLAppDetail";
+
 
 // Firebase Messaging
 import { getToken } from "firebase/messaging";
@@ -120,10 +131,43 @@ const App = () => {
 
           <Route path="pending-applications" element={<PendingApplications />} />
           <Route path="dealer-management" element={<DealerManagement />} />
-          <Route path="application-detail" element={<ApplicationApprove />} />
+          <Route path="application-detail/:id" element={<ApplicationApprove />} />
           <Route path="dealer-approval" element={<DealerApprove />} />
           <Route path="executive-management" element={<ExecutiveManagement />} />
+          <Route path="TL-management" element={<TLManagement />} />
+          <Route path="Team-management" element={<TeamManagement />} />
         </Route>
+
+{/* TL */}
+{/* TL */}
+<Route
+  path="/tl"
+  element={<TLDashboard />}
+>
+  {/* Default TL Page */}
+  <Route
+    index
+    element={<TLHome />}
+  />
+
+  <Route
+    path="my-policy"
+    element={<MyPolicy />}
+  />
+
+  <Route
+    path="approval-request"
+    element={
+      <ApprovalRequest />
+    }
+  />
+
+  <Route
+    path="profile"
+    element={<MyProfile />}
+  />
+  <Route path="application-detail/:id" element={<TLAppDetail />} />
+</Route>
 
         {/* EXECUTIVE */}
       <Route
@@ -143,7 +187,7 @@ const App = () => {
   />
 
   <Route
-    path="application-detail"
+    path="application-detail/:id"
     element={<ExecutiveApplicationDetail />}
   />
 </Route>

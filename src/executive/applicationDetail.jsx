@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import PreLoader from "../components/PreLoader";
 import {
   ArrowLeft, FileText, Download, Calendar,
@@ -7,7 +8,7 @@ import {
   ZoomIn, X, ChevronLeft, ChevronRight
 } from "lucide-react";
 import toast from "react-hot-toast"; 
-
+ 
 /* ================= HELPER FUNCTIONS ================= */
 
 const BASE_URL = 'https://insurance-backend-eufn.onrender.com';
@@ -220,7 +221,9 @@ const DocCategory = ({ title, files }) => {
 /* ================= MAIN COMPONENT ================= */
 
 const ApplicationDetail = ({ application, onBack }) => {
-  const [currentApplication, setCurrentApplication] = useState(application);
+  const params = useParams();
+  const location = useLocation();
+  const [currentApplication, setCurrentApplication] = useState(application || location.state?.application || null);
   const [selectedPolicy, setSelectedPolicy] = useState(null);
   const [actionLoading, setActionLoading] = useState("");
   const [message, setMessage] = useState("");
@@ -275,12 +278,33 @@ const getDateId = (dateString) => {
     obj[type] = value;
   });
 
-  return `${obj.day}${obj.month}${obj.year}${obj.hour}${obj.minute}${obj.second}`;
+  return `${obj.year}${obj.month}${obj.day}${obj.hour}${obj.minute}${obj.second}`;
 };
 
   useEffect(() => {
     setCurrentApplication(application);
   }, [application]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If no application prop provided, try to fetch using URL param
+    if (!application && params?.id) {
+      const fetchApp = async () => {
+        try {
+          const token = localStorage.getItem("executiveToken") || localStorage.getItem("token");
+          const res = await fetch(`https://insurance-backend-eufn.onrender.com/api/application/${params.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await res.json();
+          if (res.ok) setCurrentApplication(data);
+        } catch (err) {
+          console.error("Failed to fetch application by id:", err);
+        }
+      };
+      fetchApp();
+    }
+  }, [application, params]);
 
   if (!currentApplication) {
     return <div className="p-10 text-center">No Record Found.</div>;
@@ -513,7 +537,7 @@ const getDateId = (dateString) => {
       <div className="max-w-5xl mx-auto">
         {/* BACK BUTTON */}
         <button
-          onClick={onBack}
+          onClick={() => (onBack ? onBack() : navigate(-1))}
           className="flex items-center gap-2 text-gray-500 hover:text-blue-600 mb-6 transition-colors"
         >
           <ArrowLeft size={18} />

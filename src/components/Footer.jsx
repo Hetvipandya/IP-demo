@@ -1,124 +1,211 @@
 import React from "react";
-import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTwitter,
+} from "react-icons/fa";
+import {
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiArrowRight,
+} from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#f8f9fa] pt-0">
+    <footer className="bg-[#091124] text-slate-300 border-t border-slate-800/60 overflow-hidden font-sans">
       
-      {/* TOP BANNER */}
-      <div className="bg-[#e9f2ff] py-12 px-6 md:px-20">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="space-y-4 max-w-2xl text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#213591] leading-tight">
-              Join India’s <span className="text-[#E8021E]">Largest Advisor Network</span>
-            </h2>
-            <Link to="/quote">
-              <button className="bg-[#213591] text-white px-8 py-3 rounded-md font-semibold hover:bg-opacity-90 transition shadow-lg">
-                Request a Callback
-              </button>
-            </Link>
-          </div>
+      {/* 1. CTA BANNER SECTION */}
+      <section className="relative border-b border-slate-800/50 bg-gradient-to-br from-[#0c152e] via-[#091124] to-[#0c152e] py-12 md:py-16">
+        {/* Glow Effects */}
+        <div className="absolute top-0 left-1/4 w-80 h-80 bg-red-600/10 blur-[130px] rounded-full pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-blue-600/10 blur-[130px] rounded-full pointer-events-none"></div>
 
-          <div className="hidden md:block">
-            <img 
-              src="/assets/footer.png"
-              alt="Advisor illustration" 
-              className="w-64 h-auto" 
-            />
-          </div>
-        </div>
-      </div>
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+          <div className="bg-gradient-to-r from-white/[0.02] to-white/[0.04] border border-white/[0.08] rounded-[24px] p-8 md:p-10 backdrop-blur-xl flex flex-col lg:flex-row items-center justify-between gap-8 shadow-2xl">
+            
+            <div className="max-w-2xl text-center lg:text-left">
+              <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 text-xs font-semibold tracking-wider uppercase mb-4">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                Trusted Insurance Partner
+              </span>
 
-      {/* MAIN FOOTER */}
-      <div className="max-w-7xl mx-auto py-16 px-6 md:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-        
-        {/* LOGO */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border-l-8 border-[#E8021E]">
-          <img src="/assets/logo.png" alt="Logo" className="h-16 mb-6" />
-          <p className="text-[#003366] text-[15px] leading-relaxed font-medium mb-6">
-            At GIVA INSURANCE SERVICES, we believe in safeguarding what matters most to you — your health, your life, and your valuable assets.
-          </p>
+              <h2 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                Grow With India’s{" "}
+                <span className="bg-gradient-to-r from-red-400 via-red-500 to-orange-500 bg-clip-text text-transparent">
+                  Leading Insurance Network
+                </span>
+              </h2>
 
-          <h4 className="font-bold text-[#003366] mb-4">Follow up</h4>
-          <div className="flex gap-4">
-            <a href="https://www.facebook.com/share/1EDh2pvbff/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer">
-              <FaFacebookF className="cursor-pointer hover:text-[#E8021E]" />
-            </a>
-
-            <a href="https://www.instagram.com/solutiongrivainsurance" target="_blank" rel="noopener noreferrer">
-              <FaInstagram className="cursor-pointer hover:text-[#E8021E]" />
-            </a>
-          </div>
-        </div>
-
-        {/* EXPLORE */}
-        <div>
-          <h3 className="text-[#003366] font-bold text-xl mb-6">Explore</h3>
-          <ul className="space-y-4 text-gray-700">
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/about">About Us</Link>
-            </li>
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/gallery">Photo Gallery</Link>
-            </li>
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/blog">Blog</Link>
-            </li>
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/contact">Contact</Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* PRODUCTS */}
-        <div>
-          <h3 className="text-[#003366] font-bold text-xl mb-6">Products</h3>
-          <ul className="space-y-4 text-gray-700">
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/health-insurance">Health Insurance</Link>
-            </li>
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/motor-insurance">Motor Insurance</Link>
-            </li>
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/liability-insurance">Liability Insurance</Link>
-            </li>
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/travel-insurance">Travel Insurance</Link>
-            </li>
-            <li className="border-b pb-2 hover:text-[#E8021E]">
-              <Link to="/property-insurance">Property Insurance</Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* CONTACT */}
-        <div>
-          <h3 className="text-[#003366] font-bold text-xl mb-6">Contact Info</h3>
-          <div className="space-y-6 text-[#003366]">
-
-            <div>
-              <p className="font-bold">Head office :-</p>
-              <p className="text-sm mt-1">
-                1st floor, Avadhpuri Shopping Center, nr. Vishwas City 1, Ghatlodiya, Ahmedabad, Gujarat 380061
+              <p className="mt-3 text-slate-400 text-sm md:text-base max-w-xl">
+                Partner with GIVA Insurance Services and unlock smart insurance solutions, digital growth tools, and dedicated expert support.
               </p>
             </div>
-            
-            <div className="text-sm border-t pt-4">
-              <p><span className="font-bold">Email :-</span> grivafin@gmail.com</p>
-            </div>
 
-            <div className="text-sm border-t pt-4">
-              <p className="font-bold">Phone:</p>
-              <p>+91 9904401900</p>
-              <p>+91 9737067941</p>
-              <p>+91 9099333601</p>
+            <div className="shrink-0">
+              <Link to="/quote">
+                <button className="group relative bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 px-7 py-3.5 rounded-xl text-white font-semibold flex items-center gap-2.5 shadow-lg shadow-red-950/40 transition-all duration-300 hover:shadow-red-500/20 hover:-translate-y-0.5">
+                  Request Callback
+                  <FiArrowRight className="text-lg transition-transform duration-300 group-hover:translate-x-1" />
+                </button>
+              </Link>
             </div>
+          </div>
+        </div>
+      </section>
 
-          </div> 
+      {/* 2. MAIN FOOTER CONTENT */}
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-16 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
+
+          {/* Column 1: Brand Profile (4/12 width) */}
+          <div className="lg:col-span-4 space-y-6">
+            <Link to="/" className="inline-block">
+              <img
+                src="/assets/logo.png"
+                alt="Giva Insurance"
+                className="h-12 w-auto object-contain brightness-110"
+              />
+            </Link>
+
+            <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+              <span className="text-white font-medium">GIVA INSURANCE SERVICES</span> provides dependable protection for your health, life, motor, property, and business through customized planning.
+            </p>
+
+            {/* Social Media Links */}
+            <div className="flex items-center gap-3 pt-2">
+              {[
+                { icon: <FaFacebookF />, link: "https://www.facebook.com/share/1EDh2pvbff/?mibextid=wwXIfr", label: "Facebook" },
+                { icon: <FaInstagram />, link: "https://www.instagram.com/solutiongrivainsurance", label: "Instagram" },
+                { icon: <FaTwitter />, link: "#", label: "Twitter" },
+                { icon: <FaLinkedinIn />, link: "#", label: "LinkedIn" }
+              ].map((social, idx) => (
+                <a
+                  key={idx}
+                  href={social.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800/80 text-slate-400 hover:text-red-400 hover:border-red-500/30 hover:bg-red-500/5 flex items-center justify-center transition-all duration-300 hover:-translate-y-1"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 2: Quick Links (2/12 width) */}
+          <div className="lg:col-span-2 lg:pl-4">
+            <h3 className="text-white font-semibold text-sm tracking-wider uppercase mb-5 relative after:content-[''] after:block after:w-8 after:h-0.5 after:bg-red-500 after:mt-2">
+              Quick Links
+            </h3>
+            <ul className="space-y-3.5">
+              {[
+                { to: "/about", label: "About Us" },
+                { to: "/gallery", label: "Gallery" },
+                { to: "/blog", label: "Blog" },
+                { to: "/contact", label: "Contact Us" },
+              ].map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="text-slate-400 hover:text-white transition-colors duration-200 text-sm flex items-center group"
+                  >
+                    <span className="w-1.5 h-1.5 bg-slate-700 group-hover:bg-red-500 rounded-full mr-2.5 transition-colors duration-200"></span>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Products (3/12 width) */}
+          <div className="lg:col-span-3">
+            <h3 className="text-white font-semibold text-sm tracking-wider uppercase mb-5 relative after:content-[''] after:block after:w-8 after:h-0.5 after:bg-red-500 after:mt-2">
+              Insurance Products
+            </h3>
+            <ul className="space-y-3.5">
+              {[
+                { to: "/health-insurance", label: "Health Insurance" },
+                { to: "/motor-insurance", label: "Motor Insurance" },
+                { to: "/travel-insurance", label: "Travel Insurance" },
+                { to: "/property-insurance", label: "Property Insurance" },
+                { to: "/liability-insurance", label: "Liability Insurance" },
+              ].map((item) => (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    className="text-slate-400 hover:text-white transition-colors duration-200 text-sm flex items-center group"
+                  >
+                    <span className="w-1.5 h-1.5 bg-slate-700 group-hover:bg-red-500 rounded-full mr-2.5 transition-colors duration-200"></span>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Contact Info (3/12 width) */}
+          <div className="lg:col-span-3 space-y-5">
+            <h3 className="text-white font-semibold text-sm tracking-wider uppercase mb-5 relative after:content-[''] after:block after:w-8 after:h-0.5 after:bg-red-500 after:mt-2">
+              Contact Info
+            </h3>
+
+            <div className="space-y-4 text-sm">
+              {/* Address */}
+              <div className="flex gap-3 items-start">
+                <FiMapPin className="text-red-400 text-base shrink-0 mt-0.5" />
+                <p className="text-slate-400 leading-relaxed">
+                  1st Floor, Avadhpuri Shopping Center, Vishwas City 1, Ghatlodiya, Ahmedabad - 380061
+                </p>
+              </div>
+
+              {/* Email */}
+              <div className="flex gap-3 items-center border-t border-slate-800/40 pt-3">
+                <FiMail className="text-red-400 text-base shrink-0" />
+                <a href="mailto:grivafin@gmail.com" className="text-slate-400 hover:text-white transition-colors">
+                  grivafin@gmail.com
+                </a>
+              </div>
+
+              {/* Phone Numbers */}
+              <div className="flex gap-3 items-start border-t border-slate-800/40 pt-3">
+                <FiPhone className="text-red-400 text-base shrink-0 mt-1" />
+                <div className="space-y-1.5">
+                  {["+91 99044 01900", "+91 97370 67941", "+91 90993 33601"].map((phone) => (
+                    <a
+                      key={phone}
+                      href={`tel:${phone.replace(/\s+/g, "")}`}
+                      className="block text-slate-400 hover:text-white transition-colors"
+                    >
+                      {phone}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
+        {/* 3. BOTTOM BAR (Copyright & Policies) */}
+        <div className="border-t border-slate-800/60 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p className="text-center sm:text-left">
+            &copy; {new Date().getFullYear()} GIVA Insurance Services. All rights reserved.
+          </p>
+
+          <div className="flex items-center gap-6">
+            <Link to="/privacy-policy" className="hover:text-slate-300 transition-colors">
+              Privacy Policy
+            </Link>
+            <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
+            <Link to="/terms" className="hover:text-slate-300 transition-colors">
+              Terms & Conditions
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
   );

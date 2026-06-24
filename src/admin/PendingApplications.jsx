@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Activity,
   Calendar,
@@ -12,14 +13,15 @@ import {
 } from "lucide-react";
 import * as XLSX from "xlsx";
 import ApplicationDetail from "./applicationDetail";
-
+ 
 const PendingApplications = () => {
   const [applications, setApplications] = useState([]);
-  const [selectedApp, setSelectedApp] = useState(null);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [loadingApplicationId, setLoadingApplicationId] = useState(null);
   const [search, setSearch] = useState("");
   const [executives, setExecutives] = useState([]);
+  const [teamLeaders, setTeamLeaders] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
 
   // Filter states
@@ -35,6 +37,8 @@ const PendingApplications = () => {
     open: false,
     applicationId: null,
     executiveId: null,
+    teamLeaderId: null,
+    role: null, // 'executive' or 'teamLeader'
   });
 
   const [assignLoading, setAssignLoading] = useState(false);
@@ -59,7 +63,31 @@ const PendingApplications = () => {
   useEffect(() => {
     fetchApplications();
     fetchExecutives();
+    fetchTeamLeaders();
   }, []);
+
+  const fetchTeamLeaders = async () => {
+    try {
+      const token =
+        localStorage.getItem("adminToken") || localStorage.getItem("token");
+
+      const res = await fetch(
+        "https://insurance-backend-eufn.onrender.com/api/teamleader/all",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await res.json();
+      setTeamLeaders(Array.isArray(data) ? data : data.teamLeaders || data.data || []);
+    } catch (err) {
+      console.error("Failed to fetch team leaders:", err);
+      setTeamLeaders([]);
+    }
+  };
 
   const fetchExecutives = async () => {
     try {
@@ -127,7 +155,7 @@ const PendingApplications = () => {
       );
 
       const data = await res.json();
-      if (res.ok) setSelectedApp(data);
+      if (res.ok) navigate(`/admin/application-detail/${id}`, { state: { application: data } });
     } catch (err) {
       console.error(err);
     } finally {
@@ -139,6 +167,26 @@ const PendingApplications = () => {
   const getUniqueTypes = () => {
     const types = applications.map(app => app.tp).filter(Boolean);
     return [...new Set(types)];
+  };
+
+  // Return unique array by _id
+  const uniqueById = (arr) => {
+    if (!Array.isArray(arr)) return [];
+    const map = new Map();
+    arr.forEach((it) => {
+      if (it && it._id) map.set(it._id, it);
+    });
+    return Array.from(map.values());
+  };
+
+  const teamLeadersUnique = uniqueById(teamLeaders);
+  const executivesUnique = uniqueById(executives);
+
+  const findNameFor = (list, id) => {
+    if (!id) return null;
+    const found = list.find((x) => x._id === id);
+    if (!found) return null;
+    return found.Name || found.name || found.fullName || found.Email || null;
   };
 
   // Get unique statuses from applications
@@ -226,6 +274,7 @@ const PendingApplications = () => {
       "Type": app.tp,
       "Details": app.otherDetails,
       "Date": formatDate(app.createdAt),
+      "Team Leader": app.teamLeader?.Name || "Not Assigned",
       "Executive": app.executive?.Name || "Not Assigned",
       "Status": app.status || "Pending",
     }));
@@ -235,15 +284,6 @@ const PendingApplications = () => {
     XLSX.utils.book_append_sheet(wb, ws, "Applications");
     XLSX.writeFile(wb, `applications_${new Date().toISOString().split('T')[0]}.xlsx`);
   };
-
-  if (selectedApp) {
-    return (
-      <ApplicationDetail
-        application={selectedApp}
-        onBack={() => setSelectedApp(null)}
-      />
-    );
-  }
 
   return (
     <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
@@ -428,6 +468,7 @@ const PendingApplications = () => {
               <th className="p-3">Type</th>
               <th className="p-3">Details</th>
               <th className="p-3">Date</th>
+              <th className="p-3">Team Leader</th>
               <th className="p-3">Executive</th>
               <th className="p-3">Status</th>
               <th className="p-3">Action</th>
@@ -437,13 +478,13 @@ const PendingApplications = () => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="8" className="text-center p-6">
+                <td colSpan="9" className="text-center p-6">
                   Loading...
                 </td>
               </tr>
             ) : filteredApplications.length === 0 ? (
               <tr>
-                <td colSpan="8" className="text-center p-6">
+                <td colSpan="9" className="text-center p-6">
                   No applications found
                 </td>
               </tr>
@@ -461,29 +502,54 @@ const PendingApplications = () => {
                     {formatDate(app.createdAt)}
                   </td>
 
-                  {/* EXECUTIVE - Show "Not Assigned" if no executive */}
+                  {/* TEAM LEADER */}
                   <td className="p-3">
-                    {app.executive?.Name || (
-                      <span className="text-gray-400 italic">Not Assigned</span>
-                    )}
-                    <select
-                      className="border p-1 rounded mt-1 w-full"
-                      defaultValue={app.executive?._id || ""}
-                      onChange={(e) =>
-                        setAssignModal({
-                          open: true,
-                          applicationId: app._id,
-                          executiveId: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">Change/Assign</option>
-                      {executives.map((exe) => (
-                        <option key={exe._id} value={exe._id}>
-                          {exe.Name}
-                        </option>
-                      ))}
-                    </select>
+                    <div>
+                      <select
+                        className="border p-1 rounded w-full"
+                        value={app.teamLeader?._id || ""}
+                        onChange={(e) =>
+                          setAssignModal({
+                            open: true,
+                            applicationId: app._id,
+                            teamLeaderId: e.target.value,
+                            role: "teamLeader",
+                          })
+                        }
+                      >
+                        <option value="">{app.teamLeader?.Name || findNameFor(teamLeadersUnique, app.teamLeader?._id) || "Not Assigned"}</option>
+                        {teamLeadersUnique.map((tl) => (
+                          <option key={tl._id} value={tl._id}>
+                            {tl.Name || tl.name || tl.fullName || tl.Email || "Unnamed TL"}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                   </td>
+
+                  {/* EXECUTIVE - Separate column with heading */}
+                  <td className="p-3">
+                    <div>
+                      <select
+                        className="border p-1 rounded w-full"
+                        value={app.executive?._id || ""}
+                        onChange={(e) =>
+                          setAssignModal({
+                            open: true,
+                            applicationId: app._id,
+                            executiveId: e.target.value,
+                            role: "executive",
+                          })
+                        }
+                      >
+                        <option value="">{app.executive?.Name || findNameFor(executivesUnique, app.executive?._id) || "Not Assigned"}</option>
+                        {executivesUnique.map((exe) => (
+                          <option key={exe._id} value={exe._id}>
+                            {exe.Name || exe.name || exe.fullName || exe.Email || "Unnamed Exec"}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                    </td>
 
                   {/* STATUS */}
@@ -495,7 +561,7 @@ const PendingApplications = () => {
                     }`}>
                       {app.status || "Pending"}
                     </span>
-                   </td>
+                    </td>
 
                   {/* ACTION */}
                   <td className="p-3">
@@ -508,7 +574,7 @@ const PendingApplications = () => {
                         ? "Loading"
                         : "View"}
                     </button>
-                   </td>
+                    </td>
                 </tr>
               ))
             )}
@@ -520,52 +586,97 @@ const PendingApplications = () => {
       {assignModal.open && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow w-[300px] text-center">
-            <UserCheck className="mx-auto mb-2" size={32} />
+                <UserCheck className="mx-auto mb-2" size={32} />
 
-            <h2 className="font-bold mb-4">Assign Executive?</h2>
+                <h2 className="font-bold mb-4">{assignModal.role === "executive" ? "Assign Executive?" : "Assign Team Leader?"}</h2>
 
-            <div className="flex gap-2">
-              <button
-                onClick={() => {
-                  setAssignModal({ open: false });
-                }}
-                className="w-full border p-2 rounded"
-              >
-                Cancel
-              </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      setAssignModal({ open: false, applicationId: null, executiveId: null, teamLeaderId: null, role: null });
+                    }}
+                    className="w-full border p-2 rounded"
+                  >
+                    Cancel
+                  </button>
 
-              <button
-                onClick={async () => {
-                  setAssignLoading(true);
-                  const token =
-                    localStorage.getItem("adminToken") ||
-                    localStorage.getItem("token");
+                  <button
+                    onClick={async () => {
+                      setAssignLoading(true);
+                      const token =
+                        localStorage.getItem("adminToken") ||
+                        localStorage.getItem("token");
 
-                  await fetch(
-                    `https://insurance-backend-eufn.onrender.com/api/application/assign-executive/${assignModal.applicationId}`,
-                    {
-                      method: "PUT",
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        executiveId: assignModal.executiveId,
-                      }),
-                    }
-                  );
+                      try {
+                        if (assignModal.role === "teamLeader" && assignModal.teamLeaderId) {
+                          const res = await fetch(
+                            `https://insurance-backend-eufn.onrender.com/api/application/assign-teamleader/${assignModal.applicationId}`,
+                            {
+                              method: "PUT",
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({ teamLeaderId: assignModal.teamLeaderId }),
+                            }
+                          );
+                          const data = await res.json();
+                          if (res.ok) {
+                            const tlObj = data?.data?.teamLeader || data.teamLeader || null;
+                            const tlName = tlObj?.Name || tlObj?.name || findNameFor(teamLeadersUnique, assignModal.teamLeaderId);
+                            const tlToSet = tlObj ? tlObj : { _id: assignModal.teamLeaderId, Name: tlName };
+                            setApplications((prev) =>
+                              prev.map((app) =>
+                                app._id === assignModal.applicationId
+                                  ? { ...app, teamLeader: tlToSet }
+                                  : app
+                              )
+                            );
+                          }
+                        }
 
-                  setAssignLoading(false);
-                  setAssignModal({ open: false });
-                  fetchApplications();
-                }}
-                className="w-full bg-blue-600 text-white p-2 rounded"
-                disabled={assignLoading}
-              >
-                {assignLoading ? "Assigning..." : "Confirm"}
-              </button>
-            </div>
-          </div>
+                        if (assignModal.role === "executive" && assignModal.executiveId) {
+                          const res = await fetch(
+                            `https://insurance-backend-eufn.onrender.com/api/application/assign-executive/${assignModal.applicationId}`,
+                            {
+                              method: "PUT",
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                                "Content-Type": "application/json",
+                              },
+                              body: JSON.stringify({ executiveId: assignModal.executiveId }),
+                            }
+                          );
+                          const data = await res.json();
+                          if (res.ok) {
+                            const exObj = data?.data?.executive || data.executive || null;
+                            const exName = exObj?.Name || exObj?.name || findNameFor(executivesUnique, assignModal.executiveId);
+                            const exToSet = exObj ? exObj : { _id: assignModal.executiveId, Name: exName };
+                            setApplications((prev) =>
+                              prev.map((app) =>
+                                app._id === assignModal.applicationId
+                                  ? { ...app, executive: exToSet }
+                                  : app
+                              )
+                            );
+                          }
+                        }
+
+                        setAssignModal({ open: false, applicationId: null, executiveId: null, teamLeaderId: null, role: null });
+                      } catch (err) {
+                        console.error("Assign error:", err);
+                      } finally {
+                        setAssignLoading(false);
+                      }
+
+                    }}
+                    className="w-full bg-blue-600 text-white p-2 rounded"
+                    disabled={assignLoading}
+                  >
+                    {assignLoading ? "Assigning..." : "Confirm"}
+                  </button>
+                </div>
+              </div>
         </div>
       )}
     </div>

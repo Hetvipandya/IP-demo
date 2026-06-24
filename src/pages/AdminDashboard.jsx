@@ -31,11 +31,21 @@ const AdminDashboard = () => {
       path: "/admin/dealer-management",
       icon: <ShieldCheck size={18} />,
     },
-    {
-      name: "Executive Management",
-      path: "/admin/executive-management",
+     {
+      name: "Team Management",
+      path: "/admin/Team-management",
       icon: <ShieldCheck size={18} />,
     },
+    //  {
+    //   name: "Team Lead Management",
+    //   path: "/admin/TL-management",
+    //   icon: <ShieldCheck size={18} />,
+    // },
+    // {
+    //   name: "Executive Management",
+    //   path: "/admin/executive-management",
+    //   icon: <ShieldCheck size={18} />,
+    // },
   ];
 
   const handleLogout = () => {
@@ -97,7 +107,7 @@ const AdminDashboard = () => {
                 </Link>
               </li>
             ))}
-
+ 
             <li>
               <button
                 type="button"
@@ -116,63 +126,57 @@ const AdminDashboard = () => {
       )}
 
       {/* Fixed Sidebar */}
-      <aside className="hidden fixed left-0 top-0 h-screen w-72 border-r border-[#cbd9ff] bg-gradient-to-b from-[#f8fbff] via-[#eaf1ff] to-[#dce8ff] p-5 text-[#1f2f86] shadow-2xl shadow-[#1f2f86]/10 lg:flex lg:flex-col">
-        {/* Logo */}
-        <div className="mb-8 rounded-2xl border border-white bg-white/80 p-4 shadow-xl shadow-[#1f2f86]/10">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-lg shadow-[#1f2f86]/15">
-              <img
-                src="/assets/logo.png"
-                alt="Griva Insurance"
-                className="h-10 w-auto object-contain"
-              />
-            </span>
+     {/* Sidebar */}
+<aside className="hidden lg:flex fixed left-0 top-0 h-screen w-[300px] bg-[#234b9d] text-white flex-col shadow-xl">
+  {/* Logo */}
+  <div className="h-20 bg-[#f2f2f2] flex items-center justify-center border-b border-white/10">
+    <img
+      src="/assets/logo.png"
+      alt="Logo"
+      className="h-12 object-contain"
+    />
+  </div>
 
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#e6362e]">
-                Griva
-              </p>
+  {/* Menu Title */}
+  <div className="px-6 pt-8 pb-4">
+    <p className="text-white/50 text-sm font-bold tracking-wider uppercase">
+      Menu
+    </p>
+  </div>
 
-              <h2 className="text-xl font-black leading-tight">
-                Admin Panel
-              </h2>
-            </div>
-          </Link>
-        </div>
+  {/* Menu Items */}
+  <ul className="flex-1 px-4 space-y-2">
+    {menu.map((item, i) => (
+      <li key={i}>
+        <Link
+          to={item.path}
+          className={`flex items-center gap-4 rounded-xl px-4 py-3 text-[18px] font-medium transition-all duration-300 ${
+            location.pathname === item.path
+              ? "bg-white/10 text-white"
+              : "text-white/90 hover:bg-white/10"
+          }`}
+        >
+          <span className="text-white">
+            {item.icon}
+          </span>
 
-        {/* Menu */}
-        <div className="flex flex-1 flex-col justify-between">
-          <ul className="space-y-3 rounded-[1.35rem] border border-white/80 bg-white/45 p-2 shadow-lg shadow-[#1f2f86]/5">
-            {menu.map((item, i) => (
-              <li key={i}>
-                <Link
-                  to={item.path}
-                  className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${
-                    location.pathname === item.path
-                      ? "bg-[#1f2f86] text-white shadow-xl shadow-[#1f2f86]/20"
-                      : "text-[#435486] hover:bg-white hover:text-[#1f2f86]"
-                  }`}
-                >
-                  {item.icon}
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <span>{item.name}</span>
+        </Link>
+      </li>
+    ))}
+  </ul>
 
-          {/* Logout Fixed Bottom */}
-          <div className="pt-5">
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="flex h-14 w-full items-center justify-center gap-3 rounded-2xl border border-[#ffc7c2] bg-white px-4 text-base font-extrabold text-[#e6362e] shadow-md transition-all duration-300 hover:border-[#e6362e] hover:bg-[#fff5f4] hover:shadow-lg"
-            >
-              <LogOut size={18} />
-              Logout
-            </button>
-          </div>
-        </div>
-      </aside>
+  {/* Logout */}
+  <div className="p-5 border-t border-white/10">
+    <button
+      onClick={handleLogout}
+      className="flex w-full items-center justify-center gap-3 rounded-xl bg-white text-[#234b9d] py-3 font-semibold transition hover:scale-[1.02]"
+    >
+      <LogOut size={18} />
+      Logout
+    </button>
+  </div>
+</aside>
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-3 pt-24 md:p-6 lg:ml-72 lg:p-8">

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import PreLoader from "../components/PreLoader";
 import {
-  ArrowLeft,
+  ArrowLeft, 
   FileText,
   Download,
   Calendar,
@@ -536,14 +537,12 @@ const ConfirmPopup = ({
    MAIN COMPONENT
 ========================================================= */
 
-const ApplicationDetail = ({
-  application,
-  onBack,
-}) => {
-  const [
-    currentApplication,
-    setCurrentApplication,
-  ] = useState(application);
+const ApplicationDetail = ({ application, onBack }) => {
+  const params = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [currentApplication, setCurrentApplication] = useState(application || location.state?.application || null);
 
   const [
     selectedPolicy,
@@ -579,6 +578,24 @@ const ApplicationDetail = ({
   useEffect(() => {
     setCurrentApplication(application);
   }, [application]);
+
+  useEffect(() => {
+    if (!application && params?.id) {
+      const fetchApp = async () => {
+        try {
+          const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+          const res = await fetch(`${BASE_URL}/api/application/${params.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await res.json();
+          if (res.ok) setCurrentApplication(data);
+        } catch (err) {
+          console.error("Failed to fetch application by id:", err);
+        }
+      };
+      fetchApp();
+    }
+  }, [application, params]);
 
   // ================= HELPER: GET OLD DOCUMENTS (EXCLUDING NEW UPLOADS) =================
   const getOldDocuments = (field) => {
@@ -951,7 +968,7 @@ const totalDocuments =
       <div className="mx-auto max-w-7xl">
         {/* Back */}
         <button
-          onClick={onBack}
+          onClick={() => (onBack ? onBack() : navigate(-1))}
           className="mb-8 flex items-center gap-2 text-sm font-black text-slate-600 transition hover:text-blue-700"
         >
           <ArrowLeft size={18} />
@@ -1082,8 +1099,8 @@ const totalDocuments =
                   <DetailBox
                     label="Executive"
                     value={
-                      currentApplication
-                        .executive?.Name ||
+                      currentApplication.teamLeader?.Name ||
+                      currentApplication.executive?.Name ||
                       "Not Assigned"
                     }
                     icon={<User size={15} />}

@@ -14,7 +14,7 @@ const TestimonialsSection = ({ testimonials }) => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
     setTimeout(() => setIsAnimating(false), 500);
   };
-
+ 
   const prevSlide = () => {
     if (isAnimating) return;
     setIsAnimating(true);
@@ -231,56 +231,115 @@ const About = () => {
       </section>
 
       {/* ========== SECTION 3: PARTNERS SECTION ========== */}
-      <section className="py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="text-xs font-semibold text-red-600 uppercase tracking-wide">Our Partners</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-2">
-              Our Valued <span className="text-red-600">Partners</span>
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-red-600 to-blue-600 mx-auto mt-3 rounded-full"></div>
+      <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-red-50 relative overflow-hidden">
+  {/* Background Blur */}
+  <div className="absolute top-10 left-10 w-72 h-72 bg-red-200 rounded-full blur-3xl opacity-20"></div>
+  <div className="absolute bottom-10 right-10 w-72 h-72 bg-blue-200 rounded-full blur-3xl opacity-20"></div>
+
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    
+    {/* Heading */}
+    <div className="text-center mb-16">
+      <span className="px-4 py-1 rounded-full bg-red-100 text-red-600 text-sm font-semibold uppercase tracking-wider">
+        Our Partners
+      </span>
+
+      <h2 className="mt-5 text-4xl md:text-5xl font-bold text-gray-900">
+        Meet Our Trusted{" "}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-blue-600">
+          Partners
+        </span>
+      </h2>
+
+      <p className="mt-4 text-gray-500 max-w-2xl mx-auto">
+        Dedicated professionals helping us deliver trusted insurance solutions
+        and long-term client success.
+      </p>
+    </div>
+
+    {/* Partner Cards */}
+    <div className="grid md:grid-cols-3 gap-10">
+      {[
+        {
+          name: "Akash Jain",
+          img: "/assets/Akash Jain.jpeg",
+          role: "Strategic Partner",
+          tag: "Strategy & Growth",
+        },
+        {
+          name: "Dipen Shah",
+          img: "/assets/Dipen Shah.jpeg",
+          role: "Strategic Partner",
+          tag: "Operations & Risk",
+        },
+        {
+          name: "Neha Shah",
+          img: "/assets/Neha Shah.jpeg",
+          role: "Business Partner",
+          tag: "Client Relations",
+        },
+      ].map((partner, index) => (
+        <div
+          key={index}
+          className="group bg-white/70 backdrop-blur-lg rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-white hover:-translate-y-3"
+        >
+          {/* Image */}
+          <div className="relative w-44 h-44 mx-auto">
+            <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-blue-500 rounded-full blur-md opacity-30 group-hover:opacity-60 transition"></div>
+
+            <img
+              src={partner.img}
+              alt={partner.name}
+              className="relative w-full h-full rounded-full object-cover border-4 border-white shadow-lg group-hover:scale-105 transition duration-500"
+            />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-10 items-center max-w-3xl mx-auto">
-            {/* Partner 1 */}
-            <div className="text-center">
-              <div className="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-red-200 shadow-md">
-                <img
-                  src="/assets/Akash Jani.jpeg"
-                  alt="Akash Jani"
-                  className="w-full h-full object-cover"
-                  onError={(e) => { e.target.src = "https://via.placeholder.com/200?text=Akash+Jani"; }}
-                />
-              </div>
-              <h3 className="mt-4 text-xl font-bold text-gray-900">Akash Jani</h3>
-              <p className="text-gray-500 text-sm">Strategic Partner</p>
-            </div>
+          {/* Content */}
+          <div className="text-center mt-6">
+            <h3 className="text-2xl font-bold text-gray-900">
+              {partner.name}
+            </h3>
 
-            {/* Partner 2 */}
-            <div className="text-center">
-              <div className="w-48 h-48 mx-auto rounded-full overflow-hidden border-4 border-blue-200 shadow-md">
-                <img
-                  src="/assets/Dipen Shah.jpeg"
-                  alt="Dipen Shah"
-                  className="w-full h-full object-cover"
-                  onError={(e) => { e.target.src = "https://via.placeholder.com/200?text=Dipen+Shah"; }}
-                />
-              </div>
-              <h3 className="mt-4 text-xl font-bold text-gray-900">Dipen Shah</h3>
-              <p className="text-gray-500 text-sm">Strategic Partner</p>
-            </div>
-          </div>
+            <p className="text-red-600 font-medium mt-1">
+              {partner.role}
+            </p>
 
-          <div className="mt-10 text-center max-w-2xl mx-auto space-y-3">
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Akash Jani and Dipen Shah are key partners contributing to the growth and success of Griva Insurance Services.
-            </p>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Together, they support a wide range of insurance solutions including Health, Life, Motor, and Commercial Insurance.
-            </p>
+            <span className="inline-block mt-4 px-4 py-2 rounded-full bg-gray-100 text-gray-600 text-sm">
+              {partner.tag}
+            </span>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+
+    {/* Bottom Content */}
+    <div className="mt-16 bg-white rounded-3xl shadow-md p-8 max-w-4xl mx-auto text-center">
+      <p className="text-gray-600 leading-relaxed">
+        <span className="font-semibold text-gray-900">
+          Akash Jain
+        </span>{" "}
+        and{" "}
+        <span className="font-semibold text-gray-900">
+          Dipen Shah
+        </span>{" "}
+        play a vital role in driving the growth and strategic success of
+        Griva Insurance Services.
+      </p>
+
+      <p className="text-gray-600 mt-4 leading-relaxed">
+        Together, they contribute towards delivering comprehensive insurance
+        solutions including{" "}
+        <span className="font-medium text-red-600">
+          Health, Life, Motor,
+        </span>{" "}
+        and{" "}
+        <span className="font-medium text-blue-600">
+          Commercial Insurance.
+        </span>
+      </p>
+    </div>
+  </div>
+</section>
 
 
 
