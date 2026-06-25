@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { 
-  FaFacebookF, FaInstagram, FaUser, FaCalendarAlt, FaArrowLeft 
+  FaFacebookF, FaInstagram, FaUser, FaCalendarAlt, FaSearch, FaArrowLeft, FaChevronRight 
 } from 'react-icons/fa';
 
 const LiabilityIns = () => {
@@ -38,10 +38,11 @@ const LiabilityIns = () => {
   ];
 
   const [query, setQuery] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const filteredPosts = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return postsList;
+    if (!q) return [];
     return postsList.filter(p => (
       p.title.toLowerCase().includes(q) ||
       p.category.toLowerCase().includes(q) ||
@@ -51,195 +52,241 @@ const LiabilityIns = () => {
 
   return (
     <>
-      <div className="relative overflow-hidden bg-white">
-
-        {/* Background Pattern - Updated to match homepage */}
+      <div className="relative min-h-screen overflow-hidden bg-[#fafafa] antialiased">
+        
+        {/* Modern Dynamic Background Pattern */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          <div className="absolute inset-0 bg-gradient-to-br from-white via-red-50 to-blue-50"></div>
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-20 right-20 w-72 h-72 bg-red-200 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-200 rounded-full blur-3xl"></div>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-slate-50 via-white to-blue-50/20"></div>
+          <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-red-500/[0.03] rounded-full blur-[130px]"></div>
+          <div className="absolute bottom-[20%] left-[-10%] w-[700px] h-[700px] bg-blue-500/[0.03] rounded-full blur-[150px]"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
-          {/* Back Button */}
+          {/* Premium Back Button */}
           <button 
             onClick={() => navigate('/blog')} 
-            className="flex items-center gap-2 mb-6 text-red-600 font-semibold hover:text-blue-700 transition-colors group"
+            className="inline-flex items-center gap-2.5 mb-8 px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 font-medium text-sm rounded-xl shadow-sm border border-slate-100 hover:border-slate-200 transition-all duration-200 group"
           >
-            <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
+            <FaArrowLeft className="text-red-500 group-hover:-translate-x-1 transition-transform" />
             Back to Blogs
           </button>
 
-          <div className="flex flex-col lg:flex-row gap-10">
+          {/* Main Workspace Grid - items-start ensures sticky works */}
+          <div className="flex flex-col lg:flex-row gap-12 items-start">
             
-            {/* Main Content */}
-            <main className="lg:w-2/3">
-              <div className="rounded-xl overflow-hidden mb-6 shadow-lg border border-gray-100">
-                <img 
-                  src="https://navlakhainsurance.in/wp-content/uploads/2025/07/134016.jpg" 
-                  alt="Liability Insurance" 
-                  className="w-full h-auto object-cover transition duration-500 hover:scale-105"
-                />
+            {/* 📌 LEFT SIDE: Sticky Main Content */}
+            <main className="w-full lg:w-2/3 lg:sticky lg:top-6 lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto no-scrollbar space-y-8 pr-2">
+              
+              {/* Premium Hero Image Frame */}
+              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-white p-1 bg-white/60 backdrop-blur-sm group">
+                <div className="overflow-hidden rounded-xl">
+                  <img 
+                    src="https://navlakhainsurance.in/wp-content/uploads/2025/07/134016.jpg" 
+                    alt="Liability Insurance" 
+                    className="w-full h-auto object-cover transition duration-700 ease-out group-hover:scale-102"
+                  />
+                </div>
               </div>
 
-              {/* Meta Info */}
-              <div className="flex items-center text-sm text-gray-500 mb-6 space-x-6">
-                <span className="flex items-center gap-2">
-                  <FaUser className="text-red-600" /> Navlakhainsurance
+              {/* Meta Tags Wrapper */}
+              <div className="flex items-center gap-5 text-xs font-semibold uppercase tracking-wider text-slate-500 bg-white/60 backdrop-blur-sm inline-flex px-4 py-2 rounded-full border border-slate-100 shadow-sm">
+                <span className="flex items-center gap-1.5">
+                  <FaUser className="text-red-500" /> Navlakhainsurance
                 </span>
-                <span className="flex items-center gap-2">
-                  <FaCalendarAlt className="text-red-600" /> July 26, 2025
+                <div className="h-3 w-px bg-slate-200"></div>
+                <span className="flex items-center gap-1.5">
+                  <FaCalendarAlt className="text-blue-500" /> July 26, 2025
                 </span>
               </div>
 
-              <article className="space-y-6">
-                <h1 className="text-3xl font-bold text-gray-900 tracking-tight">What is Liability Insurance?</h1>
-                <p className="leading-relaxed text-gray-700">
+              {/* Redesigned Article Workspace */}
+              <article className="bg-white p-6 sm:p-10 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+                <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                  What is Liability Insurance?
+                </h1>
+                <p className="text-base sm:text-lg leading-relaxed text-slate-600">
                   Liability insurance is a policy designed to protect individuals and businesses from the financial burden of legal claims. It covers compensation for damages, bodily injuries, or property losses for which you or your business may be held legally responsible. Whether it's a workplace accident, property damage, or a customer injury, liability insurance ensures that one incident doesn't jeopardize your financial stability.
                 </p>
 
-                <h2 className="text-2xl font-bold text-gray-900">Why is Liability Insurance Important?</h2>
-                <p className="leading-relaxed text-gray-700">
+                <h2 className="text-2xl font-bold text-slate-900 pt-6 border-t border-slate-100">
+                  Why is Liability Insurance Important?
+                </h2>
+                <p className="leading-relaxed text-slate-600">
                   In today's environment, even a small mistake can lead to lawsuits and significant financial losses. Without liability coverage, you may have to pay for legal defense, settlements, or damages out of your pocket. For businesses, this could mean closing down operations; for individuals, it can wipe out years of savings. Liability insurance safeguards your assets and provides peace of mind, knowing that you're covered against unexpected claims.
                 </p>
 
-                <h2 className="text-2xl font-bold text-gray-900">Types of Liability Insurance</h2>
-                <ul className="space-y-3 pl-2">
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700"><strong>General Liability Insurance</strong> – Covers bodily injuries, property damages, and legal costs faced by businesses.</span></li>
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700"><strong>Professional Liability Insurance</strong> – Protects professionals like doctors, lawyers, and consultants against errors, omissions, or negligence.</span></li>
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700"><strong>Product Liability Insurance</strong> – Covers damages caused by defective products sold by a business.</span></li>
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700"><strong>Employer's Liability Insurance</strong> – Protects employers from claims made by employees for work-related injuries.</span></li>
+                <h2 className="text-2xl font-bold text-slate-900 pt-6 border-t border-slate-100">
+                  Types of Liability Insurance
+                </h2>
+                <ul className="space-y-4 text-slate-600">
+                  <li className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-2 h-2 rounded-full bg-red-500 mt-2.5"></span>
+                    <span><strong className="text-slate-800">General Liability Insurance</strong> – Covers bodily injuries, property damages, and legal costs faced by businesses.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-2 h-2 rounded-full bg-red-500 mt-2.5"></span>
+                    <span><strong className="text-slate-800">Professional Liability Insurance</strong> – Protects professionals like doctors, lawyers, and consultants against errors, omissions, or negligence.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-2 h-2 rounded-full bg-red-500 mt-2.5"></span>
+                    <span><strong className="text-slate-800">Product Liability Insurance</strong> – Covers damages caused by defective products sold by a business.</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-2 h-2 rounded-full bg-red-500 mt-2.5"></span>
+                    <span><strong className="text-slate-800">Employer's Liability Insurance</strong> – Protects employers from claims made by employees for work-related injuries.</span>
+                  </li>
                 </ul>
 
-                <h2 className="text-2xl font-bold text-gray-900">Key Benefits of Liability Insurance</h2>
-                <ul className="space-y-3 pl-2">
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700">Financial protection from lawsuits, settlements, and legal fees</span></li>
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700">Coverage for accidental damages, bodily injuries, or property losses</span></li>
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700">Builds credibility and trust with clients and partners</span></li>
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700">Enables businesses to focus on operations without constant worry of claims</span></li>
-                  <li className="flex items-start"><span className="mr-2 text-lg leading-none text-red-600">•</span><span className="text-gray-700">Essential for complying with regulations in many industries</span></li>
+                <h2 className="text-2xl font-bold text-slate-900 pt-6 border-t border-slate-100">
+                  Key Benefits of Liability Insurance
+                </h2>
+                <ul className="space-y-3.5 text-slate-600">
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xs font-bold mt-0.5">✓</div>
+                    <span>Financial protection from lawsuits, settlements, and legal fees</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xs font-bold mt-0.5">✓</div>
+                    <span>Coverage for accidental damages, bodily injuries, or property losses</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xs font-bold mt-0.5">✓</div>
+                    <span>Builds credibility and trust with clients and partners</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xs font-bold mt-0.5">✓</div>
+                    <span>Enables businesses to focus on operations without constant worry of claims</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xs font-bold mt-0.5">✓</div>
+                    <span>Essential for complying with regulations in many industries</span>
+                  </li>
                 </ul>
 
-                <h2 className="text-2xl font-bold text-gray-900">How to Choose the Right Liability Coverage?</h2>
-                <p className="leading-relaxed text-gray-700">
+                <h2 className="text-2xl font-bold text-slate-900 pt-6 border-t border-slate-100">
+                  How to Choose the Right Liability Coverage?
+                </h2>
+                <p className="leading-relaxed text-slate-600">
                   When selecting liability insurance, consider the nature of your business or profession, potential risks, and coverage limits. Work with an insurance advisor to customize a policy that fits your needs. Check the insurer's claim settlement ratio and exclusions in the policy document.
                 </p>
 
-                <h2 className="text-2xl font-bold text-gray-900">Conclusion</h2>
-                <p className="leading-relaxed text-gray-700">
+                <h2 className="text-2xl font-bold text-slate-900 pt-6 border-t border-slate-100">
+                  Conclusion
+                </h2>
+                <p className="leading-relaxed text-slate-600">
                   Liability insurance acts as a shield against unforeseen financial and legal troubles. It ensures that one accident or claim doesn't derail your finances or your business. Investing in liability insurance today secures your tomorrow by protecting what matters most—your assets, your reputation, and your peace of mind.
                 </p>
               </article>
 
-              {/* Social Share Section */}
-              <div className="mt-8 flex items-center gap-4">
-                <span className="font-bold text-gray-800">Share:</span>
+              {/* Modern Social Share Component */}
+              <div className="flex items-center gap-4 py-2 px-1">
+                <span className="font-bold text-xs text-slate-500 tracking-wider uppercase">Share Article:</span>
                 <div className="flex gap-2">
-                  {/* Facebook */}
                   <a
                     href="https://www.facebook.com/share/1EDh2pvbff/?mibextid=wwXIfr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 bg-[#1877F2] hover:bg-[#0d6ad2] rounded-full flex items-center justify-center text-white transition-all duration-300"
+                    className="w-9 h-9 bg-white border border-slate-200/60 shadow-sm hover:bg-[#1877F2] rounded-xl flex items-center justify-center text-slate-600 hover:text-white hover:border-[#1877F2] transition-all duration-300"
                   >
-                    <FaFacebookF size={14} />
+                    <FaFacebookF size={13} />
                   </a>
 
-                  {/* Instagram */}
                   <a
                     href="https://www.instagram.com/solutiongrivainsurance?utm_source=qr&igsh=MXN0N2dzMmtwYmRnaA=="
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gradient-to-tr from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-90 rounded-full flex items-center justify-center text-white transition-all duration-300"
+                    className="w-9 h-9 bg-white border border-slate-200/60 shadow-sm hover:bg-gradient-to-tr hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF] rounded-xl flex items-center justify-center text-slate-600 hover:text-white hover:border-transparent transition-all duration-300"
                   >
-                    <FaInstagram size={14} />
+                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                    </svg>
                   </a>
                 </div>
               </div>
 
-              {/* Navigation Buttons */}
-              <div className="mt-12 py-8 border-t border-b border-gray-100 flex items-center justify-between">
-                {/* Previous Post: Travel Insurance */}
+              {/* Post Navigation Split Banners */}
+              <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-4">
+                {/* Previous Button */}
                 <div 
-                  className="flex items-center gap-4 group cursor-pointer text-left" 
+                  className="flex-1 py-4 px-5 bg-white border border-slate-100 rounded-2xl flex items-center gap-4 group cursor-pointer shadow-sm hover:shadow-md transition-all duration-300"
                   onClick={() => navigate('/travel-insurance')}
                 >
-                  <div className="w-10 h-10 border border-gray-200 flex items-center justify-center rounded-lg text-gray-400 group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-blue-600 group-hover:text-white transition-all duration-300">
-                    <span className="text-xl">«</span>
+                  <div className="w-9 h-9 bg-slate-50 flex items-center justify-center rounded-xl text-slate-400 group-hover:bg-red-500 group-hover:text-white transition-all duration-300">
+                    <FaArrowLeft size={12} />
                   </div>
                   <div>
-                    <p className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Previous Post</p>
-                    <p className="font-bold text-gray-700 group-hover:text-red-600 transition-colors">Travel Insurance</p>
+                    <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Previous Post</p>
+                    <p className="font-bold text-slate-800 text-sm group-hover:text-red-500 transition-colors">Travel Insurance</p>
                   </div>
                 </div>
 
-                {/* Next Post: Motor Insurance */}
+                {/* Next Button */}
                 <div 
-                  className="flex items-center gap-4 group cursor-pointer text-right" 
+                  className="flex-1 py-4 px-5 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl flex items-center justify-between group cursor-pointer shadow-sm hover:shadow-md transition-all duration-300"
                   onClick={() => navigate('/motor-insurance')}
                 >
                   <div>
-                    <p className="text-[10px] uppercase tracking-widest text-gray-400 font-semibold">Next Post</p>
-                    <p className="font-bold text-gray-700 group-hover:text-red-600 transition-colors">Motor Insurance</p>
+                    <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Next Post</p>
+                    <p className="font-bold text-white text-sm group-hover:text-red-400 transition-colors">Motor Insurance</p>
                   </div>
-                  <div className="w-10 h-10 border border-gray-200 flex items-center justify-center rounded-lg text-gray-400 group-hover:bg-gradient-to-r group-hover:from-red-600 group-hover:to-blue-600 group-hover:text-white transition-all duration-300">
-                    <span className="text-xl">»</span>
+                  <div className="w-9 h-9 bg-white/10 flex items-center justify-center rounded-xl text-white group-hover:bg-red-500 transition-all duration-300">
+                    <FaChevronRight size={12} />
                   </div>
                 </div>
               </div>
 
-              {/* Leave A Comment Section */}
-              <div className="mt-12">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Leave A Comment</h3>
+              {/* Redesigned Comments Section Wrapper */}
+              <section className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm">
+                <h3 className="text-xl font-bold mb-6 text-slate-900">Leave A Comment</h3>
                 <form className="space-y-5">
                   <div className="w-full">
                     <textarea 
-                      placeholder="Comment" 
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all h-40"
+                      placeholder="Write your thoughts here..." 
+                      className="w-full h-40 p-4 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-red-500/10 focus:border-red-500 outline-none text-slate-700 transition-all placeholder:text-slate-400 text-sm"
                     ></textarea>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <input 
                       type="text" 
                       placeholder="Name*" 
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-red-500/10 focus:border-red-500 outline-none text-slate-700 transition-all placeholder:text-slate-400 text-sm"
                       required
                     />
                     <input 
                       type="email" 
                       placeholder="Email*" 
-                      className="w-full p-4 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-red-500/10 focus:border-red-500 outline-none text-slate-700 transition-all placeholder:text-slate-400 text-sm"
                       required
                     />
                   </div>
                   <button 
                     type="submit" 
-                    className="bg-gradient-to-r from-red-600 to-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:shadow-lg transition-all duration-300 uppercase text-sm tracking-wider"
+                    className="mt-4 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold rounded-xl shadow-md shadow-red-500/10 hover:shadow-lg transition-all active:scale-[0.99] uppercase text-xs tracking-wider"
                   >
                     Post Comment
                   </button>
                 </form>
-              </div>  
+              </section>  
             </main>
 
-            {/* Sidebar */}
-            <aside className="lg:w-1/3 space-y-8">
+            {/* 📜 RIGHT SIDE: Scrollable Sidebar */}
+            <aside className="w-full lg:w-1/3 space-y-8">
               
-              {/* Search Box */}
-              <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
-                <div className="mb-5">
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">Search</h3>
-                  <div className="w-12 h-1 bg-gradient-to-r from-red-600 to-blue-600 rounded-full"></div>
+              {/* Redesigned Search Widget with useMemo Integration */}
+              <div className="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
+                <div className="mb-4">
+                  <h3 className="text-lg font-bold text-slate-900 mb-1">Search</h3>
+                  <div className="w-8 h-1 bg-gradient-to-r from-red-500 to-blue-600 rounded-full"></div>
                 </div>
                 <div className="relative">
                   <input 
                     type="text" 
-                    placeholder="Search..." 
+                    placeholder="Type here to search..." 
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
+                    onFocus={() => setShowDropdown(true)}
+                    onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         if (filteredPosts && filteredPosts.length > 0) {
@@ -247,46 +294,55 @@ const LiabilityIns = () => {
                         }
                       }
                     }}
-                    className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-600 transition"
+                    className="w-full pl-4 pr-10 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 text-sm text-slate-700 bg-slate-50/40 transition-all placeholder:text-slate-400"
                   />
+                  <FaSearch className="absolute right-3.5 top-3.5 text-slate-400" size={14} />
 
-                  {query && filteredPosts.length > 0 && (
-                    <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg z-20">
-                      {filteredPosts.slice(0,5).map(p => (
-                        <div key={p.id} onMouseDown={() => navigate(p.path)} className="px-4 py-3 hover:bg-gray-100 cursor-pointer flex items-start gap-3">
-                          <img src={p.img} alt={p.title} className="w-12 h-12 rounded-md object-cover flex-shrink-0" />
-                          <div>
-                            <div className="text-sm font-semibold text-gray-800">{p.title}</div>
-                            <div className="text-xs text-gray-500">{p.category}</div>
+                  {showDropdown && query && (
+                    <div className="absolute left-0 right-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-xl z-20 max-h-60 overflow-auto divide-y divide-slate-50">
+                      {filteredPosts.length > 0 ? (
+                        filteredPosts.slice(0, 5).map(p => (
+                          <div
+                            key={p.id}
+                            onMouseDown={() => navigate(p.path)}
+                            className="px-4 py-3 hover:bg-slate-50 cursor-pointer flex items-center gap-3 transition-colors"
+                          >
+                            <img src={p.img} alt={p.title} className="w-10 h-10 rounded-lg object-cover shadow-sm flex-shrink-0" />
+                            <div className="min-w-0">
+                              <p className="text-xs font-semibold text-slate-800 truncate">{p.title}</p>
+                              <p className="text-[10px] text-slate-400 mt-0.5">{p.category}</p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <div className="px-4 py-3 text-xs text-slate-400 text-center">No results found</div>
+                      )}
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Recent Posts Box */}
-              <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
-                <div className="mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">Recent Post</h3>
-                  <div className="w-12 h-1 bg-gradient-to-r from-red-600 to-blue-600 rounded-full"></div>
+              {/* Redesigned Recent Posts Widget */}
+              <div className="bg-white rounded-2xl shadow-sm p-6 border border-slate-100">
+                <div className="mb-5">
+                  <h3 className="text-lg font-bold text-slate-900 mb-1">Recent Posts</h3>
+                  <div className="w-8 h-1 bg-gradient-to-r from-red-500 to-blue-600 rounded-full"></div>
                 </div>
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {recentPosts.map((post, index) => (
                     <div 
                       key={index} 
-                      className="flex gap-4 items-center group cursor-pointer"
+                      className="flex gap-4 items-center group cursor-pointer p-2 -mx-2 rounded-xl hover:bg-slate-50/80 transition-all duration-200"
                       onClick={() => navigate(post.path)}
                     >
                       <img 
                         src={post.img} 
                         alt="post" 
-                        className="w-20 h-20 rounded-lg object-cover flex-shrink-0 shadow-sm group-hover:shadow-md transition" 
+                        className="w-16 h-16 rounded-xl object-cover flex-shrink-0 shadow-sm transition duration-300" 
                       />
-                      <div className="flex flex-col">
-                        <p className="text-xs text-gray-500 mb-1">{post.date}</p>
-                        <h4 className="text-sm font-bold text-gray-800 group-hover:text-red-600 transition-colors leading-snug">
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-medium text-slate-400 mb-0.5">{post.date}</p>
+                        <h4 className="text-sm font-bold text-slate-700 group-hover:text-red-500 transition-colors leading-snug line-clamp-2">
                           {post.title}
                         </h4>
                       </div>

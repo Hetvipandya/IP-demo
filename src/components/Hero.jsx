@@ -2,6 +2,10 @@ import { ArrowRight, Phone, Shield, Users, FileCheck, Award, Clock, Headphones, 
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+
+import "swiper/css";
 
 const basePath = "/assets/";
 
@@ -581,23 +585,54 @@ const Index = () => {
       </section>
 
       {/* ========== PARTNERS SECTION ========== */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">Trusted Partners</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-3">
-              Our <span className="text-red-600">Insurance Partners</span>
-            </h2>
+   <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-12">
+      <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">
+        Trusted Partners
+      </span>
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-3">
+        Our <span className="text-red-600">Insurance Partners</span>
+      </h2>
+    </div>
+
+    <Swiper
+      modules={[Autoplay]}
+      spaceBetween={20}
+      loop={true}
+      autoplay={{
+        delay: 2000,
+        disableOnInteraction: false,
+      }}
+      breakpoints={{
+        320: {
+          slidesPerView: 2,
+        },
+        640: {
+          slidesPerView: 3,
+        },
+        768: {
+          slidesPerView: 4,
+        },
+        1024: {
+          slidesPerView: 6,
+        },
+      }}
+    >
+      {partners.map((partner, idx) => (
+        <SwiperSlide key={idx}>
+          <div className="bg-white rounded-xl p-6 h-28 flex items-center justify-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 hover:border-red-200">
+            <img
+              src={basePath + partner.file}
+              alt={partner.name}
+              className="h-16 w-auto object-contain opacity-90 hover:opacity-100 transition"
+            />
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
-            {partners.map((partner, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-6 h-28 flex items-center justify-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 hover:border-red-200">
-                <img src={basePath + partner.file} alt={partner.name} className="h-16 w-auto object-contain opacity-90 hover:opacity-100 transition" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  </div>
+</section>
 
       {/* ========== ADVISOR SECTION ========== */}
 <section className="py-20 bg-gradient-to-br from-blue-900 to-red-800 text-white">
