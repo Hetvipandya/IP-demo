@@ -93,7 +93,7 @@ const HealthIns = () => {
               {/* Meta Tags Wrapper */}
               <div className="flex items-center gap-5 text-xs font-semibold uppercase tracking-wider text-slate-500 bg-white/60 backdrop-blur-sm inline-flex px-4 py-2 rounded-full border border-slate-100 shadow-sm">
                 <span className="flex items-center gap-1.5">
-                  <FaUser className="text-red-500" /> Felixaerocrop
+                  <FaUser className="text-red-500" /> Griva Insurance
                 </span>
                 <div className="h-3 w-px bg-slate-200"></div>
                 <span className="flex items-center gap-1.5">
