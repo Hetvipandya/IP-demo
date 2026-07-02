@@ -102,9 +102,8 @@ const TestimonialsSection = ({ testimonials }) => {
                     setTimeout(() => setIsAnimating(false), 500);
                   }
                 }}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  idx === activeIndex ? "w-8 bg-red-600" : "w-2 bg-gray-300"
-                }`}
+                className={`h-2 rounded-full transition-all duration-300 ${idx === activeIndex ? "w-8 bg-red-600" : "w-2 bg-gray-300"
+                  }`}
               />
             ))}
           </div>
@@ -123,15 +122,15 @@ const insuranceTypes = [
 
 const quoteItems = [
   { title: "Bike Insurance", image: basePath + "red-scooter-1.png", path: "/motor-insurance", tag: "Starting at ₹538" },
-{
-  title: "Car Insurance",
-  image: basePath + "car.png",
-  path: "/motor-insurance",
-  tag: [
-    "Zero Dep. Available", 
-    "Starting at ₹2094"
-  ]
-},
+  {
+    title: "Car Insurance",
+    image: basePath + "car.png",
+    path: "/motor-insurance",
+    tag: [
+      "Zero Dep. Available",
+      "Starting at ₹2094"
+    ]
+  },
   { title: "Health Insurance", image: basePath + "health.png", path: "/health-insurance", tag: "Cover up to 1Cr" },
   { title: "Term Life", image: basePath + "term.png", path: "/health-insurance", tag: "Tax Benefits" },
   { title: "Investment", image: basePath + "investment.png", path: "/property-insurance", tag: "Wealth Growth" },
@@ -192,25 +191,25 @@ const testimonials = [
 ];
 
 const steps = [
-  { 
-    title: "Choose Your Policy", 
-    cta: "Browse Plans", 
-    path: "/contact", 
-    description: "Select from 100+ tailored insurance policies",
+  {
+    title: "Understand Your Needs",
+    cta: "Talk to Expert",
+    path: "/contact",
+    description: "We listen to your goals and recommend the right protection for your family, business, or vehicle.",
     icon: FileCheck
   },
-  { 
-    title: "Compare Quotes", 
-    cta: "Get Quotes", 
-    path: "/contact", 
-    description: "Get instant quotes from 45+ top insurers",
+  {
+    title: "Compare the Best Options",
+    cta: "Get Quotes",
+    path: "/contact",
+    description: "Our team compares trusted plans so you get strong coverage, better value, and smarter choices.",
     icon: TrendingUp
   },
-  { 
-    title: "Easy Claim Support", 
-    cta: "Learn More", 
-    path: "/contact", 
-    description: "Hassle-free claim assistance 24/7",
+  {
+    title: "Stay Protected, Always",
+    cta: "Claim Support",
+    path: "/contact",
+    description: "From policy purchase to claim help, Griva Insurance Solutions stays with you at every step.",
     icon: Headphones
   },
 ];
@@ -225,61 +224,61 @@ const productImages = [
 const productsRaw = [
   {
     title: "Health Insurance",
-    description: "Comprehensive medical coverage for you and your family.",
+    description: "Comprehensive medical coverage designed to protect you and your family from unexpected healthcare expenses. Enjoy cashless hospitalization, pre and post-hospitalization expenses, daycare procedures, and annual health check-ups with our extensive network of partner hospitals across the country.",
     path: "/health-insurance",
     tag: "Personal Accident",
   },
   {
     title: "Motor Insurance",
-    description: "Protect your vehicle with zero depreciation cover.",
+    description: "Protect your prized vehicle with our zero depreciation motor insurance policy. Get comprehensive coverage against accidents, theft, natural calamities, and third-party liabilities. Enjoy hassle-free claims, instant policy issuance, and add-on covers like engine protection and consumables coverage.",
     path: "/motor-insurance",
     tag: "Non Motor Insurance",
   },
   {
     title: "Liability Insurance",
-    description: "Legal liability protection for businesses.",
+    description: "Essential legal liability protection for businesses against third-party claims arising from bodily injury, property damage, or personal injury. Safeguard your organization from costly lawsuits, court expenses, and compensation payouts with customizable coverage limits and global protection.",
     path: "/liability-insurance",
     tag: "Non Motor Insurance",
   },
   {
     title: "Travel Insurance",
-    description: "International & domestic trip coverage.",
+    description: "Comprehensive international and domestic trip coverage ensuring peace of mind during your journeys. Get protection against trip cancellations, medical emergencies, lost baggage, flight delays, and personal accidents. Enjoy 24/7 global assistance and emergency cash transfer services worldwide.",
     path: "/travel-insurance",
     tag: "Personal Accident",
   },
   {
     title: "Property Insurance",
-    description: "Secure your home and commercial properties.",
+    description: "Secure your home and commercial properties against unforeseen damages like fire, theft, natural disasters, and structural damages. Our policy covers building structures, interior contents, and valuable assets with flexible sum insured options and easy claim settlement process.",
     path: "/property-insurance",
     tag: "Non Motor Insurance",
   },
   {
     title: "Fire Insurance",
-    description: "Protection against fire and lightning damage.",
+    description: "Comprehensive protection against fire, lightning, and allied perils causing damage to your property and assets. Coverage includes building structures, machinery, stock, and contents with add-on covers for earthquakes, floods, and riots. Enjoy competitive premiums and quick claim settlements.",
     path: "/contact",
     tag: "Non Motor Insurance",
   },
   {
     title: "Warehouse Insurance",
-    description: "Coverage for stored goods and inventory.",
+    description: "Complete coverage for stored goods, inventory, and warehouse contents against fire, theft, natural disasters, and accidental damages. Protect your business from financial losses due to stock damage with flexible policy terms, specialized risk assessment, and efficient claims processing.",
     path: "/contact",
     tag: "Non Motor Insurance",
   },
   {
     title: "Transit Insurance",
-    description: "Goods protection during transportation.",
+    description: "Reliable goods-in-transit protection ensuring your shipments are covered during road, rail, sea, or air transportation. Safeguard against theft, damage, accidents, and natural calamities during the entire journey with competitive rates and comprehensive global coverage options.",
     path: "/contact",
     tag: "Non Motor Insurance",
   },
   {
     title: "Commercial Vehicle",
-    description: "Comprehensive coverage for business fleets.",
+    description: "Comprehensive motor insurance tailored for business fleets, trucks, buses, and commercial cargo vehicles. Get extensive coverage against accidents, theft, third-party liabilities, and driver protection. Enjoy fleet discounts, online management tools, and nationwide cashless repair networks.",
     path: "/contact",
     tag: "Non Motor Insurance",
   },
   {
     title: "Life Insurance",
-    description: "Secure your family's financial future.",
+    description: "Secure your family's financial future with our comprehensive life insurance plans. Choose from term insurance, endowment policies, ULIPs, or retirement plans to build a robust financial safety net. Enjoy tax benefits, flexible premium payment options, and guaranteed financial protection for your loved ones.",
     path: "/contact",
     tag: "Life Insurance",
   },
@@ -305,9 +304,9 @@ const partners = [
   { file: "Untitled-design-22.png", name: "IFFCO Tokio" },
   { file: "Untitled-design-25.png", name: "Bajaj Allianz" },
   { file: "Untitled-design-24.png", name: "Magma HDI" },
-  {file:  "CholaMs.jpeg"},
-  {file:  "TataAig.jpeg"},
-  {file:  "IndusInd.jpeg"}
+  { file: "CholaMs.jpeg" },
+  { file: "TataAig.jpeg" },
+  { file: "IndusInd.jpeg" }
 ];
 
 const blogCards = [
@@ -338,7 +337,6 @@ const Index = () => {
   const [visibleSections, setVisibleSections] = useState({
     home: false, stats: false, steps: false, products: false, blog: false
   });
-  const [activeProductTab, setActiveProductTab] = useState("all");
 
   const sectionRefs = {
     home: useRef(null),
@@ -372,9 +370,7 @@ const Index = () => {
 
   const navigate = useNavigate();
 
-  const filteredProducts = activeProductTab === "all" 
-    ? products.slice(0, 6) 
-    : products.filter(p => p.tag?.toLowerCase() === activeProductTab).slice(0, 6);
+  const filteredProducts = products;
 
   return (
     <main className="bg-white">
@@ -389,9 +385,8 @@ const Index = () => {
           <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-200 rounded-full blur-3xl"></div>
         </div>
 
-        <div className={`relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 transition-all duration-1000 ${
-          visibleSections.home ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}>
+        <div className={`relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 transition-all duration-1000 ${visibleSections.home ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}>
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Content */}
             <div className="space-y-8">
@@ -399,19 +394,19 @@ const Index = () => {
                 <BadgeCheck className="w-4 h-4 text-red-600" />
                 <span className="text-sm font-semibold bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent uppercase tracking-wide">Trusted by 50 Lakh+ Customers</span>
               </div>
-              
-  <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-tight">
-  <span className="bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">Secure Everything</span>
-  <br />
-  <span className="text-gray-800">Protect What</span>
-  <br />
-  <span className="text-gray-800">Matters.</span>
-</h1>
+
+              <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-tight">
+                <span className="bg-gradient-to-r from-red-600 to-blue-600 bg-clip-text text-transparent">Secure Everything</span>
+                <br />
+                <span className="text-gray-800">Protect What</span>
+                <br />
+                <span className="text-gray-800">Matters.</span>
+              </h1>
               <p className="text-xl text-gray-600 max-w-lg leading-relaxed">
                 Simple, digital-first general insurance. Compare quotes, save money, and buy in under{" "}
                 <span className="text-red-600 font-bold">2 minutes.</span>
               </p>
-              
+
               <div className="flex flex-wrap gap-4">
                 <button
                   onClick={() => navigate("/contact")}
@@ -419,16 +414,16 @@ const Index = () => {
                 >
                   Get Started <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition" />
                 </button>
-              <a href="tel:9904401900">
-  <button className="px-8 py-4 border-2 border-gray-300 rounded-xl font-semibold hover:border-red-600 hover:bg-red-50 transition-all duration-300 flex items-center gap-2">
-    <Phone className="w-5 h-5 text-red-600" />
-    Call Advisor
-  </button>
-</a>
+                <a href="tel:9904401900">
+                  <button className="px-8 py-4 border-2 border-gray-300 rounded-xl font-semibold hover:border-red-600 hover:bg-red-50 transition-all duration-300 flex items-center gap-2">
+                    <Phone className="w-5 h-5 text-red-600" />
+                    Call Advisor
+                  </button>
+                </a>
               </div>
 
               {/* Trust Badges */}
-             
+
             </div>
 
             {/* Right - Insurance Cards Grid */}
@@ -439,11 +434,26 @@ const Index = () => {
                   to={item.path}
                   className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-l-red-600"
                 >
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between gap-2">
                     <div className="h-14 w-14 bg-gradient-to-br from-red-50 to-blue-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition">
                       <img src={item.image} alt={item.title} className="h-8 w-8 object-contain" />
                     </div>
-                    <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">{item.tag}</span>
+                    <div className="flex flex-col items-end gap-1">
+                      {Array.isArray(item.tag) ? (
+                        item.tag.map((tag, tagIndex) => (
+                          <span
+                            key={`${item.title}-${tagIndex}`}
+                            className="text-[10px] sm:text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full whitespace-nowrap"
+                          >
+                            {tag}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-[10px] sm:text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full whitespace-nowrap">
+                          {item.tag}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <h3 className="mt-4 text-base font-bold text-gray-900 group-hover:text-red-600 transition">{item.title}</h3>
                   <div className="mt-4 flex items-center gap-1 text-red-600 text-sm font-semibold group-hover:gap-2 transition-all">
@@ -458,9 +468,8 @@ const Index = () => {
 
       {/* ========== STATS SECTION ========== */}
       <section ref={sectionRefs.stats} className="py-20 bg-gradient-to-br from-white to-gray-50">
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
-          visibleSections.stats ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}>
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${visibleSections.stats ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}>
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">Our Achievements</span>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-3">
@@ -484,30 +493,35 @@ const Index = () => {
       </section>
 
       {/* ========== STEPS SECTION ========== */}
-      <section ref={sectionRefs.steps} className="py-20 bg-gradient-to-br from-red-50 to-blue-50">
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
-          visibleSections.steps ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}>
+      <section ref={sectionRefs.steps} className="py-20 bg-gradient-to-br from-red-50 via-white to-blue-50">
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${visibleSections.steps ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}>
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">Simple Process</span>
+            <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">How Griva Insurance Solutions Works</span>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-3">
-              3 Easy Steps to <span className="text-red-600">Complete Protection</span>
+              Simple, transparent <span className="text-red-600">insurance support</span> for every need
             </h2>
+            <p className="text-lg text-gray-600 mt-4">
+              Griva Insurance Solutions makes insurance easy by understanding your requirement, comparing the best options, and guiding you with reliable support.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {steps.map((step, i) => (
-              <div key={i} className="relative text-center group">
-                <div className="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-r from-red-600 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg z-10">
+              <div key={i} className="relative group">
+                <div className="absolute -top-3 -left-3 w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg z-10">
                   {i + 1}
                 </div>
-                <div className="bg-white rounded-2xl p-8 pt-12 shadow-lg hover:shadow-2xl transition-all duration-300 border-t-4 border-t-red-600">
+                <div className="bg-white rounded-3xl p-8 pt-12 shadow-lg hover:shadow-2xl transition-all duration-300 border border-red-100 hover:border-red-300">
                   <div className="w-20 h-20 bg-gradient-to-br from-red-50 to-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
                     <step.icon className="w-10 h-10 text-red-600" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
                   <p className="text-gray-600 mb-6">{step.description}</p>
-                  <Link to={step.path} className="inline-flex items-center gap-2 text-red-600 font-semibold hover:gap-3 transition-all">
+                  <Link
+                    to={step.path}
+                    className="inline-flex items-center gap-2 rounded-full bg-red-50 px-4 py-2 text-sm font-semibold text-red-600 hover:bg-red-600 hover:text-white transition-all"
+                  >
                     {step.cta} <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -518,163 +532,169 @@ const Index = () => {
       </section>
 
       {/* ========== PRODUCTS SECTION ========== */}
-      <section ref={sectionRefs.products} className="py-20 bg-white">
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
-          visibleSections.products ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}>
+      <section ref={sectionRefs.products} className="py-20 bg-gradient-to-br from-slate-50 via-white to-red-50">
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${visibleSections.products ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}>
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">Insurance Products</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-3">
-              Comprehensive <span className="text-red-600">Coverage</span> For You
+            <span className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-red-600">
+              Insurance Products
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-4">
+              Comprehensive <span className="text-red-600">Coverage</span> for Every Need
             </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Discover reliable insurance solutions tailored for your health, vehicle, travel, property, and business requirements.
+            </p>
           </div>
 
-          {/* Product Tabs */}
-         <div className="flex justify-center gap-3 mb-12 flex-wrap">
-  {[
-    "All",
-    "Life Insurance",
-    "Non Motor Insurance",
-    "Personal Accident"
-  ].map((tab) => (
-    <button
-      key={tab}
-      onClick={() =>
-        setActiveProductTab(
-          tab.toLowerCase()
-        )
-      }
-      className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
-        activeProductTab ===
-        tab.toLowerCase()
-          ? "bg-gradient-to-r from-red-600 to-blue-600 text-white shadow-lg"
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-      }`}
-    >
-      {tab === "All"
-        ? "All Products"
-        : tab}
-    </button>
-  ))}
-</div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product, idx) => (
-              <Link key={idx} to={product.path} className="group bg-gray-50 rounded-2xl p-6 hover:bg-white hover:shadow-xl transition-all duration-300 border-l-4 border-l-red-600">
-                <div className="flex items-start gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-red-50 to-blue-50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition">
+          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredProducts.map((product) => (
+              <div
+                key={product.title}
+                className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+              >
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-red-600 to-blue-600" />
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-red-50 to-blue-50 transition duration-300 group-hover:scale-110">
                     <img src={product.image} alt={product.title} className="h-10 w-10 object-contain" />
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-bold text-lg text-gray-900 group-hover:text-red-600 transition">{product.title}</h3>
-                      {product.tag && (
-                        <span className="text-xs font-semibold bg-red-100 text-red-600 px-2 py-1 rounded-full">{product.tag}</span>
-                      )}
-                    </div>
-                    <p className="text-gray-500 text-sm mt-1">{product.description}</p>
-                    <div className="mt-3 flex items-center gap-1 text-red-600 text-sm font-semibold group-hover:gap-2 transition-all">
-                      Learn More <ArrowRight className="w-3 h-3" />
-                    </div>
-                  </div>
+                  
                 </div>
-              </Link>
+
+                <h3 className="mt-5 text-xl font-bold text-gray-900 transition group-hover:text-red-600">
+                  {product.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-gray-600">
+                  {product.description}
+                </p>
+
+                
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ========== PARTNERS SECTION ========== */}
-   <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="text-center mb-12">
-      <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">
-        Trusted Partners
-      </span>
-      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-3">
-        Our <span className="text-red-600">Insurance Partners</span>
-      </h2>
-    </div>
-
-    <Swiper
-      modules={[Autoplay]}
-      spaceBetween={20}
-      loop={true}
-      autoplay={{
-        delay: 2000,
-        disableOnInteraction: false,
-      }}
-      breakpoints={{
-        320: {
-          slidesPerView: 2,
-        },
-        640: {
-          slidesPerView: 3,
-        },
-        768: {
-          slidesPerView: 4,
-        },
-        1024: {
-          slidesPerView: 6,
-        },
-      }}
-    >
-      {partners.map((partner, idx) => (
-        <SwiperSlide key={idx}>
-          <div className="bg-white rounded-xl p-6 h-28 flex items-center justify-center border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 hover:border-red-200">
-            <img
-              src={basePath + partner.file}
-              alt={partner.name}
-              className="h-16 w-auto object-contain opacity-90 hover:opacity-100 transition"
-            />
+      <section className="py-20 bg-gradient-to-br from-gray-50 via-white to-red-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-semibold uppercase tracking-[0.2em] text-red-600">
+              Trusted Partners
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mt-4">
+              Our <span className="text-red-600">Insurance Partners</span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
+              We work with some of the most trusted names in the insurance industry to bring you reliable protection and faster support.
+            </p>
           </div>
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  </div>
-</section>
+
+          <div className="space-y-5">
+            <div className="rounded-[2rem] border border-gray-200 bg-white/80 p-4 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+              <Swiper
+                modules={[Autoplay]}
+                spaceBetween={18}
+                loop={true}
+                slidesPerView={2}
+                autoplay={{
+                  delay: 1800,
+                  disableOnInteraction: false,
+                  reverseDirection: true,
+                }}
+                breakpoints={{
+                  640: { slidesPerView: 3 },
+                  768: { slidesPerView: 4 },
+                  1024: { slidesPerView: 6 },
+                }}
+              >
+                {[...partners, ...partners].map((partner, idx) => (
+                  <SwiperSlide key={`${partner.name}-${idx}`}>
+                    <div className="flex h-24 items-center justify-center rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-lg md:h-28">
+                      <img
+                        src={basePath + partner.file}
+                        alt={partner.name}
+                        className="h-12 w-auto object-contain opacity-90 transition hover:opacity-100 md:h-14"
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+
+            <div className="rounded-[2rem] border border-gray-200 bg-white/80 p-4 shadow-[0_20px_60px_-25px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+              <Swiper
+                modules={[Autoplay]}
+                spaceBetween={18}
+                loop={true}
+                slidesPerView={2}
+                autoplay={{
+                  delay: 2000,
+                  disableOnInteraction: false,
+                }}
+                breakpoints={{
+                  640: { slidesPerView: 3 },
+                  768: { slidesPerView: 4 },
+                  1024: { slidesPerView: 6 },
+                }}
+              >
+                {[...partners, ...partners].map((partner, idx) => (
+                  <SwiperSlide key={`${partner.name}-second-${idx}`}>
+                    <div className="flex h-24 items-center justify-center rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50 p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-lg md:h-28">
+                      <img
+                        src={basePath + partner.file}
+                        alt={partner.name}
+                        className="h-12 w-auto object-contain opacity-90 transition hover:opacity-100 md:h-14"
+                      />
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ========== ADVISOR SECTION ========== */}
-<section className="py-20 bg-gradient-to-br from-blue-900 to-red-800 text-white">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="grid lg:grid-cols-2 gap-12 items-center">
-      <div className="space-y-6">
-        <span className="text-sm font-semibold text-blue-200 uppercase tracking-wide">Expert Guidance</span>
-        <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-          Get Free Advice From Our <span className="text-red-300">Certified Advisors</span>
-        </h2>
-        <p className="text-blue-100 text-lg">Our experts are here to help you find the perfect insurance plan tailored to your needs. Completely free consultation.</p>
-        <div className="flex flex-wrap gap-4">
-          <Link to="/contact" className="px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2">
-            Talk to Advisor <ChevronRight className="w-5 h-5" />
-          </Link>
-          <button className="px-8 py-4 border-2 border-white/30 rounded-xl font-semibold hover:bg-white/10 transition flex items-center gap-2">
-            <Phone className="w-5 h-5" /> +91 9904401900
-          </button>
-        </div>
-      </div>
-      <div className="grid grid-cols-4 gap-4">
-        {insuranceTypes.map((item) => (
-          <div key={item.title} className="text-center group cursor-pointer">
-            <div className="h-20 w-20 mx-auto bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm group-hover:bg-white/20 transition-all group-hover:-translate-y-1">
-              <img src={item.image} alt={item.title} className="h-10 w-10 object-contain brightness-0 invert" />
+      <section className="py-20 bg-gradient-to-br from-blue-900 to-red-800 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <span className="text-sm font-semibold text-blue-200 uppercase tracking-wide">Expert Guidance</span>
+              <h2 className="text-4xl md:text-5xl font-bold leading-tight">
+                Get Free Advice From Our <span className="text-red-300">Certified Advisors</span>
+              </h2>
+              <p className="text-blue-100 text-lg">Our experts are here to help you find the perfect insurance plan tailored to your needs. Completely free consultation.</p>
+              <div className="flex flex-wrap gap-4">
+                <Link to="/contact" className="px-8 py-4 bg-white text-blue-700 rounded-xl font-semibold hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2">
+                  Talk to Advisor <ChevronRight className="w-5 h-5" />
+                </Link>
+                <button className="px-8 py-4 border-2 border-white/30 rounded-xl font-semibold hover:bg-white/10 transition flex items-center gap-2">
+                  <Phone className="w-5 h-5" /> +91 9904401900
+                </button>
+              </div>
             </div>
-            <p className="mt-2 text-sm font-semibold text-red-100">{item.title}</p>
+            <div className="grid grid-cols-4 gap-4">
+              {insuranceTypes.map((item) => (
+                <div key={item.title} className="text-center group cursor-pointer">
+                  <div className="h-20 w-20 mx-auto bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm group-hover:bg-white/20 transition-all group-hover:-translate-y-1">
+                    <img src={item.image} alt={item.title} className="h-10 w-10 object-contain brightness-0 invert" />
+                  </div>
+                  <p className="mt-2 text-sm font-semibold text-red-100">{item.title}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* ========== TESTIMONIALS SECTION ========== */}
       <TestimonialsSection testimonials={testimonials} />
 
       {/* ========== BLOG SECTION ========== */}
       <section ref={sectionRefs.blog} className="py-20 bg-gray-50">
-        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${
-          visibleSections.blog ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}>
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-1000 ${visibleSections.blog ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}>
           <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="text-sm font-semibold text-red-600 uppercase tracking-wide">Knowledge Hub</span>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-3">

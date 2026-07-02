@@ -264,12 +264,16 @@ const Header = () => {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 lg:px-10">
         
         {/* LOGO */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-3">
           <img
             src="/assets/logo.png"
             alt="Logo"
             className="h-14 md:h-16 object-contain"
           />
+          <div className="leading-tight">
+            <p className="text-[16px] md:text-[18px] font-bold text-[#213591]">Griva Insurance</p>
+            <p className="text-[12px] md:text-[13px] font-semibold text-[#E8021E]">Solutions</p>
+          </div>
         </Link>
 
         {/* DESKTOP MENU */}

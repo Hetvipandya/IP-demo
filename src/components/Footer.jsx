@@ -40,7 +40,7 @@ const Footer = () => {
               </h2>
 
               <p className="mt-3 text-slate-400 text-sm md:text-base max-w-xl">
-                Partner with GIVA Insurance Services and unlock smart insurance solutions, digital growth tools, and dedicated expert support.
+                Partner with GRIVA INSURANCE SERVICES and unlock smart insurance solutions, digital growth tools, and dedicated expert support.
               </p>
             </div>
 
@@ -71,7 +71,7 @@ const Footer = () => {
             </Link>
 
             <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
-              <span className="text-white font-medium">GIVA INSURANCE SERVICES</span> provides dependable protection for your health, life, motor, property, and business through customized planning.
+              <span className="text-white font-medium">GRIVA INSURANCE SERVICES</span> provides dependable protection for your health, life, motor, property, and business through customized planning.
             </p>
 
             {/* Social Media Links */}
@@ -193,7 +193,7 @@ const Footer = () => {
         {/* 3. BOTTOM BAR (Copyright & Policies) */}
         <div className="border-t border-slate-800/60 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p className="text-center sm:text-left">
-            &copy; {new Date().getFullYear()} GIVA Insurance Services. All rights reserved.
+            &copy; {new Date().getFullYear()} GRIVA INSURANCE SERVICES. All rights reserved.
           </p>
 
           <div className="flex items-center gap-6">
